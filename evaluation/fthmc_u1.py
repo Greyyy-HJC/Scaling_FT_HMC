@@ -221,7 +221,7 @@ class HMC_U1_FT:
         else:
             return theta, False, H_old.item()
 
-    def tune_step_size(self, n_tune_steps=1000, target_rate=0.65, target_tolerance=0.15, initial_step_size=0.2, max_attempts=10, theta=None):
+    def tune_step_size(self, n_tune_steps=1000, target_rate=0.75, target_tolerance=0.15, initial_step_size=0.1, max_attempts=10, theta=None):
         """
         Tune the step size to achieve desired acceptance rate using binary search.
         
@@ -306,7 +306,7 @@ class HMC_U1_FT:
         # Tune step size before thermalization
         if self.if_tune_step_size:
             print("Tuning step size before thermalization...")
-            self.tune_step_size(theta=theta)
+            self.tune_step_size(initial_step_size=self.dt, theta=theta)
         else:
             print(f"Using step size: {self.dt:.2f}")
         

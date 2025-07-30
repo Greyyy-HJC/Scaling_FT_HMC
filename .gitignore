@@ -1,4 +1,4 @@
 gauges/*
 models/*
-**/sub.sh
+**/sub*.sh
 **/logs/*

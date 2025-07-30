@@ -112,7 +112,7 @@ class HMC_U1:
         else:
             return theta, False, H_old.item()
 
-    def tune_step_size(self, n_tune_steps=2000, target_rate=0.75, target_tolerance=0.15, initial_step_size=0.2, max_attempts=10, theta=None):
+    def tune_step_size(self, n_tune_steps=2000, target_rate=0.75, target_tolerance=0.15, initial_step_size=0.1, max_attempts=10, theta=None):
         """
         Tune the step size to achieve desired acceptance rate using binary search.
         
