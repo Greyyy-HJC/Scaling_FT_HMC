@@ -10,6 +10,6 @@ This project implements a field transformed HMC algorithm to reduce the critical
 Scaling_FT_HMC/
     gauge_generation/
     model_training/
-    evaluation/
+    scaling/
     utils/
 ```
