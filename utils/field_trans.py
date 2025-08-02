@@ -462,6 +462,15 @@ class FieldTransformation:
                torch.norm(force_new, p=4) / (vol**(1/4)) + \
                torch.norm(force_new, p=6) / (vol**(1/6)) + \
                torch.norm(force_new, p=8) / (vol**(1/8))
+               
+        
+        #TODO: try this
+        # Decreasing weights to avoid high-order norm dominance
+        # loss = 1.0 * torch.norm(force_new, p=2) / (vol**(1/2)) + \
+        #     0.5 * torch.norm(force_new, p=4) / (vol**(1/4)) + \
+        #     0.2 * torch.norm(force_new, p=6) / (vol**(1/6)) + \
+        #     0.1 * torch.norm(force_new, p=8) / (vol**(1/8))   
+               
         
         return loss
 
