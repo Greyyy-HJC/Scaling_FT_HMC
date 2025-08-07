@@ -21,6 +21,7 @@ parser.add_argument('--n_steps', type=int, default=1,
                     help='Number of steps (default: 1)')
 parser.add_argument('--step_size', type=float, default=0.1,
                     help='Step size (default: 0.1)')
+
 args = parser.parse_args()
 
 # Print all arguments
@@ -70,12 +71,7 @@ print(">>> Simulation completed")
 # Compute autocorrelation of topological charges
 max_lag = 20
 hmc_fig = hmc_summary(beta, max_lag, volume, therm_plaq_ls, plaq_ls, topological_charges, hamiltonians, therm_acceptance_rate, acceptance_rate)
-hmc_fig.savefig(f'plots/gauge_gen_hmc_L{lattice_size}_beta{beta:.1f}.pdf', transparent=True)
+hmc_fig.savefig(f'plots/hmc_tune_L{lattice_size}_beta{beta:.1f}_n{n_steps}_dt{step_size:.4f}.pdf', transparent=True)
 
 
-# Save configurations for training
-np.save(f'../gauges/theta_L{lattice_size}_beta{beta:.1f}.npy', torch.stack(config_ls).detach().cpu().numpy())
-
-# Save topological_charges and acceptance rate to csv files
-np.savetxt(f'dumps/topo_L{lattice_size}_beta{beta:.1f}.csv', np.array(topological_charges), fmt='%.6e')
-np.savetxt(f'dumps/accept_rate_L{lattice_size}_beta{beta:.1f}.csv', [acceptance_rate], fmt='%.6e')
+# %%

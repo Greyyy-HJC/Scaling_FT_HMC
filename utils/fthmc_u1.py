@@ -1,5 +1,6 @@
 # %%
 import torch
+import numpy as np
 from tqdm import tqdm
 from Scaling_FT_HMC.utils.func import plaq_from_field, plaq_mean_from_field, regularize, topo_from_field
 
@@ -139,17 +140,38 @@ class HMC_U1_FT:
         torch.Tensor
             The force.
         """
-        # theta_new.requires_grad_(True)
-        # action_value = self.new_action(theta_new)
-        # action_value.backward(retain_graph=True)
-        # ff = theta_new.grad
-        # theta_new.requires_grad_(False)
-        # return ff
     
         theta_copy = theta_new.detach().clone().requires_grad_(True)
         action_value = self.new_action(theta_copy)
         force = torch.autograd.grad(action_value, theta_copy)[0]
         return force.detach()  # *: break the gradient chain
+    
+    def leapfrog(self, theta, pi):
+        """
+        Perform the leapfrog integration step.
+
+        Parameters:
+        -----------
+        theta : torch.Tensor
+            The initial field configuration.
+        pi : torch.Tensor
+            The initial momentum.
+
+        Returns:
+        --------
+        tuple
+            The updated field configuration and momentum.
+        """
+        dt = self.dt
+        theta_ = theta + 0.5 * dt * pi
+        pi_ = pi - dt * self.new_force(theta_)
+        for _ in range(self.n_steps - 1):
+            theta_ = theta_ + dt * pi_
+            pi_ = pi_ - dt * self.new_force(theta_)
+        theta_ = theta_ + 0.5 * dt * pi_
+        theta_ = regularize(theta_)
+        
+        return theta_, pi_
 
     
     def omelyan(self, theta, pi):
@@ -209,7 +231,8 @@ class HMC_U1_FT:
         action_value = self.new_action(theta) 
         H_old = action_value + 0.5 * torch.sum(pi**2)
 
-        new_theta, new_pi = self.omelyan(theta.clone(), pi.clone())
+        # new_theta, new_pi = self.omelyan(theta.clone(), pi.clone()) # TODO
+        new_theta, new_pi = self.leapfrog(theta.clone(), pi.clone())
         new_action_value = self.new_action(new_theta) 
         H_new = new_action_value + 0.5 * torch.sum(new_pi**2)
 
@@ -298,10 +321,18 @@ class HMC_U1_FT:
         # Initial thermalization to get away from cold start
         theta = self.initialize()
         n_initial_therm = self.n_thermalization_steps
-        
+        plaq_ls_initial_therm = []
         print(">>> Initial thermalization...")
         for _ in tqdm(range(n_initial_therm), desc="Initial thermalization"):
             theta, _, _ = self.metropolis_step(theta)
+            plaq = plaq_mean_from_field(theta).item()
+            plaq_ls_initial_therm.append(round(plaq, 4))
+        # Average every 10 elements in plaq_ls_initial_therm, handling any remainder
+        n = len(plaq_ls_initial_therm)
+        n_complete = (n // 10) * 10  # Length that can be evenly divided by 10
+        # Process complete groups of 10
+        means = np.mean(np.array(plaq_ls_initial_therm[-n_complete:]).reshape(-1, 10), axis=1)
+        print(f"Initial thermalization: ⟨plaq⟩ = {means}")
         
         # Tune step size before thermalization
         if self.if_tune_step_size:

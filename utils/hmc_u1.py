@@ -1,5 +1,6 @@
 # %%
 import torch
+import numpy as np
 from tqdm import tqdm
 from fthmc_2d_u1.utils.func import plaq_from_field, topo_from_field, plaq_mean_from_field, regularize
 
@@ -72,7 +73,7 @@ class HMC_U1:
         """
         Use 2nd-order minimum-norm (Omelyan) integrator.
         """
-        lam = 0.1931833   # the best λ for 2nd-order minimum-norm (Omelyan) integrator
+        lam = 0.1931833   # the best λ for 2nd-order minimum-norm (Omelyan) integrator #? NOTE: think of tuning this parameter
         dt  = self.dt
         theta_, pi_ = theta, pi
 
@@ -80,7 +81,7 @@ class HMC_U1:
         pi_ = pi_ - lam * dt * self.force(theta_)
 
         # repeat n_steps times "position-momentum-position-momentum-position" update
-        for _ in range(self.n_steps):
+        for _ in range(self.n_steps):  #? NOTE: dt * n_steps = trajectory length, fix n_steps=1 (10) and tune dt to optimize (Leapfrog: dt = 0.1, n_steps = 50; Omelyan: dt = 0.35, n_steps = 1)
             # position half step
             theta_ = theta_ + 0.5 * dt * pi_
             # momentum update
@@ -94,13 +95,25 @@ class HMC_U1:
         # restore to main domain
         theta_ = regularize(theta_)
         return theta_, pi_
+    
+    def leapfrog(self, theta, pi):
+        dt = self.dt
+        theta_ = theta + 0.5 * dt * pi
+        pi_ = pi - dt * self.force(theta_)
+        for _ in range(self.n_steps - 1):
+            theta_ = theta_ + dt * pi_
+            pi_ = pi_ - dt * self.force(theta_)
+        theta_ = theta_ + 0.5 * dt * pi_
+        theta_ = regularize(theta_)
+        return theta_, pi_
 
     def metropolis_step(self, theta):
         pi = torch.randn_like(theta, device=self.device)
         action_value = self.action(theta)
         H_old = action_value + 0.5 * torch.sum(pi**2)
 
-        new_theta, new_pi = self.omelyan(theta.clone(), pi.clone())
+        # new_theta, new_pi = self.omelyan(theta.clone(), pi.clone()) # TODO
+        new_theta, new_pi = self.leapfrog(theta.clone(), pi.clone())
         new_action_value = self.action(new_theta)
         H_new = new_action_value + 0.5 * torch.sum(new_pi**2)
 
@@ -160,6 +173,7 @@ class HMC_U1:
             
             # Check if current rate is acceptable
             if abs(current_rate - target_rate) <= target_tolerance:
+                print(f"N step is {self.n_steps}")
                 print(f"Found good step size: {self.dt:.6f}")
                 break
             
@@ -180,13 +194,23 @@ class HMC_U1:
         """
         First do a rough thermalization, then tune step size, then do final thermalization.
         """
-        # Initial thermalization to get away from cold start
-        theta = self.initialize()
-        n_initial_therm = self.n_thermalization_steps
         
-        print(">>> Initial thermalization...")
-        for _ in tqdm(range(n_initial_therm), desc="Initial thermalization"):
-            theta, _, _ = self.metropolis_step(theta)
+        theta = self.initialize() # initialize for step size tuning
+        if self.if_tune_step_size:
+            # Initial thermalization to get away from cold start
+            n_initial_therm = self.n_thermalization_steps
+            plaq_ls_initial_therm = []
+            print(">>> Initial thermalization...")
+            for _ in tqdm(range(n_initial_therm), desc="Initial thermalization"):
+                theta, _, _ = self.metropolis_step(theta)
+                plaq = plaq_mean_from_field(theta).item()
+                plaq_ls_initial_therm.append(round(plaq, 4))
+            # Average every 10 elements in plaq_ls_initial_therm, handling any remainder
+            n = len(plaq_ls_initial_therm)
+            n_complete = (n // 10) * 10  # Length that can be evenly divided by 10
+            # Process complete groups of 10
+            means = np.mean(np.array(plaq_ls_initial_therm[-n_complete:]).reshape(-1, 10), axis=1)
+            print(f"Initial thermalization: ⟨plaq⟩ = {means}")
         
         # Tune step size on thermalized configuration
         if self.if_tune_step_size:
@@ -195,7 +219,7 @@ class HMC_U1:
         else:
             print(f">>> Using step size: {self.dt:.2f}")
         
-        theta = self.initialize()
+        theta = self.initialize() # initialize for run thermalization
         plaq_ls = []
         acceptance_count = 0
         

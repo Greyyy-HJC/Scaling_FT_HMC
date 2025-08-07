@@ -102,6 +102,7 @@ class FieldTransformation:
                 
                 self.print("Trying to use torch.compile for optimized computation...")
                 self.forward_compiled = torch.compile(self.forward, **compile_options)
+                self.inverse_compiled = torch.compile(self.inverse, **compile_options)
                 self.ft_phase_compiled = torch.compile(self.ft_phase, **compile_options)
                 self.compute_jac_logdet_compiled = torch.compile(self.compute_jac_logdet, **compile_options)
                 self.compute_action_compiled = torch.compile(self.compute_action, **compile_options)
@@ -110,12 +111,14 @@ class FieldTransformation:
                 self.print(f"Warning: torch.compile initialization failed: {e}")
                 self.print("Falling back to standard functions")
                 self.forward_compiled = self.forward
+                self.inverse_compiled = self.inverse
                 self.ft_phase_compiled = self.ft_phase
                 self.compute_jac_logdet_compiled = self.compute_jac_logdet
                 self.compute_action_compiled = self.compute_action
         else:
             # If PyTorch version does not support compile, use standard functions
             self.forward_compiled = self.forward
+            self.inverse_compiled = self.inverse
             self.ft_phase_compiled = self.ft_phase
             self.compute_jac_logdet_compiled = self.compute_jac_logdet
             self.compute_action_compiled = self.compute_action
@@ -294,6 +297,10 @@ class FieldTransformation:
     def inverse_field_transformation(self, theta):
         """Inverse field transformation function for HMC (single input)"""
         return self.inverse(theta.unsqueeze(0)).squeeze(0)
+    
+    def inverse_field_transformation_compiled(self, theta):
+        """Inverse field transformation function for HMC (single input)"""
+        return self.inverse_compiled(theta.unsqueeze(0)).squeeze(0)
 
     def compute_jac_logdet(self, theta):
         """Compute total log determinant of Jacobian for all subsets
@@ -470,6 +477,8 @@ class FieldTransformation:
         #     0.5 * torch.norm(force_new, p=4) / (vol**(1/4)) + \
         #     0.2 * torch.norm(force_new, p=6) / (vol**(1/6)) + \
         #     0.1 * torch.norm(force_new, p=8) / (vol**(1/8))   
+        
+        #? NOTE: search for some designs 
                
         
         return loss
