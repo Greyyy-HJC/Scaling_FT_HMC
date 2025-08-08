@@ -73,26 +73,19 @@ class HMC_U1:
         """
         Use 2nd-order minimum-norm (Omelyan) integrator.
         """
-        lam = 0.1931833   # the best λ for 2nd-order minimum-norm (Omelyan) integrator #? NOTE: think of tuning this parameter
-        dt  = self.dt
-        theta_, pi_ = theta, pi
-
-        # first momentum half step
-        pi_ = pi_ - lam * dt * self.force(theta_)
-
-        # repeat n_steps times "position-momentum-position-momentum-position" update
-        for _ in range(self.n_steps):  #? NOTE: dt * n_steps = trajectory length, fix n_steps=1 (10) and tune dt to optimize (Leapfrog: dt = 0.1, n_steps = 50; Omelyan: dt = 0.35, n_steps = 1)
-            # position half step
+        lam = 0.1931833 # the best λ for 2nd-order minimum-norm (Omelyan) integrator #? NOTE: think of tuning this parameter
+        dt = self.dt
+        theta_ = theta
+        pi_ = pi - lam * dt * self.force(theta_)
+        for step_index in range(self.n_steps):
             theta_ = theta_ + 0.5 * dt * pi_
-            # momentum update
-            pi_ = pi_ - (1 - 2*lam) * dt * self.force(theta_)
-            # position half step
+            pi_ = pi_ - (1 - 2 * lam) * dt * self.force(theta_)
             theta_ = theta_ + 0.5 * dt * pi_
-
-        # last momentum half step
+            # Interior momentum update that merges the trailing P(lam*dt) of the
+            # current substep with the leading P(lam*dt) of the next substep.
+            if step_index != self.n_steps - 1:
+                pi_ = pi_ - 2 * lam * dt * self.force(theta_)
         pi_ = pi_ - lam * dt * self.force(theta_)
-
-        # restore to main domain
         theta_ = regularize(theta_)
         return theta_, pi_
     
@@ -112,8 +105,8 @@ class HMC_U1:
         action_value = self.action(theta)
         H_old = action_value + 0.5 * torch.sum(pi**2)
 
-        # new_theta, new_pi = self.omelyan(theta.clone(), pi.clone()) # TODO
-        new_theta, new_pi = self.leapfrog(theta.clone(), pi.clone())
+        new_theta, new_pi = self.omelyan(theta.clone(), pi.clone())
+        # new_theta, new_pi = self.leapfrog(theta.clone(), pi.clone())
         new_action_value = self.action(new_theta)
         H_new = new_action_value + 0.5 * torch.sum(new_pi**2)
 

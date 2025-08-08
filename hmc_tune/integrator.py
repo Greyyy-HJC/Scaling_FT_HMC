@@ -1,7 +1,25 @@
 # %%
 import torch
+import math
 import numpy as np
-from Scaling_FT_HMC.utils.func import plaq_from_field, topo_from_field, plaq_mean_from_field, regularize
+
+def plaq_from_field(theta):
+    """
+    Calculate the plaquette value for a given field configuration.
+    """
+    theta0, theta1 = theta[0], theta[1]
+    thetaP = theta0 - theta1 - torch.roll(theta0, shifts=-1, dims=1) + torch.roll(theta1, shifts=-1, dims=0)
+
+    return thetaP
+
+
+def regularize(theta):
+    """
+    Regularize the plaquette value to the range [-pi, pi).
+    """
+    theta_wrapped = (theta - math.pi) / (2 * math.pi)
+    return 2 * math.pi * (theta_wrapped - torch.floor(theta_wrapped) - 0.5)
+
 
 
 class HMC_U1:
@@ -43,14 +61,18 @@ class HMC_U1:
         """
         Use 2nd-order minimum-norm (Omelyan) integrator.
         """
-        lam = 0.1931833
+        lam = 0.1931833 # the best λ for 2nd-order minimum-norm (Omelyan) integrator #? NOTE: think of tuning this parameter
         dt = self.dt
         theta_ = theta
         pi_ = pi - lam * dt * self.force(theta_)
-        for _ in range(self.n_steps):
+        for step_index in range(self.n_steps):
             theta_ = theta_ + 0.5 * dt * pi_
-            pi_ = pi_ - (1 - 2*lam) * dt * self.force(theta_)
+            pi_ = pi_ - (1 - 2 * lam) * dt * self.force(theta_)
             theta_ = theta_ + 0.5 * dt * pi_
+            # Interior momentum update that merges the trailing P(lam*dt) of the
+            # current substep with the leading P(lam*dt) of the next substep.
+            if step_index != self.n_steps - 1:
+                pi_ = pi_ - 2 * lam * dt * self.force(theta_)
         pi_ = pi_ - lam * dt * self.force(theta_)
         theta_ = regularize(theta_)
         return theta_, pi_
@@ -126,7 +148,7 @@ def compute_dH_omelyan(dt, steps, n_trials=32):
 
 steps_list = [5, 10, 20, 40]
 tau_leapfrog = 0.1
-tau_omelyan = 0.001
+tau_omelyan = 0.1
 
 print('-' * 60)
 

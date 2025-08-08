@@ -60,8 +60,8 @@ set_seed(args.rand_seed)
 lattice_size = args.lattice_size
 volume = lattice_size ** 2
 beta = args.beta
-n_thermalization_steps = 200
-n_steps = 1
+n_thermalization_steps = 2000
+n_steps = 10
 store_interval = 1
 ft_step_size = args.ft_step_size
 n_iterations = store_interval * args.n_configs

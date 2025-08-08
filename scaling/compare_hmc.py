@@ -40,7 +40,7 @@ set_seed(args.rand_seed)
 lattice_size = args.lattice_size
 volume = lattice_size ** 2
 beta = args.beta
-n_thermalization_steps = 200
+n_thermalization_steps = 2000
 n_steps = 10
 step_size = args.step_size
 store_interval = 1
@@ -86,7 +86,7 @@ print(f">>> Total time (Standard HMC): {therm_time + run_time:.2f} seconds")
 
 # Compute autocorrelation of topological charges
 hmc_fig = hmc_summary(beta, max_lag, volume, therm_plaq_ls, plaq_ls, topological_charges, hamiltonians, therm_acceptance_rate, acceptance_rate)
-hmc_fig.savefig(f'plots/comparison_hmc_L{lattice_size}_beta{beta:.1f}.pdf', transparent=True)
+hmc_fig.savefig(f'plots/hmc_L{lattice_size}_beta{beta:.1f}.pdf', transparent=True)
 
 # Print timing comparison
 print(f">>> Total time (Standard HMC): {therm_time + run_time:.2f} seconds")

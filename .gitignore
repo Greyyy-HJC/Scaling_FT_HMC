@@ -2,3 +2,4 @@ gauges/*
 models/*
 **/sub*.sh
 **/logs/*
+**/old_logs/*

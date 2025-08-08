@@ -190,26 +190,19 @@ class HMC_U1_FT:
         torch.Tensor
             The force.
         """
-        lam = 0.1931833   # the best λ for 2nd-order minimum-norm (Omelyan) integrator
-        dt  = self.dt
-        theta_, pi_ = theta, pi
-
-        # first momentum half step
-        pi_ = pi_ - lam * dt * self.new_force(theta_)
-
-        # repeat n_steps times "position-momentum-position-momentum-position" update
-        for _ in range(self.n_steps):
-            # position half step
+        lam = 0.1931833 # the best λ for 2nd-order minimum-norm (Omelyan) integrator #? NOTE: think of tuning this parameter
+        dt = self.dt
+        theta_ = theta
+        pi_ = pi - lam * dt * self.new_force(theta_)
+        for step_index in range(self.n_steps):
             theta_ = theta_ + 0.5 * dt * pi_
-            # momentum update
-            pi_ = pi_ - (1 - 2*lam) * dt * self.new_force(theta_)
-            # position half step
+            pi_ = pi_ - (1 - 2 * lam) * dt * self.new_force(theta_)
             theta_ = theta_ + 0.5 * dt * pi_
-
-        # last momentum half step
+            # Interior momentum update that merges the trailing P(lam*dt) of the
+            # current substep with the leading P(lam*dt) of the next substep.
+            if step_index != self.n_steps - 1:
+                pi_ = pi_ - 2 * lam * dt * self.new_force(theta_)
         pi_ = pi_ - lam * dt * self.new_force(theta_)
-
-        # restore to main domain
         theta_ = regularize(theta_)
         return theta_, pi_
 
@@ -231,8 +224,8 @@ class HMC_U1_FT:
         action_value = self.new_action(theta) 
         H_old = action_value + 0.5 * torch.sum(pi**2)
 
-        # new_theta, new_pi = self.omelyan(theta.clone(), pi.clone()) # TODO
-        new_theta, new_pi = self.leapfrog(theta.clone(), pi.clone())
+        new_theta, new_pi = self.omelyan(theta.clone(), pi.clone())
+        # new_theta, new_pi = self.leapfrog(theta.clone(), pi.clone())
         new_action_value = self.new_action(new_theta) 
         H_new = new_action_value + 0.5 * torch.sum(new_pi**2)
 
