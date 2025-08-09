@@ -198,8 +198,7 @@ class HMC_U1_FT:
             theta_ = theta_ + 0.5 * dt * pi_
             pi_ = pi_ - (1 - 2 * lam) * dt * self.new_force(theta_)
             theta_ = theta_ + 0.5 * dt * pi_
-            # Interior momentum update that merges the trailing P(lam*dt) of the
-            # current substep with the leading P(lam*dt) of the next substep.
+            # Interior momentum update that merges the trailing P(lam*dt) of the current substep with the leading P(lam*dt) of the next substep.
             if step_index != self.n_steps - 1:
                 pi_ = pi_ - 2 * lam * dt * self.new_force(theta_)
         pi_ = pi_ - lam * dt * self.new_force(theta_)
