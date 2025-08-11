@@ -16,6 +16,7 @@ fthmc_base_L32_b3_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scalin
 fthmc_base_L32_b3_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L32_beta3.0_base_train_b3.0_L32_1984.csv')
 fthmc_base_L32_b3_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L32_beta3.0_base_train_b3.0_L32_1999.csv')
 fthmc_base_L32_b3_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L32_beta3.0_base_train_b3.0_L32_2008.csv')
+fthmc_base_L32_b3_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L32_beta3.0_base_train_b3.0_L32_2017.csv')
 fthmc_base_L32_b3_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L32_beta3.0_base_train_b3.0_L32_2025.csv')
 
 max_lag = 64
@@ -28,6 +29,7 @@ fthmc_base_L32_b3_auto_1331 = auto_from_chi(fthmc_base_L32_b3_topo_1331, max_lag
 fthmc_base_L32_b3_auto_1984 = auto_from_chi(fthmc_base_L32_b3_topo_1984, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_base_L32_b3_auto_1999 = auto_from_chi(fthmc_base_L32_b3_topo_1999, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_base_L32_b3_auto_2008 = auto_from_chi(fthmc_base_L32_b3_topo_2008, max_lag=max_lag, beta=beta, volume=volume)
+fthmc_base_L32_b3_auto_2017 = auto_from_chi(fthmc_base_L32_b3_topo_2017, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_base_L32_b3_auto_2025 = auto_from_chi(fthmc_base_L32_b3_topo_2025, max_lag=max_lag, beta=beta, volume=volume)
 
 
@@ -38,16 +40,18 @@ gamma_fthmc_1331 = 1 / (1 - fthmc_base_L32_b3_auto_1331[16])
 gamma_fthmc_1984 = 1 / (1 - fthmc_base_L32_b3_auto_1984[16])
 gamma_fthmc_1999 = 1 / (1 - fthmc_base_L32_b3_auto_1999[16])
 gamma_fthmc_2008 = 1 / (1 - fthmc_base_L32_b3_auto_2008[16])
+gamma_fthmc_2017 = 1 / (1 - fthmc_base_L32_b3_auto_2017[16])
 gamma_fthmc_2025 = 1 / (1 - fthmc_base_L32_b3_auto_2025[16])
 
 gamma_ratio_1331 = gamma_hmc / gamma_fthmc_1331
 gamma_ratio_1984 = gamma_hmc / gamma_fthmc_1984
 gamma_ratio_1999 = gamma_hmc / gamma_fthmc_1999
 gamma_ratio_2008 = gamma_hmc / gamma_fthmc_2008
+gamma_ratio_2017 = gamma_hmc / gamma_fthmc_2017
 gamma_ratio_2025 = gamma_hmc / gamma_fthmc_2025
 
-gamma_ratio_L32_b3_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
-gamma_ratio_L32_b3_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
+gamma_ratio_L32_b3_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
+gamma_ratio_L32_b3_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
 
 base_L32_b3_gamma_ratio = gv.gvar(gamma_ratio_L32_b3_mean, gamma_ratio_L32_b3_std)
 
@@ -60,11 +64,12 @@ deltaQ_fthmc_1331 = [ abs(fthmc_base_L32_b3_topo_1331[i] - fthmc_base_L32_b3_top
 deltaQ_fthmc_1984 = [ abs(fthmc_base_L32_b3_topo_1984[i] - fthmc_base_L32_b3_topo_1984[i-1]) for i in range(1, len(fthmc_base_L32_b3_topo_1984))]
 deltaQ_fthmc_1999 = [ abs(fthmc_base_L32_b3_topo_1999[i] - fthmc_base_L32_b3_topo_1999[i-1]) for i in range(1, len(fthmc_base_L32_b3_topo_1999))]
 deltaQ_fthmc_2008 = [ abs(fthmc_base_L32_b3_topo_2008[i] - fthmc_base_L32_b3_topo_2008[i-1]) for i in range(1, len(fthmc_base_L32_b3_topo_2008))]
+deltaQ_fthmc_2017 = [ abs(fthmc_base_L32_b3_topo_2017[i] - fthmc_base_L32_b3_topo_2017[i-1]) for i in range(1, len(fthmc_base_L32_b3_topo_2017))]
 deltaQ_fthmc_2025 = [ abs(fthmc_base_L32_b3_topo_2025[i] - fthmc_base_L32_b3_topo_2025[i-1]) for i in range(1, len(fthmc_base_L32_b3_topo_2025))]
 
 deltaQ_hmc_L32_b3_mean = np.mean(deltaQ_hmc)
-deltaQ_fthmc_L32_b3_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
-deltaQ_fthmc_L32_b3_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b3_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b3_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
 
 base_L32_b3_deltaQ_ratio = gv.gvar(deltaQ_fthmc_L32_b3_mean / deltaQ_hmc_L32_b3_mean, deltaQ_fthmc_L32_b3_std / deltaQ_hmc_L32_b3_mean)
 
@@ -82,6 +87,7 @@ fthmc_base_L32_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scalin
 fthmc_base_L32_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L32_beta6.0_base_train_b3.0_L32_1984.csv')
 fthmc_base_L32_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L32_beta6.0_base_train_b3.0_L32_1999.csv')
 fthmc_base_L32_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L32_beta6.0_base_train_b3.0_L32_2008.csv')
+fthmc_base_L32_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L32_beta6.0_base_train_b3.0_L32_2017.csv')
 fthmc_base_L32_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L32_beta6.0_base_train_b3.0_L32_2025.csv')
 
 max_lag = 64
@@ -94,6 +100,7 @@ fthmc_base_L32_b6_auto_1331 = auto_from_chi(fthmc_base_L32_b6_topo_1331, max_lag
 fthmc_base_L32_b6_auto_1984 = auto_from_chi(fthmc_base_L32_b6_topo_1984, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_base_L32_b6_auto_1999 = auto_from_chi(fthmc_base_L32_b6_topo_1999, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_base_L32_b6_auto_2008 = auto_from_chi(fthmc_base_L32_b6_topo_2008, max_lag=max_lag, beta=beta, volume=volume)
+fthmc_base_L32_b6_auto_2017 = auto_from_chi(fthmc_base_L32_b6_topo_2017, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_base_L32_b6_auto_2025 = auto_from_chi(fthmc_base_L32_b6_topo_2025, max_lag=max_lag, beta=beta, volume=volume)
 
 
@@ -103,16 +110,18 @@ gamma_fthmc_1331 = 1 / (1 - fthmc_base_L32_b6_auto_1331[16])
 gamma_fthmc_1984 = 1 / (1 - fthmc_base_L32_b6_auto_1984[16])
 gamma_fthmc_1999 = 1 / (1 - fthmc_base_L32_b6_auto_1999[16])
 gamma_fthmc_2008 = 1 / (1 - fthmc_base_L32_b6_auto_2008[16])
+gamma_fthmc_2017 = 1 / (1 - fthmc_base_L32_b6_auto_2017[16])
 gamma_fthmc_2025 = 1 / (1 - fthmc_base_L32_b6_auto_2025[16])
 
 gamma_ratio_1331 = gamma_hmc / gamma_fthmc_1331
 gamma_ratio_1984 = gamma_hmc / gamma_fthmc_1984
 gamma_ratio_1999 = gamma_hmc / gamma_fthmc_1999
 gamma_ratio_2008 = gamma_hmc / gamma_fthmc_2008
+gamma_ratio_2017 = gamma_hmc / gamma_fthmc_2017
 gamma_ratio_2025 = gamma_hmc / gamma_fthmc_2025
 
-gamma_ratio_L32_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
-gamma_ratio_L32_b6_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
+gamma_ratio_L32_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
+gamma_ratio_L32_b6_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
 
 base_L32_b6_gamma_ratio = gv.gvar(gamma_ratio_L32_b6_mean, gamma_ratio_L32_b6_std)
 
@@ -125,11 +134,12 @@ deltaQ_fthmc_1331 = [ abs(fthmc_base_L32_b6_topo_1331[i] - fthmc_base_L32_b6_top
 deltaQ_fthmc_1984 = [ abs(fthmc_base_L32_b6_topo_1984[i] - fthmc_base_L32_b6_topo_1984[i-1]) for i in range(1, len(fthmc_base_L32_b6_topo_1984))]
 deltaQ_fthmc_1999 = [ abs(fthmc_base_L32_b6_topo_1999[i] - fthmc_base_L32_b6_topo_1999[i-1]) for i in range(1, len(fthmc_base_L32_b6_topo_1999))]
 deltaQ_fthmc_2008 = [ abs(fthmc_base_L32_b6_topo_2008[i] - fthmc_base_L32_b6_topo_2008[i-1]) for i in range(1, len(fthmc_base_L32_b6_topo_2008))]
+deltaQ_fthmc_2017 = [ abs(fthmc_base_L32_b6_topo_2017[i] - fthmc_base_L32_b6_topo_2017[i-1]) for i in range(1, len(fthmc_base_L32_b6_topo_2017))]
 deltaQ_fthmc_2025 = [ abs(fthmc_base_L32_b6_topo_2025[i] - fthmc_base_L32_b6_topo_2025[i-1]) for i in range(1, len(fthmc_base_L32_b6_topo_2025))]
 
 deltaQ_hmc_L32_b6_mean = np.mean(deltaQ_hmc)
-deltaQ_fthmc_L32_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
-deltaQ_fthmc_L32_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
 
 base_L32_b6_deltaQ_ratio = gv.gvar(deltaQ_fthmc_L32_b6_mean / deltaQ_hmc_L32_b6_mean, deltaQ_fthmc_L32_b6_std / deltaQ_hmc_L32_b6_mean)
 
@@ -146,6 +156,7 @@ fthmc_base_L64_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scalin
 fthmc_base_L64_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L64_beta6.0_base_train_b3.0_L32_1984.csv')
 fthmc_base_L64_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L64_beta6.0_base_train_b3.0_L32_1999.csv')
 fthmc_base_L64_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L64_beta6.0_base_train_b3.0_L32_2008.csv')
+fthmc_base_L64_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L64_beta6.0_base_train_b3.0_L32_2017.csv')
 fthmc_base_L64_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L64_beta6.0_base_train_b3.0_L32_2025.csv')
 
 max_lag = 200
@@ -158,6 +169,7 @@ fthmc_base_L64_b6_auto_1331 = auto_from_chi(fthmc_base_L64_b6_topo_1331, max_lag
 fthmc_base_L64_b6_auto_1984 = auto_from_chi(fthmc_base_L64_b6_topo_1984, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_base_L64_b6_auto_1999 = auto_from_chi(fthmc_base_L64_b6_topo_1999, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_base_L64_b6_auto_2008 = auto_from_chi(fthmc_base_L64_b6_topo_2008, max_lag=max_lag, beta=beta, volume=volume)
+fthmc_base_L64_b6_auto_2017 = auto_from_chi(fthmc_base_L64_b6_topo_2017, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_base_L64_b6_auto_2025 = auto_from_chi(fthmc_base_L64_b6_topo_2025, max_lag=max_lag, beta=beta, volume=volume)
 
 
@@ -170,16 +182,18 @@ gamma_fthmc_1331 = 1 / (1 - fthmc_base_L64_b6_auto_1331[idx])
 gamma_fthmc_1984 = 1 / (1 - fthmc_base_L64_b6_auto_1984[idx])
 gamma_fthmc_1999 = 1 / (1 - fthmc_base_L64_b6_auto_1999[idx])
 gamma_fthmc_2008 = 1 / (1 - fthmc_base_L64_b6_auto_2008[idx])
+gamma_fthmc_2017 = 1 / (1 - fthmc_base_L64_b6_auto_2017[idx])
 gamma_fthmc_2025 = 1 / (1 - fthmc_base_L64_b6_auto_2025[idx])
 
 gamma_ratio_1331 = gamma_hmc / gamma_fthmc_1331
 gamma_ratio_1984 = gamma_hmc / gamma_fthmc_1984
 gamma_ratio_1999 = gamma_hmc / gamma_fthmc_1999
 gamma_ratio_2008 = gamma_hmc / gamma_fthmc_2008
+gamma_ratio_2017 = gamma_hmc / gamma_fthmc_2017
 gamma_ratio_2025 = gamma_hmc / gamma_fthmc_2025
 
-gamma_ratio_L64_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
-gamma_ratio_L64_b6_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
+gamma_ratio_L64_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025]) 
+gamma_ratio_L64_b6_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
 
 base_L64_b6_gamma_ratio = gv.gvar(gamma_ratio_L64_b6_mean, gamma_ratio_L64_b6_std)
 
@@ -194,11 +208,12 @@ deltaQ_fthmc_1331 = [ abs(fthmc_base_L64_b6_topo_1331[i] - fthmc_base_L64_b6_top
 deltaQ_fthmc_1984 = [ abs(fthmc_base_L64_b6_topo_1984[i] - fthmc_base_L64_b6_topo_1984[i-1]) for i in range(1, len(fthmc_base_L64_b6_topo_1984))]
 deltaQ_fthmc_1999 = [ abs(fthmc_base_L64_b6_topo_1999[i] - fthmc_base_L64_b6_topo_1999[i-1]) for i in range(1, len(fthmc_base_L64_b6_topo_1999))]
 deltaQ_fthmc_2008 = [ abs(fthmc_base_L64_b6_topo_2008[i] - fthmc_base_L64_b6_topo_2008[i-1]) for i in range(1, len(fthmc_base_L64_b6_topo_2008))]
+deltaQ_fthmc_2017 = [ abs(fthmc_base_L64_b6_topo_2017[i] - fthmc_base_L64_b6_topo_2017[i-1]) for i in range(1, len(fthmc_base_L64_b6_topo_2017))]
 deltaQ_fthmc_2025 = [ abs(fthmc_base_L64_b6_topo_2025[i] - fthmc_base_L64_b6_topo_2025[i-1]) for i in range(1, len(fthmc_base_L64_b6_topo_2025))]
 
 deltaQ_hmc_L64_b6_mean = np.mean(deltaQ_hmc)
-deltaQ_fthmc_L64_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
-deltaQ_fthmc_L64_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L64_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L64_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
 
 base_L64_b6_deltaQ_ratio = gv.gvar(deltaQ_fthmc_L64_b6_mean / deltaQ_hmc_L64_b6_mean, deltaQ_fthmc_L64_b6_std / deltaQ_hmc_L64_b6_mean)
 
@@ -215,6 +230,7 @@ fthmc_attn_L32_b3_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_e
 fthmc_attn_L32_b3_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L32_beta3.0_attn_train_b3.0_L32_1984.csv')
 fthmc_attn_L32_b3_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L32_beta3.0_attn_train_b3.0_L32_1999.csv')
 fthmc_attn_L32_b3_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L32_beta3.0_attn_train_b3.0_L32_2008.csv')
+fthmc_attn_L32_b3_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L32_beta3.0_attn_train_b3.0_L32_2017.csv')
 fthmc_attn_L32_b3_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L32_beta3.0_attn_train_b3.0_L32_2025.csv')
 
 max_lag = 64
@@ -227,6 +243,7 @@ fthmc_attn_L32_b3_auto_1331 = auto_from_chi(fthmc_attn_L32_b3_topo_1331, max_lag
 fthmc_attn_L32_b3_auto_1984 = auto_from_chi(fthmc_attn_L32_b3_topo_1984, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_attn_L32_b3_auto_1999 = auto_from_chi(fthmc_attn_L32_b3_topo_1999, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_attn_L32_b3_auto_2008 = auto_from_chi(fthmc_attn_L32_b3_topo_2008, max_lag=max_lag, beta=beta, volume=volume)
+fthmc_attn_L32_b3_auto_2017 = auto_from_chi(fthmc_attn_L32_b3_topo_2017, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_attn_L32_b3_auto_2025 = auto_from_chi(fthmc_attn_L32_b3_topo_2025, max_lag=max_lag, beta=beta, volume=volume)
 
 
@@ -236,16 +253,18 @@ gamma_fthmc_1331 = 1 / (1 - fthmc_attn_L32_b3_auto_1331[16])
 gamma_fthmc_1984 = 1 / (1 - fthmc_attn_L32_b3_auto_1984[16])
 gamma_fthmc_1999 = 1 / (1 - fthmc_attn_L32_b3_auto_1999[16])
 gamma_fthmc_2008 = 1 / (1 - fthmc_attn_L32_b3_auto_2008[16])
+gamma_fthmc_2017 = 1 / (1 - fthmc_attn_L32_b3_auto_2017[16])
 gamma_fthmc_2025 = 1 / (1 - fthmc_attn_L32_b3_auto_2025[16])
 
 gamma_ratio_1331 = gamma_hmc / gamma_fthmc_1331
 gamma_ratio_1984 = gamma_hmc / gamma_fthmc_1984
 gamma_ratio_1999 = gamma_hmc / gamma_fthmc_1999
 gamma_ratio_2008 = gamma_hmc / gamma_fthmc_2008
+gamma_ratio_2017 = gamma_hmc / gamma_fthmc_2017
 gamma_ratio_2025 = gamma_hmc / gamma_fthmc_2025
 
-gamma_ratio_L32_b3_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
-gamma_ratio_L32_b3_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
+gamma_ratio_L32_b3_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
+gamma_ratio_L32_b3_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
 
 
 attn_L32_b3_gamma_ratio = gv.gvar(gamma_ratio_L32_b3_mean, gamma_ratio_L32_b3_std)
@@ -259,11 +278,12 @@ deltaQ_fthmc_1331 = [ abs(fthmc_attn_L32_b3_topo_1331[i] - fthmc_attn_L32_b3_top
 deltaQ_fthmc_1984 = [ abs(fthmc_attn_L32_b3_topo_1984[i] - fthmc_attn_L32_b3_topo_1984[i-1]) for i in range(1, len(fthmc_attn_L32_b3_topo_1984))]
 deltaQ_fthmc_1999 = [ abs(fthmc_attn_L32_b3_topo_1999[i] - fthmc_attn_L32_b3_topo_1999[i-1]) for i in range(1, len(fthmc_attn_L32_b3_topo_1999))]
 deltaQ_fthmc_2008 = [ abs(fthmc_attn_L32_b3_topo_2008[i] - fthmc_attn_L32_b3_topo_2008[i-1]) for i in range(1, len(fthmc_attn_L32_b3_topo_2008))]
+deltaQ_fthmc_2017 = [ abs(fthmc_attn_L32_b3_topo_2017[i] - fthmc_attn_L32_b3_topo_2017[i-1]) for i in range(1, len(fthmc_attn_L32_b3_topo_2017))]
 deltaQ_fthmc_2025 = [ abs(fthmc_attn_L32_b3_topo_2025[i] - fthmc_attn_L32_b3_topo_2025[i-1]) for i in range(1, len(fthmc_attn_L32_b3_topo_2025))]
 
 deltaQ_hmc_L32_b3_mean = np.mean(deltaQ_hmc)
-deltaQ_fthmc_L32_b3_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
-deltaQ_fthmc_L32_b3_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b3_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b3_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
 
 
 attn_L32_b3_deltaQ_ratio = gv.gvar(deltaQ_fthmc_L32_b3_mean / deltaQ_hmc_L32_b3_mean, deltaQ_fthmc_L32_b3_std / deltaQ_hmc_L32_b3_mean)
@@ -282,6 +302,7 @@ fthmc_attn_L32_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_e
 fthmc_attn_L32_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L32_beta6.0_attn_train_b3.0_L32_1984.csv')
 fthmc_attn_L32_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L32_beta6.0_attn_train_b3.0_L32_1999.csv')
 fthmc_attn_L32_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L32_beta6.0_attn_train_b3.0_L32_2008.csv')
+fthmc_attn_L32_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L32_beta6.0_attn_train_b3.0_L32_2017.csv')
 fthmc_attn_L32_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L32_beta6.0_attn_train_b3.0_L32_2025.csv')
 
 max_lag = 64
@@ -294,6 +315,7 @@ fthmc_attn_L32_b6_auto_1331 = auto_from_chi(fthmc_attn_L32_b6_topo_1331, max_lag
 fthmc_attn_L32_b6_auto_1984 = auto_from_chi(fthmc_attn_L32_b6_topo_1984, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_attn_L32_b6_auto_1999 = auto_from_chi(fthmc_attn_L32_b6_topo_1999, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_attn_L32_b6_auto_2008 = auto_from_chi(fthmc_attn_L32_b6_topo_2008, max_lag=max_lag, beta=beta, volume=volume)
+fthmc_attn_L32_b6_auto_2017 = auto_from_chi(fthmc_attn_L32_b6_topo_2017, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_attn_L32_b6_auto_2025 = auto_from_chi(fthmc_attn_L32_b6_topo_2025, max_lag=max_lag, beta=beta, volume=volume)
 
 
@@ -303,12 +325,14 @@ gamma_fthmc_1331 = 1 / (1 - fthmc_attn_L32_b6_auto_1331[16])
 gamma_fthmc_1984 = 1 / (1 - fthmc_attn_L32_b6_auto_1984[16])
 gamma_fthmc_1999 = 1 / (1 - fthmc_attn_L32_b6_auto_1999[16])
 gamma_fthmc_2008 = 1 / (1 - fthmc_attn_L32_b6_auto_2008[16])
+gamma_fthmc_2017 = 1 / (1 - fthmc_attn_L32_b6_auto_2017[16])
 gamma_fthmc_2025 = 1 / (1 - fthmc_attn_L32_b6_auto_2025[16])
 
 gamma_ratio_1331 = gamma_hmc / gamma_fthmc_1331
 gamma_ratio_1984 = gamma_hmc / gamma_fthmc_1984
 gamma_ratio_1999 = gamma_hmc / gamma_fthmc_1999
 gamma_ratio_2008 = gamma_hmc / gamma_fthmc_2008
+gamma_ratio_2017 = gamma_hmc / gamma_fthmc_2017
 gamma_ratio_2025 = gamma_hmc / gamma_fthmc_2025
 
 gamma_ratio_L32_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
@@ -325,11 +349,12 @@ deltaQ_fthmc_1331 = [ abs(fthmc_attn_L32_b6_topo_1331[i] - fthmc_attn_L32_b6_top
 deltaQ_fthmc_1984 = [ abs(fthmc_attn_L32_b6_topo_1984[i] - fthmc_attn_L32_b6_topo_1984[i-1]) for i in range(1, len(fthmc_attn_L32_b6_topo_1984))]
 deltaQ_fthmc_1999 = [ abs(fthmc_attn_L32_b6_topo_1999[i] - fthmc_attn_L32_b6_topo_1999[i-1]) for i in range(1, len(fthmc_attn_L32_b6_topo_1999))]
 deltaQ_fthmc_2008 = [ abs(fthmc_attn_L32_b6_topo_2008[i] - fthmc_attn_L32_b6_topo_2008[i-1]) for i in range(1, len(fthmc_attn_L32_b6_topo_2008))]
+deltaQ_fthmc_2017 = [ abs(fthmc_attn_L32_b6_topo_2017[i] - fthmc_attn_L32_b6_topo_2017[i-1]) for i in range(1, len(fthmc_attn_L32_b6_topo_2017))]
 deltaQ_fthmc_2025 = [ abs(fthmc_attn_L32_b6_topo_2025[i] - fthmc_attn_L32_b6_topo_2025[i-1]) for i in range(1, len(fthmc_attn_L32_b6_topo_2025))]
 
 deltaQ_hmc_L32_b6_mean = np.mean(deltaQ_hmc)
-deltaQ_fthmc_L32_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
-deltaQ_fthmc_L32_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
 
 attn_L32_b6_deltaQ_ratio = gv.gvar(deltaQ_fthmc_L32_b6_mean / deltaQ_hmc_L32_b6_mean, deltaQ_fthmc_L32_b6_std / deltaQ_hmc_L32_b6_mean)
 
@@ -346,6 +371,7 @@ fthmc_attn_L64_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_e
 fthmc_attn_L64_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L64_beta6.0_attn_train_b3.0_L32_1984.csv')
 fthmc_attn_L64_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L64_beta6.0_attn_train_b3.0_L32_1999.csv')
 fthmc_attn_L64_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L64_beta6.0_attn_train_b3.0_L32_2008.csv')
+fthmc_attn_L64_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L64_beta6.0_attn_train_b3.0_L32_2017.csv')
 fthmc_attn_L64_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L64_beta6.0_attn_train_b3.0_L32_2025.csv')
 
 max_lag = 200
@@ -358,6 +384,7 @@ fthmc_attn_L64_b6_auto_1331 = auto_from_chi(fthmc_attn_L64_b6_topo_1331, max_lag
 fthmc_attn_L64_b6_auto_1984 = auto_from_chi(fthmc_attn_L64_b6_topo_1984, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_attn_L64_b6_auto_1999 = auto_from_chi(fthmc_attn_L64_b6_topo_1999, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_attn_L64_b6_auto_2008 = auto_from_chi(fthmc_attn_L64_b6_topo_2008, max_lag=max_lag, beta=beta, volume=volume)
+fthmc_attn_L64_b6_auto_2017 = auto_from_chi(fthmc_attn_L64_b6_topo_2017, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_attn_L64_b6_auto_2025 = auto_from_chi(fthmc_attn_L64_b6_topo_2025, max_lag=max_lag, beta=beta, volume=volume)
 
 idx = 16
@@ -368,16 +395,18 @@ gamma_fthmc_1331 = 1 / (1 - fthmc_attn_L64_b6_auto_1331[idx])
 gamma_fthmc_1984 = 1 / (1 - fthmc_attn_L64_b6_auto_1984[idx])
 gamma_fthmc_1999 = 1 / (1 - fthmc_attn_L64_b6_auto_1999[idx])
 gamma_fthmc_2008 = 1 / (1 - fthmc_attn_L64_b6_auto_2008[idx])
+gamma_fthmc_2017 = 1 / (1 - fthmc_attn_L64_b6_auto_2017[idx])
 gamma_fthmc_2025 = 1 / (1 - fthmc_attn_L64_b6_auto_2025[idx])
 
 gamma_ratio_1331 = gamma_hmc / gamma_fthmc_1331
 gamma_ratio_1984 = gamma_hmc / gamma_fthmc_1984
 gamma_ratio_1999 = gamma_hmc / gamma_fthmc_1999
 gamma_ratio_2008 = gamma_hmc / gamma_fthmc_2008
+gamma_ratio_2017 = gamma_hmc / gamma_fthmc_2017
 gamma_ratio_2025 = gamma_hmc / gamma_fthmc_2025
 
-gamma_ratio_L64_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
-gamma_ratio_L64_b6_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
+gamma_ratio_L64_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
+gamma_ratio_L64_b6_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
 
 attn_L64_b6_gamma_ratio = gv.gvar(gamma_ratio_L64_b6_mean, gamma_ratio_L64_b6_std)
 
@@ -392,11 +421,12 @@ deltaQ_fthmc_1331 = [ abs(fthmc_attn_L64_b6_topo_1331[i] - fthmc_attn_L64_b6_top
 deltaQ_fthmc_1984 = [ abs(fthmc_attn_L64_b6_topo_1984[i] - fthmc_attn_L64_b6_topo_1984[i-1]) for i in range(1, len(fthmc_attn_L64_b6_topo_1984))]
 deltaQ_fthmc_1999 = [ abs(fthmc_attn_L64_b6_topo_1999[i] - fthmc_attn_L64_b6_topo_1999[i-1]) for i in range(1, len(fthmc_attn_L64_b6_topo_1999))]
 deltaQ_fthmc_2008 = [ abs(fthmc_attn_L64_b6_topo_2008[i] - fthmc_attn_L64_b6_topo_2008[i-1]) for i in range(1, len(fthmc_attn_L64_b6_topo_2008))]
+deltaQ_fthmc_2017 = [ abs(fthmc_attn_L64_b6_topo_2017[i] - fthmc_attn_L64_b6_topo_2017[i-1]) for i in range(1, len(fthmc_attn_L64_b6_topo_2017))]
 deltaQ_fthmc_2025 = [ abs(fthmc_attn_L64_b6_topo_2025[i] - fthmc_attn_L64_b6_topo_2025[i-1]) for i in range(1, len(fthmc_attn_L64_b6_topo_2025))]
 
 deltaQ_hmc_L64_b6_mean = np.mean(deltaQ_hmc)
-deltaQ_fthmc_L64_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
-deltaQ_fthmc_L64_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L64_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L64_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
 
 
 attn_L64_b6_deltaQ_ratio = gv.gvar(deltaQ_fthmc_L64_b6_mean / deltaQ_hmc_L64_b6_mean, deltaQ_fthmc_L64_b6_std / deltaQ_hmc_L64_b6_mean)
@@ -414,6 +444,7 @@ fthmc_resn_L32_b3_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_e
 fthmc_resn_L32_b3_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L32_beta3.0_resn_train_b3.0_L32_1984.csv')
 fthmc_resn_L32_b3_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L32_beta3.0_resn_train_b3.0_L32_1999.csv')
 fthmc_resn_L32_b3_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L32_beta3.0_resn_train_b3.0_L32_2008.csv')
+fthmc_resn_L32_b3_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L32_beta3.0_resn_train_b3.0_L32_2017.csv')
 fthmc_resn_L32_b3_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L32_beta3.0_resn_train_b3.0_L32_2025.csv')
 
 beta = 3.0
@@ -426,6 +457,7 @@ fthmc_resn_L32_b3_auto_1331 = auto_from_chi(fthmc_resn_L32_b3_topo_1331, max_lag
 fthmc_resn_L32_b3_auto_1984 = auto_from_chi(fthmc_resn_L32_b3_topo_1984, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_resn_L32_b3_auto_1999 = auto_from_chi(fthmc_resn_L32_b3_topo_1999, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_resn_L32_b3_auto_2008 = auto_from_chi(fthmc_resn_L32_b3_topo_2008, max_lag=max_lag, beta=beta, volume=volume)
+fthmc_resn_L32_b3_auto_2017 = auto_from_chi(fthmc_resn_L32_b3_topo_2017, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_resn_L32_b3_auto_2025 = auto_from_chi(fthmc_resn_L32_b3_topo_2025, max_lag=max_lag, beta=beta, volume=volume)
 
 
@@ -434,16 +466,18 @@ gamma_fthmc_1331 = 1 / (1 - fthmc_resn_L32_b3_auto_1331[16])
 gamma_fthmc_1984 = 1 / (1 - fthmc_resn_L32_b3_auto_1984[16])
 gamma_fthmc_1999 = 1 / (1 - fthmc_resn_L32_b3_auto_1999[16])
 gamma_fthmc_2008 = 1 / (1 - fthmc_resn_L32_b3_auto_2008[16])
+gamma_fthmc_2017 = 1 / (1 - fthmc_resn_L32_b3_auto_2017[16])
 gamma_fthmc_2025 = 1 / (1 - fthmc_resn_L32_b3_auto_2025[16])
 
 gamma_ratio_1331 = gamma_hmc / gamma_fthmc_1331
 gamma_ratio_1984 = gamma_hmc / gamma_fthmc_1984
 gamma_ratio_1999 = gamma_hmc / gamma_fthmc_1999
 gamma_ratio_2008 = gamma_hmc / gamma_fthmc_2008
+gamma_ratio_2017 = gamma_hmc / gamma_fthmc_2017
 gamma_ratio_2025 = gamma_hmc / gamma_fthmc_2025
 
-gamma_ratio_L32_b3_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
-gamma_ratio_L32_b3_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
+gamma_ratio_L32_b3_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
+gamma_ratio_L32_b3_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
 
 resn_L32_b3_gamma_ratio = gv.gvar(gamma_ratio_L32_b3_mean, gamma_ratio_L32_b3_std)
 
@@ -456,11 +490,12 @@ deltaQ_fthmc_1331 = [ abs(fthmc_resn_L32_b3_topo_1331[i] - fthmc_resn_L32_b3_top
 deltaQ_fthmc_1984 = [ abs(fthmc_resn_L32_b3_topo_1984[i] - fthmc_resn_L32_b3_topo_1984[i-1]) for i in range(1, len(fthmc_resn_L32_b3_topo_1984))]
 deltaQ_fthmc_1999 = [ abs(fthmc_resn_L32_b3_topo_1999[i] - fthmc_resn_L32_b3_topo_1999[i-1]) for i in range(1, len(fthmc_resn_L32_b3_topo_1999))]
 deltaQ_fthmc_2008 = [ abs(fthmc_resn_L32_b3_topo_2008[i] - fthmc_resn_L32_b3_topo_2008[i-1]) for i in range(1, len(fthmc_resn_L32_b3_topo_2008))]
+deltaQ_fthmc_2017 = [ abs(fthmc_resn_L32_b3_topo_2017[i] - fthmc_resn_L32_b3_topo_2017[i-1]) for i in range(1, len(fthmc_resn_L32_b3_topo_2017))]
 deltaQ_fthmc_2025 = [ abs(fthmc_resn_L32_b3_topo_2025[i] - fthmc_resn_L32_b3_topo_2025[i-1]) for i in range(1, len(fthmc_resn_L32_b3_topo_2025))]
 
 deltaQ_hmc_L32_b3_mean = np.mean(deltaQ_hmc)
-deltaQ_fthmc_L32_b3_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
-deltaQ_fthmc_L32_b3_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b3_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b3_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
 
 resn_L32_b3_deltaQ_ratio = gv.gvar(deltaQ_fthmc_L32_b3_mean / deltaQ_hmc_L32_b3_mean, deltaQ_fthmc_L32_b3_std / deltaQ_hmc_L32_b3_mean)
 
@@ -477,6 +512,7 @@ fthmc_resn_L32_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_e
 fthmc_resn_L32_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L32_beta6.0_resn_train_b3.0_L32_1984.csv')
 fthmc_resn_L32_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L32_beta6.0_resn_train_b3.0_L32_1999.csv')
 fthmc_resn_L32_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L32_beta6.0_resn_train_b3.0_L32_2008.csv')
+fthmc_resn_L32_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L32_beta6.0_resn_train_b3.0_L32_2017.csv')
 fthmc_resn_L32_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L32_beta6.0_resn_train_b3.0_L32_2025.csv')
 
 beta = 6.0
@@ -489,6 +525,7 @@ fthmc_resn_L32_b6_auto_1331 = auto_from_chi(fthmc_resn_L32_b6_topo_1331, max_lag
 fthmc_resn_L32_b6_auto_1984 = auto_from_chi(fthmc_resn_L32_b6_topo_1984, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_resn_L32_b6_auto_1999 = auto_from_chi(fthmc_resn_L32_b6_topo_1999, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_resn_L32_b6_auto_2008 = auto_from_chi(fthmc_resn_L32_b6_topo_2008, max_lag=max_lag, beta=beta, volume=volume)
+fthmc_resn_L32_b6_auto_2017 = auto_from_chi(fthmc_resn_L32_b6_topo_2017, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_resn_L32_b6_auto_2025 = auto_from_chi(fthmc_resn_L32_b6_topo_2025, max_lag=max_lag, beta=beta, volume=volume)
 
 
@@ -498,16 +535,18 @@ gamma_fthmc_1331 = 1 / (1 - fthmc_resn_L32_b6_auto_1331[16])
 gamma_fthmc_1984 = 1 / (1 - fthmc_resn_L32_b6_auto_1984[16])
 gamma_fthmc_1999 = 1 / (1 - fthmc_resn_L32_b6_auto_1999[16])
 gamma_fthmc_2008 = 1 / (1 - fthmc_resn_L32_b6_auto_2008[16])
+gamma_fthmc_2017 = 1 / (1 - fthmc_resn_L32_b6_auto_2017[16])
 gamma_fthmc_2025 = 1 / (1 - fthmc_resn_L32_b6_auto_2025[16])
 
 gamma_ratio_1331 = gamma_hmc / gamma_fthmc_1331
 gamma_ratio_1984 = gamma_hmc / gamma_fthmc_1984
 gamma_ratio_1999 = gamma_hmc / gamma_fthmc_1999
 gamma_ratio_2008 = gamma_hmc / gamma_fthmc_2008
+gamma_ratio_2017 = gamma_hmc / gamma_fthmc_2017
 gamma_ratio_2025 = gamma_hmc / gamma_fthmc_2025
 
-gamma_ratio_L32_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
-gamma_ratio_L32_b6_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
+gamma_ratio_L32_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
+gamma_ratio_L32_b6_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
 
 resn_L32_b6_gamma_ratio = gv.gvar(gamma_ratio_L32_b6_mean, gamma_ratio_L32_b6_std)
 
@@ -519,11 +558,12 @@ deltaQ_fthmc_1331 = [ abs(fthmc_resn_L32_b6_topo_1331[i] - fthmc_resn_L32_b6_top
 deltaQ_fthmc_1984 = [ abs(fthmc_resn_L32_b6_topo_1984[i] - fthmc_resn_L32_b6_topo_1984[i-1]) for i in range(1, len(fthmc_resn_L32_b6_topo_1984))]
 deltaQ_fthmc_1999 = [ abs(fthmc_resn_L32_b6_topo_1999[i] - fthmc_resn_L32_b6_topo_1999[i-1]) for i in range(1, len(fthmc_resn_L32_b6_topo_1999))]
 deltaQ_fthmc_2008 = [ abs(fthmc_resn_L32_b6_topo_2008[i] - fthmc_resn_L32_b6_topo_2008[i-1]) for i in range(1, len(fthmc_resn_L32_b6_topo_2008))]
+deltaQ_fthmc_2017 = [ abs(fthmc_resn_L32_b6_topo_2017[i] - fthmc_resn_L32_b6_topo_2017[i-1]) for i in range(1, len(fthmc_resn_L32_b6_topo_2017))]
 deltaQ_fthmc_2025 = [ abs(fthmc_resn_L32_b6_topo_2025[i] - fthmc_resn_L32_b6_topo_2025[i-1]) for i in range(1, len(fthmc_resn_L32_b6_topo_2025))]
 
 deltaQ_hmc_L32_b6_mean = np.mean(deltaQ_hmc)
-deltaQ_fthmc_L32_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
-deltaQ_fthmc_L32_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
 
 resn_L32_b6_deltaQ_ratio = gv.gvar(deltaQ_fthmc_L32_b6_mean / deltaQ_hmc_L32_b6_mean, deltaQ_fthmc_L32_b6_std / deltaQ_hmc_L32_b6_mean)
 
@@ -540,6 +580,7 @@ fthmc_resn_L64_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_e
 fthmc_resn_L64_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L64_beta6.0_resn_train_b3.0_L32_1984.csv')
 fthmc_resn_L64_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L64_beta6.0_resn_train_b3.0_L32_1999.csv')
 fthmc_resn_L64_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L64_beta6.0_resn_train_b3.0_L32_2008.csv')
+fthmc_resn_L64_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L64_beta6.0_resn_train_b3.0_L32_2017.csv')
 fthmc_resn_L64_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L64_beta6.0_resn_train_b3.0_L32_2025.csv')
 
 max_lag = 200
@@ -552,6 +593,7 @@ fthmc_resn_L64_b6_auto_1331 = auto_from_chi(fthmc_resn_L64_b6_topo_1331, max_lag
 fthmc_resn_L64_b6_auto_1984 = auto_from_chi(fthmc_resn_L64_b6_topo_1984, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_resn_L64_b6_auto_1999 = auto_from_chi(fthmc_resn_L64_b6_topo_1999, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_resn_L64_b6_auto_2008 = auto_from_chi(fthmc_resn_L64_b6_topo_2008, max_lag=max_lag, beta=beta, volume=volume)
+fthmc_resn_L64_b6_auto_2017 = auto_from_chi(fthmc_resn_L64_b6_topo_2017, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_resn_L64_b6_auto_2025 = auto_from_chi(fthmc_resn_L64_b6_topo_2025, max_lag=max_lag, beta=beta, volume=volume)
 
 idx = 100
@@ -562,16 +604,18 @@ gamma_fthmc_1331 = 1 / (1 - fthmc_resn_L64_b6_auto_1331[idx])
 gamma_fthmc_1984 = 1 / (1 - fthmc_resn_L64_b6_auto_1984[idx])
 gamma_fthmc_1999 = 1 / (1 - fthmc_resn_L64_b6_auto_1999[idx])
 gamma_fthmc_2008 = 1 / (1 - fthmc_resn_L64_b6_auto_2008[idx])
+gamma_fthmc_2017 = 1 / (1 - fthmc_resn_L64_b6_auto_2017[idx])
 gamma_fthmc_2025 = 1 / (1 - fthmc_resn_L64_b6_auto_2025[idx])
 
 gamma_ratio_1331 = gamma_hmc / gamma_fthmc_1331
 gamma_ratio_1984 = gamma_hmc / gamma_fthmc_1984
 gamma_ratio_1999 = gamma_hmc / gamma_fthmc_1999
 gamma_ratio_2008 = gamma_hmc / gamma_fthmc_2008
+gamma_ratio_2017 = gamma_hmc / gamma_fthmc_2017
 gamma_ratio_2025 = gamma_hmc / gamma_fthmc_2025
 
-gamma_ratio_L64_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
-gamma_ratio_L64_b6_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
+gamma_ratio_L64_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
+gamma_ratio_L64_b6_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
 
 resn_L64_b6_gamma_ratio = gv.gvar(gamma_ratio_L64_b6_mean, gamma_ratio_L64_b6_std)
 
@@ -584,11 +628,12 @@ deltaQ_fthmc_1331 = [ abs(fthmc_resn_L64_b6_topo_1331[i] - fthmc_resn_L64_b6_top
 deltaQ_fthmc_1984 = [ abs(fthmc_resn_L64_b6_topo_1984[i] - fthmc_resn_L64_b6_topo_1984[i-1]) for i in range(1, len(fthmc_resn_L64_b6_topo_1984))]
 deltaQ_fthmc_1999 = [ abs(fthmc_resn_L64_b6_topo_1999[i] - fthmc_resn_L64_b6_topo_1999[i-1]) for i in range(1, len(fthmc_resn_L64_b6_topo_1999))]
 deltaQ_fthmc_2008 = [ abs(fthmc_resn_L64_b6_topo_2008[i] - fthmc_resn_L64_b6_topo_2008[i-1]) for i in range(1, len(fthmc_resn_L64_b6_topo_2008))]
+deltaQ_fthmc_2017 = [ abs(fthmc_resn_L64_b6_topo_2017[i] - fthmc_resn_L64_b6_topo_2017[i-1]) for i in range(1, len(fthmc_resn_L64_b6_topo_2017))]
 deltaQ_fthmc_2025 = [ abs(fthmc_resn_L64_b6_topo_2025[i] - fthmc_resn_L64_b6_topo_2025[i-1]) for i in range(1, len(fthmc_resn_L64_b6_topo_2025))]
 
 deltaQ_hmc_L64_b6_mean = np.mean(deltaQ_hmc)
-deltaQ_fthmc_L64_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
-deltaQ_fthmc_L64_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L64_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L64_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
 
 resn_L64_b6_deltaQ_ratio = gv.gvar(deltaQ_fthmc_L64_b6_mean / deltaQ_hmc_L64_b6_mean, deltaQ_fthmc_L64_b6_std / deltaQ_hmc_L64_b6_mean)
 
@@ -606,6 +651,7 @@ fthmc_coorconv_L32_b3_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/co
 fthmc_coorconv_L32_b3_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/coorconv_evaluation/dumps/topo_fthmc_L32_beta3.0_coorconv_train_b3.0_L32_1984.csv')
 fthmc_coorconv_L32_b3_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/coorconv_evaluation/dumps/topo_fthmc_L32_beta3.0_coorconv_train_b3.0_L32_1999.csv')
 fthmc_coorconv_L32_b3_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/coorconv_evaluation/dumps/topo_fthmc_L32_beta3.0_coorconv_train_b3.0_L32_2008.csv')
+fthmc_coorconv_L32_b3_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/coorconv_evaluation/dumps/topo_fthmc_L32_beta3.0_coorconv_train_b3.0_L32_2017.csv')
 fthmc_coorconv_L32_b3_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/coorconv_evaluation/dumps/topo_fthmc_L32_beta3.0_coorconv_train_b3.0_L32_2025.csv')
 
 max_lag = 64
@@ -618,6 +664,7 @@ fthmc_coorconv_L32_b3_auto_1331 = auto_from_chi(fthmc_coorconv_L32_b3_topo_1331,
 fthmc_coorconv_L32_b3_auto_1984 = auto_from_chi(fthmc_coorconv_L32_b3_topo_1984, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_coorconv_L32_b3_auto_1999 = auto_from_chi(fthmc_coorconv_L32_b3_topo_1999, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_coorconv_L32_b3_auto_2008 = auto_from_chi(fthmc_coorconv_L32_b3_topo_2008, max_lag=max_lag, beta=beta, volume=volume)
+fthmc_coorconv_L32_b3_auto_2017 = auto_from_chi(fthmc_coorconv_L32_b3_topo_2017, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_coorconv_L32_b3_auto_2025 = auto_from_chi(fthmc_coorconv_L32_b3_topo_2025, max_lag=max_lag, beta=beta, volume=volume)
 
 
@@ -627,16 +674,18 @@ gamma_fthmc_1331 = 1 / (1 - fthmc_coorconv_L32_b3_auto_1331[16])
 gamma_fthmc_1984 = 1 / (1 - fthmc_coorconv_L32_b3_auto_1984[16])
 gamma_fthmc_1999 = 1 / (1 - fthmc_coorconv_L32_b3_auto_1999[16])
 gamma_fthmc_2008 = 1 / (1 - fthmc_coorconv_L32_b3_auto_2008[16])
+gamma_fthmc_2017 = 1 / (1 - fthmc_coorconv_L32_b3_auto_2017[16])
 gamma_fthmc_2025 = 1 / (1 - fthmc_coorconv_L32_b3_auto_2025[16])
 
 gamma_ratio_1331 = gamma_hmc / gamma_fthmc_1331
 gamma_ratio_1984 = gamma_hmc / gamma_fthmc_1984
 gamma_ratio_1999 = gamma_hmc / gamma_fthmc_1999
 gamma_ratio_2008 = gamma_hmc / gamma_fthmc_2008
+gamma_ratio_2017 = gamma_hmc / gamma_fthmc_2017
 gamma_ratio_2025 = gamma_hmc / gamma_fthmc_2025
 
-gamma_ratio_L32_b3_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
-gamma_ratio_L32_b3_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
+gamma_ratio_L32_b3_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
+gamma_ratio_L32_b3_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
 
 coorconv_L32_b3_gamma_ratio = gv.gvar(gamma_ratio_L32_b3_mean, gamma_ratio_L32_b3_std)
 
@@ -649,11 +698,12 @@ deltaQ_fthmc_1331 = [ abs(fthmc_coorconv_L32_b3_topo_1331[i] - fthmc_coorconv_L3
 deltaQ_fthmc_1984 = [ abs(fthmc_coorconv_L32_b3_topo_1984[i] - fthmc_coorconv_L32_b3_topo_1984[i-1]) for i in range(1, len(fthmc_coorconv_L32_b3_topo_1984))]
 deltaQ_fthmc_1999 = [ abs(fthmc_coorconv_L32_b3_topo_1999[i] - fthmc_coorconv_L32_b3_topo_1999[i-1]) for i in range(1, len(fthmc_coorconv_L32_b3_topo_1999))]
 deltaQ_fthmc_2008 = [ abs(fthmc_coorconv_L32_b3_topo_2008[i] - fthmc_coorconv_L32_b3_topo_2008[i-1]) for i in range(1, len(fthmc_coorconv_L32_b3_topo_2008))]
+deltaQ_fthmc_2017 = [ abs(fthmc_coorconv_L32_b3_topo_2017[i] - fthmc_coorconv_L32_b3_topo_2017[i-1]) for i in range(1, len(fthmc_coorconv_L32_b3_topo_2017))]
 deltaQ_fthmc_2025 = [ abs(fthmc_coorconv_L32_b3_topo_2025[i] - fthmc_coorconv_L32_b3_topo_2025[i-1]) for i in range(1, len(fthmc_coorconv_L32_b3_topo_2025))]
 
 deltaQ_hmc_L32_b3_mean = np.mean(deltaQ_hmc)
-deltaQ_fthmc_L32_b3_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
-deltaQ_fthmc_L32_b3_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b3_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b3_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
 
 coorconv_L32_b3_deltaQ_ratio = gv.gvar(deltaQ_fthmc_L32_b3_mean / deltaQ_hmc_L32_b3_mean, deltaQ_fthmc_L32_b3_std / deltaQ_hmc_L32_b3_mean)
 
@@ -670,6 +720,7 @@ fthmc_coorconv_L32_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/co
 fthmc_coorconv_L32_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/coorconv_evaluation/dumps/topo_fthmc_L32_beta6.0_coorconv_train_b3.0_L32_1984.csv')
 fthmc_coorconv_L32_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/coorconv_evaluation/dumps/topo_fthmc_L32_beta6.0_coorconv_train_b3.0_L32_1999.csv')
 fthmc_coorconv_L32_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/coorconv_evaluation/dumps/topo_fthmc_L32_beta6.0_coorconv_train_b3.0_L32_2008.csv')
+fthmc_coorconv_L32_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/coorconv_evaluation/dumps/topo_fthmc_L32_beta6.0_coorconv_train_b3.0_L32_2017.csv')
 fthmc_coorconv_L32_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/coorconv_evaluation/dumps/topo_fthmc_L32_beta6.0_coorconv_train_b3.0_L32_2025.csv')
 
 max_lag = 64
@@ -682,6 +733,7 @@ fthmc_coorconv_L32_b6_auto_1331 = auto_from_chi(fthmc_coorconv_L32_b6_topo_1331,
 fthmc_coorconv_L32_b6_auto_1984 = auto_from_chi(fthmc_coorconv_L32_b6_topo_1984, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_coorconv_L32_b6_auto_1999 = auto_from_chi(fthmc_coorconv_L32_b6_topo_1999, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_coorconv_L32_b6_auto_2008 = auto_from_chi(fthmc_coorconv_L32_b6_topo_2008, max_lag=max_lag, beta=beta, volume=volume)
+fthmc_coorconv_L32_b6_auto_2017 = auto_from_chi(fthmc_coorconv_L32_b6_topo_2017, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_coorconv_L32_b6_auto_2025 = auto_from_chi(fthmc_coorconv_L32_b6_topo_2025, max_lag=max_lag, beta=beta, volume=volume)
 
 
@@ -691,16 +743,18 @@ gamma_fthmc_1331 = 1 / (1 - fthmc_coorconv_L32_b6_auto_1331[16])
 gamma_fthmc_1984 = 1 / (1 - fthmc_coorconv_L32_b6_auto_1984[16])
 gamma_fthmc_1999 = 1 / (1 - fthmc_coorconv_L32_b6_auto_1999[16])
 gamma_fthmc_2008 = 1 / (1 - fthmc_coorconv_L32_b6_auto_2008[16])
+gamma_fthmc_2017 = 1 / (1 - fthmc_coorconv_L32_b6_auto_2017[16])
 gamma_fthmc_2025 = 1 / (1 - fthmc_coorconv_L32_b6_auto_2025[16])
 
 gamma_ratio_1331 = gamma_hmc / gamma_fthmc_1331
 gamma_ratio_1984 = gamma_hmc / gamma_fthmc_1984
 gamma_ratio_1999 = gamma_hmc / gamma_fthmc_1999
 gamma_ratio_2008 = gamma_hmc / gamma_fthmc_2008
+gamma_ratio_2017 = gamma_hmc / gamma_fthmc_2017
 gamma_ratio_2025 = gamma_hmc / gamma_fthmc_2025
 
-gamma_ratio_L32_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
-gamma_ratio_L32_b6_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
+gamma_ratio_L32_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
+gamma_ratio_L32_b6_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
 
 coorconv_L32_b6_gamma_ratio = gv.gvar(gamma_ratio_L32_b6_mean, gamma_ratio_L32_b6_std)
 
@@ -713,11 +767,12 @@ deltaQ_fthmc_1331 = [ abs(fthmc_coorconv_L32_b6_topo_1331[i] - fthmc_coorconv_L3
 deltaQ_fthmc_1984 = [ abs(fthmc_coorconv_L32_b6_topo_1984[i] - fthmc_coorconv_L32_b6_topo_1984[i-1]) for i in range(1, len(fthmc_coorconv_L32_b6_topo_1984))]
 deltaQ_fthmc_1999 = [ abs(fthmc_coorconv_L32_b6_topo_1999[i] - fthmc_coorconv_L32_b6_topo_1999[i-1]) for i in range(1, len(fthmc_coorconv_L32_b6_topo_1999))]
 deltaQ_fthmc_2008 = [ abs(fthmc_coorconv_L32_b6_topo_2008[i] - fthmc_coorconv_L32_b6_topo_2008[i-1]) for i in range(1, len(fthmc_coorconv_L32_b6_topo_2008))]
+deltaQ_fthmc_2017 = [ abs(fthmc_coorconv_L32_b6_topo_2017[i] - fthmc_coorconv_L32_b6_topo_2017[i-1]) for i in range(1, len(fthmc_coorconv_L32_b6_topo_2017))]
 deltaQ_fthmc_2025 = [ abs(fthmc_coorconv_L32_b6_topo_2025[i] - fthmc_coorconv_L32_b6_topo_2025[i-1]) for i in range(1, len(fthmc_coorconv_L32_b6_topo_2025))]
 
 deltaQ_hmc_L32_b6_mean = np.mean(deltaQ_hmc)
-deltaQ_fthmc_L32_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
-deltaQ_fthmc_L32_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
 
 coorconv_L32_b6_deltaQ_ratio = gv.gvar(deltaQ_fthmc_L32_b6_mean / deltaQ_hmc_L32_b6_mean, deltaQ_fthmc_L32_b6_std / deltaQ_hmc_L32_b6_mean)
 
@@ -734,6 +789,7 @@ fthmc_coorconv_L64_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/co
 fthmc_coorconv_L64_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/coorconv_evaluation/dumps/topo_fthmc_L64_beta6.0_coorconv_train_b3.0_L32_1984.csv')
 fthmc_coorconv_L64_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/coorconv_evaluation/dumps/topo_fthmc_L64_beta6.0_coorconv_train_b3.0_L32_1999.csv')
 fthmc_coorconv_L64_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/coorconv_evaluation/dumps/topo_fthmc_L64_beta6.0_coorconv_train_b3.0_L32_2008.csv')
+fthmc_coorconv_L64_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/coorconv_evaluation/dumps/topo_fthmc_L64_beta6.0_coorconv_train_b3.0_L32_2017.csv')
 fthmc_coorconv_L64_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/coorconv_evaluation/dumps/topo_fthmc_L64_beta6.0_coorconv_train_b3.0_L32_2025.csv')
 
 max_lag = 200
@@ -746,6 +802,7 @@ fthmc_coorconv_L64_b6_auto_1331 = auto_from_chi(fthmc_coorconv_L64_b6_topo_1331,
 fthmc_coorconv_L64_b6_auto_1984 = auto_from_chi(fthmc_coorconv_L64_b6_topo_1984, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_coorconv_L64_b6_auto_1999 = auto_from_chi(fthmc_coorconv_L64_b6_topo_1999, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_coorconv_L64_b6_auto_2008 = auto_from_chi(fthmc_coorconv_L64_b6_topo_2008, max_lag=max_lag, beta=beta, volume=volume)
+fthmc_coorconv_L64_b6_auto_2017 = auto_from_chi(fthmc_coorconv_L64_b6_topo_2017, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_coorconv_L64_b6_auto_2025 = auto_from_chi(fthmc_coorconv_L64_b6_topo_2025, max_lag=max_lag, beta=beta, volume=volume)
 
 idx = 16
@@ -756,16 +813,18 @@ gamma_fthmc_1331 = 1 / (1 - fthmc_coorconv_L64_b6_auto_1331[idx])
 gamma_fthmc_1984 = 1 / (1 - fthmc_coorconv_L64_b6_auto_1984[idx])
 gamma_fthmc_1999 = 1 / (1 - fthmc_coorconv_L64_b6_auto_1999[idx])
 gamma_fthmc_2008 = 1 / (1 - fthmc_coorconv_L64_b6_auto_2008[idx])
+gamma_fthmc_2017 = 1 / (1 - fthmc_coorconv_L64_b6_auto_2017[idx])
 gamma_fthmc_2025 = 1 / (1 - fthmc_coorconv_L64_b6_auto_2025[idx])
 
 gamma_ratio_1331 = gamma_hmc / gamma_fthmc_1331
 gamma_ratio_1984 = gamma_hmc / gamma_fthmc_1984
 gamma_ratio_1999 = gamma_hmc / gamma_fthmc_1999
 gamma_ratio_2008 = gamma_hmc / gamma_fthmc_2008
+gamma_ratio_2017 = gamma_hmc / gamma_fthmc_2017
 gamma_ratio_2025 = gamma_hmc / gamma_fthmc_2025
 
-gamma_ratio_L64_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
-gamma_ratio_L64_b6_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
+gamma_ratio_L64_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
+gamma_ratio_L64_b6_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
 
 coorconv_L64_b6_gamma_ratio = gv.gvar(gamma_ratio_L64_b6_mean, gamma_ratio_L64_b6_std)
 
@@ -779,11 +838,12 @@ deltaQ_fthmc_1331 = [ abs(fthmc_coorconv_L64_b6_topo_1331[i] - fthmc_coorconv_L6
 deltaQ_fthmc_1984 = [ abs(fthmc_coorconv_L64_b6_topo_1984[i] - fthmc_coorconv_L64_b6_topo_1984[i-1]) for i in range(1, len(fthmc_coorconv_L64_b6_topo_1984))]
 deltaQ_fthmc_1999 = [ abs(fthmc_coorconv_L64_b6_topo_1999[i] - fthmc_coorconv_L64_b6_topo_1999[i-1]) for i in range(1, len(fthmc_coorconv_L64_b6_topo_1999))]
 deltaQ_fthmc_2008 = [ abs(fthmc_coorconv_L64_b6_topo_2008[i] - fthmc_coorconv_L64_b6_topo_2008[i-1]) for i in range(1, len(fthmc_coorconv_L64_b6_topo_2008))]
+deltaQ_fthmc_2017 = [ abs(fthmc_coorconv_L64_b6_topo_2017[i] - fthmc_coorconv_L64_b6_topo_2017[i-1]) for i in range(1, len(fthmc_coorconv_L64_b6_topo_2017))]
 deltaQ_fthmc_2025 = [ abs(fthmc_coorconv_L64_b6_topo_2025[i] - fthmc_coorconv_L64_b6_topo_2025[i-1]) for i in range(1, len(fthmc_coorconv_L64_b6_topo_2025))]
 
 deltaQ_hmc_L64_b6_mean = np.mean(deltaQ_hmc)
-deltaQ_fthmc_L64_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
-deltaQ_fthmc_L64_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L64_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L64_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
 
 coorconv_L64_b6_deltaQ_ratio = gv.gvar(deltaQ_fthmc_L64_b6_mean / deltaQ_hmc_L64_b6_mean, deltaQ_fthmc_L64_b6_std / deltaQ_hmc_L64_b6_mean)
 
@@ -800,6 +860,7 @@ fthmc_multif_L32_b3_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/mult
 fthmc_multif_L32_b3_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/multif_evaluation/dumps/topo_fthmc_L32_beta3.0_multif_train_b3.0_L32_1984.csv')
 fthmc_multif_L32_b3_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/multif_evaluation/dumps/topo_fthmc_L32_beta3.0_multif_train_b3.0_L32_1999.csv')
 fthmc_multif_L32_b3_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/multif_evaluation/dumps/topo_fthmc_L32_beta3.0_multif_train_b3.0_L32_2008.csv')
+fthmc_multif_L32_b3_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/multif_evaluation/dumps/topo_fthmc_L32_beta3.0_multif_train_b3.0_L32_2017.csv')
 fthmc_multif_L32_b3_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/multif_evaluation/dumps/topo_fthmc_L32_beta3.0_multif_train_b3.0_L32_2025.csv')
 
 max_lag = 64
@@ -812,6 +873,7 @@ fthmc_multif_L32_b3_auto_1331 = auto_from_chi(fthmc_multif_L32_b3_topo_1331, max
 fthmc_multif_L32_b3_auto_1984 = auto_from_chi(fthmc_multif_L32_b3_topo_1984, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_multif_L32_b3_auto_1999 = auto_from_chi(fthmc_multif_L32_b3_topo_1999, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_multif_L32_b3_auto_2008 = auto_from_chi(fthmc_multif_L32_b3_topo_2008, max_lag=max_lag, beta=beta, volume=volume)
+fthmc_multif_L32_b3_auto_2017 = auto_from_chi(fthmc_multif_L32_b3_topo_2017, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_multif_L32_b3_auto_2025 = auto_from_chi(fthmc_multif_L32_b3_topo_2025, max_lag=max_lag, beta=beta, volume=volume)
 
 
@@ -821,16 +883,18 @@ gamma_fthmc_1331 = 1 / (1 - fthmc_multif_L32_b3_auto_1331[16])
 gamma_fthmc_1984 = 1 / (1 - fthmc_multif_L32_b3_auto_1984[16])
 gamma_fthmc_1999 = 1 / (1 - fthmc_multif_L32_b3_auto_1999[16])
 gamma_fthmc_2008 = 1 / (1 - fthmc_multif_L32_b3_auto_2008[16])
+gamma_fthmc_2017 = 1 / (1 - fthmc_multif_L32_b3_auto_2017[16])
 gamma_fthmc_2025 = 1 / (1 - fthmc_multif_L32_b3_auto_2025[16])
 
 gamma_ratio_1331 = gamma_hmc / gamma_fthmc_1331
 gamma_ratio_1984 = gamma_hmc / gamma_fthmc_1984
 gamma_ratio_1999 = gamma_hmc / gamma_fthmc_1999
 gamma_ratio_2008 = gamma_hmc / gamma_fthmc_2008
+gamma_ratio_2017 = gamma_hmc / gamma_fthmc_2017
 gamma_ratio_2025 = gamma_hmc / gamma_fthmc_2025
 
-gamma_ratio_L32_b3_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
-gamma_ratio_L32_b3_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
+gamma_ratio_L32_b3_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
+gamma_ratio_L32_b3_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
 
 multif_L32_b3_gamma_ratio = gv.gvar(gamma_ratio_L32_b3_mean, gamma_ratio_L32_b3_std)
 
@@ -843,11 +907,12 @@ deltaQ_fthmc_1331 = [ abs(fthmc_multif_L32_b3_topo_1331[i] - fthmc_multif_L32_b3
 deltaQ_fthmc_1984 = [ abs(fthmc_multif_L32_b3_topo_1984[i] - fthmc_multif_L32_b3_topo_1984[i-1]) for i in range(1, len(fthmc_multif_L32_b3_topo_1984))]
 deltaQ_fthmc_1999 = [ abs(fthmc_multif_L32_b3_topo_1999[i] - fthmc_multif_L32_b3_topo_1999[i-1]) for i in range(1, len(fthmc_multif_L32_b3_topo_1999))]
 deltaQ_fthmc_2008 = [ abs(fthmc_multif_L32_b3_topo_2008[i] - fthmc_multif_L32_b3_topo_2008[i-1]) for i in range(1, len(fthmc_multif_L32_b3_topo_2008))]
+deltaQ_fthmc_2017 = [ abs(fthmc_multif_L32_b3_topo_2017[i] - fthmc_multif_L32_b3_topo_2017[i-1]) for i in range(1, len(fthmc_multif_L32_b3_topo_2017))]
 deltaQ_fthmc_2025 = [ abs(fthmc_multif_L32_b3_topo_2025[i] - fthmc_multif_L32_b3_topo_2025[i-1]) for i in range(1, len(fthmc_multif_L32_b3_topo_2025))]
 
 deltaQ_hmc_L32_b3_mean = np.mean(deltaQ_hmc)
-deltaQ_fthmc_L32_b3_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
-deltaQ_fthmc_L32_b3_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b3_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b3_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
 
 multif_L32_b3_deltaQ_ratio = gv.gvar(deltaQ_fthmc_L32_b3_mean / deltaQ_hmc_L32_b3_mean, deltaQ_fthmc_L32_b3_std / deltaQ_hmc_L32_b3_mean)
 
@@ -864,6 +929,7 @@ fthmc_multif_L32_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/mult
 fthmc_multif_L32_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/multif_evaluation/dumps/topo_fthmc_L32_beta6.0_multif_train_b3.0_L32_1984.csv')
 fthmc_multif_L32_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/multif_evaluation/dumps/topo_fthmc_L32_beta6.0_multif_train_b3.0_L32_1999.csv')
 fthmc_multif_L32_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/multif_evaluation/dumps/topo_fthmc_L32_beta6.0_multif_train_b3.0_L32_2008.csv')
+fthmc_multif_L32_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/multif_evaluation/dumps/topo_fthmc_L32_beta6.0_multif_train_b3.0_L32_2017.csv')
 fthmc_multif_L32_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/multif_evaluation/dumps/topo_fthmc_L32_beta6.0_multif_train_b3.0_L32_2025.csv')
 
 max_lag = 64
@@ -876,6 +942,7 @@ fthmc_multif_L32_b6_auto_1331 = auto_from_chi(fthmc_multif_L32_b6_topo_1331, max
 fthmc_multif_L32_b6_auto_1984 = auto_from_chi(fthmc_multif_L32_b6_topo_1984, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_multif_L32_b6_auto_1999 = auto_from_chi(fthmc_multif_L32_b6_topo_1999, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_multif_L32_b6_auto_2008 = auto_from_chi(fthmc_multif_L32_b6_topo_2008, max_lag=max_lag, beta=beta, volume=volume)
+fthmc_multif_L32_b6_auto_2017 = auto_from_chi(fthmc_multif_L32_b6_topo_2017, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_multif_L32_b6_auto_2025 = auto_from_chi(fthmc_multif_L32_b6_topo_2025, max_lag=max_lag, beta=beta, volume=volume)
 
 
@@ -885,16 +952,18 @@ gamma_fthmc_1331 = 1 / (1 - fthmc_multif_L32_b6_auto_1331[16])
 gamma_fthmc_1984 = 1 / (1 - fthmc_multif_L32_b6_auto_1984[16])
 gamma_fthmc_1999 = 1 / (1 - fthmc_multif_L32_b6_auto_1999[16])
 gamma_fthmc_2008 = 1 / (1 - fthmc_multif_L32_b6_auto_2008[16])
+gamma_fthmc_2017 = 1 / (1 - fthmc_multif_L32_b6_auto_2017[16])
 gamma_fthmc_2025 = 1 / (1 - fthmc_multif_L32_b6_auto_2025[16])
 
 gamma_ratio_1331 = gamma_hmc / gamma_fthmc_1331
 gamma_ratio_1984 = gamma_hmc / gamma_fthmc_1984
 gamma_ratio_1999 = gamma_hmc / gamma_fthmc_1999
 gamma_ratio_2008 = gamma_hmc / gamma_fthmc_2008
+gamma_ratio_2017 = gamma_hmc / gamma_fthmc_2017
 gamma_ratio_2025 = gamma_hmc / gamma_fthmc_2025
 
-gamma_ratio_L32_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
-gamma_ratio_L32_b6_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
+gamma_ratio_L32_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
+gamma_ratio_L32_b6_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
 
 multif_L32_b6_gamma_ratio = gv.gvar(gamma_ratio_L32_b6_mean, gamma_ratio_L32_b6_std)
 
@@ -907,11 +976,12 @@ deltaQ_fthmc_1331 = [ abs(fthmc_multif_L32_b6_topo_1331[i] - fthmc_multif_L32_b6
 deltaQ_fthmc_1984 = [ abs(fthmc_multif_L32_b6_topo_1984[i] - fthmc_multif_L32_b6_topo_1984[i-1]) for i in range(1, len(fthmc_multif_L32_b6_topo_1984))]
 deltaQ_fthmc_1999 = [ abs(fthmc_multif_L32_b6_topo_1999[i] - fthmc_multif_L32_b6_topo_1999[i-1]) for i in range(1, len(fthmc_multif_L32_b6_topo_1999))]
 deltaQ_fthmc_2008 = [ abs(fthmc_multif_L32_b6_topo_2008[i] - fthmc_multif_L32_b6_topo_2008[i-1]) for i in range(1, len(fthmc_multif_L32_b6_topo_2008))]
+deltaQ_fthmc_2017 = [ abs(fthmc_multif_L32_b6_topo_2017[i] - fthmc_multif_L32_b6_topo_2017[i-1]) for i in range(1, len(fthmc_multif_L32_b6_topo_2017))]
 deltaQ_fthmc_2025 = [ abs(fthmc_multif_L32_b6_topo_2025[i] - fthmc_multif_L32_b6_topo_2025[i-1]) for i in range(1, len(fthmc_multif_L32_b6_topo_2025))]
 
 deltaQ_hmc_L32_b6_mean = np.mean(deltaQ_hmc)
-deltaQ_fthmc_L32_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
-deltaQ_fthmc_L32_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
 
 multif_L32_b6_deltaQ_ratio = gv.gvar(deltaQ_fthmc_L32_b6_mean / deltaQ_hmc_L32_b6_mean, deltaQ_fthmc_L32_b6_std / deltaQ_hmc_L32_b6_mean)
 
@@ -928,6 +998,7 @@ fthmc_multif_L64_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/mult
 fthmc_multif_L64_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/multif_evaluation/dumps/topo_fthmc_L64_beta6.0_multif_train_b3.0_L32_1984.csv')
 fthmc_multif_L64_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/multif_evaluation/dumps/topo_fthmc_L64_beta6.0_multif_train_b3.0_L32_1999.csv')
 fthmc_multif_L64_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/multif_evaluation/dumps/topo_fthmc_L64_beta6.0_multif_train_b3.0_L32_2008.csv')
+fthmc_multif_L64_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/multif_evaluation/dumps/topo_fthmc_L64_beta6.0_multif_train_b3.0_L32_2017.csv')
 fthmc_multif_L64_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/multif_evaluation/dumps/topo_fthmc_L64_beta6.0_multif_train_b3.0_L32_2025.csv')
 
 max_lag = 200
@@ -940,6 +1011,7 @@ fthmc_multif_L64_b6_auto_1331 = auto_from_chi(fthmc_multif_L64_b6_topo_1331, max
 fthmc_multif_L64_b6_auto_1984 = auto_from_chi(fthmc_multif_L64_b6_topo_1984, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_multif_L64_b6_auto_1999 = auto_from_chi(fthmc_multif_L64_b6_topo_1999, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_multif_L64_b6_auto_2008 = auto_from_chi(fthmc_multif_L64_b6_topo_2008, max_lag=max_lag, beta=beta, volume=volume)
+fthmc_multif_L64_b6_auto_2017 = auto_from_chi(fthmc_multif_L64_b6_topo_2017, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_multif_L64_b6_auto_2025 = auto_from_chi(fthmc_multif_L64_b6_topo_2025, max_lag=max_lag, beta=beta, volume=volume)
 
 idx = 16
@@ -950,16 +1022,18 @@ gamma_fthmc_1331 = 1 / (1 - fthmc_multif_L64_b6_auto_1331[idx])
 gamma_fthmc_1984 = 1 / (1 - fthmc_multif_L64_b6_auto_1984[idx])
 gamma_fthmc_1999 = 1 / (1 - fthmc_multif_L64_b6_auto_1999[idx])
 gamma_fthmc_2008 = 1 / (1 - fthmc_multif_L64_b6_auto_2008[idx])
+gamma_fthmc_2017 = 1 / (1 - fthmc_multif_L64_b6_auto_2017[idx])
 gamma_fthmc_2025 = 1 / (1 - fthmc_multif_L64_b6_auto_2025[idx])
 
 gamma_ratio_1331 = gamma_hmc / gamma_fthmc_1331
 gamma_ratio_1984 = gamma_hmc / gamma_fthmc_1984
 gamma_ratio_1999 = gamma_hmc / gamma_fthmc_1999
 gamma_ratio_2008 = gamma_hmc / gamma_fthmc_2008
+gamma_ratio_2017 = gamma_hmc / gamma_fthmc_2017
 gamma_ratio_2025 = gamma_hmc / gamma_fthmc_2025
 
-gamma_ratio_L64_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
-gamma_ratio_L64_b6_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
+gamma_ratio_L64_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
+gamma_ratio_L64_b6_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
 
 multif_L64_b6_gamma_ratio = gv.gvar(gamma_ratio_L64_b6_mean, gamma_ratio_L64_b6_std)
 
@@ -973,11 +1047,12 @@ deltaQ_fthmc_1331 = [ abs(fthmc_multif_L64_b6_topo_1331[i] - fthmc_multif_L64_b6
 deltaQ_fthmc_1984 = [ abs(fthmc_multif_L64_b6_topo_1984[i] - fthmc_multif_L64_b6_topo_1984[i-1]) for i in range(1, len(fthmc_multif_L64_b6_topo_1984))]
 deltaQ_fthmc_1999 = [ abs(fthmc_multif_L64_b6_topo_1999[i] - fthmc_multif_L64_b6_topo_1999[i-1]) for i in range(1, len(fthmc_multif_L64_b6_topo_1999))]
 deltaQ_fthmc_2008 = [ abs(fthmc_multif_L64_b6_topo_2008[i] - fthmc_multif_L64_b6_topo_2008[i-1]) for i in range(1, len(fthmc_multif_L64_b6_topo_2008))]
+deltaQ_fthmc_2017 = [ abs(fthmc_multif_L64_b6_topo_2017[i] - fthmc_multif_L64_b6_topo_2017[i-1]) for i in range(1, len(fthmc_multif_L64_b6_topo_2017))]
 deltaQ_fthmc_2025 = [ abs(fthmc_multif_L64_b6_topo_2025[i] - fthmc_multif_L64_b6_topo_2025[i-1]) for i in range(1, len(fthmc_multif_L64_b6_topo_2025))]
 
 deltaQ_hmc_L64_b6_mean = np.mean(deltaQ_hmc)
-deltaQ_fthmc_L64_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
-deltaQ_fthmc_L64_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L64_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L64_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
 
 multif_L64_b6_deltaQ_ratio = gv.gvar(deltaQ_fthmc_L64_b6_mean / deltaQ_hmc_L64_b6_mean, deltaQ_fthmc_L64_b6_std / deltaQ_hmc_L64_b6_mean)
 
@@ -994,6 +1069,7 @@ fthmc_alpha_L32_b3_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/alpha
 fthmc_alpha_L32_b3_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/alpha_evaluation/dumps/topo_fthmc_L32_beta3.0_alpha_train_b3.0_L32_1984.csv')
 fthmc_alpha_L32_b3_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/alpha_evaluation/dumps/topo_fthmc_L32_beta3.0_alpha_train_b3.0_L32_1999.csv')
 fthmc_alpha_L32_b3_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/alpha_evaluation/dumps/topo_fthmc_L32_beta3.0_alpha_train_b3.0_L32_2008.csv')
+fthmc_alpha_L32_b3_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/alpha_evaluation/dumps/topo_fthmc_L32_beta3.0_alpha_train_b3.0_L32_2017.csv')
 fthmc_alpha_L32_b3_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/alpha_evaluation/dumps/topo_fthmc_L32_beta3.0_alpha_train_b3.0_L32_2025.csv')
 
 max_lag = 64
@@ -1006,6 +1082,7 @@ fthmc_alpha_L32_b3_auto_1331 = auto_from_chi(fthmc_alpha_L32_b3_topo_1331, max_l
 fthmc_alpha_L32_b3_auto_1984 = auto_from_chi(fthmc_alpha_L32_b3_topo_1984, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_alpha_L32_b3_auto_1999 = auto_from_chi(fthmc_alpha_L32_b3_topo_1999, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_alpha_L32_b3_auto_2008 = auto_from_chi(fthmc_alpha_L32_b3_topo_2008, max_lag=max_lag, beta=beta, volume=volume)
+fthmc_alpha_L32_b3_auto_2017 = auto_from_chi(fthmc_alpha_L32_b3_topo_2017, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_alpha_L32_b3_auto_2025 = auto_from_chi(fthmc_alpha_L32_b3_topo_2025, max_lag=max_lag, beta=beta, volume=volume)
 
 idx = 16
@@ -1016,16 +1093,18 @@ gamma_fthmc_1331 = 1 / (1 - fthmc_alpha_L32_b3_auto_1331[idx])
 gamma_fthmc_1984 = 1 / (1 - fthmc_alpha_L32_b3_auto_1984[idx])
 gamma_fthmc_1999 = 1 / (1 - fthmc_alpha_L32_b3_auto_1999[idx])
 gamma_fthmc_2008 = 1 / (1 - fthmc_alpha_L32_b3_auto_2008[idx])
+gamma_fthmc_2017 = 1 / (1 - fthmc_alpha_L32_b3_auto_2017[idx])
 gamma_fthmc_2025 = 1 / (1 - fthmc_alpha_L32_b3_auto_2025[idx])
 
 gamma_ratio_1331 = gamma_hmc / gamma_fthmc_1331
 gamma_ratio_1984 = gamma_hmc / gamma_fthmc_1984
 gamma_ratio_1999 = gamma_hmc / gamma_fthmc_1999
 gamma_ratio_2008 = gamma_hmc / gamma_fthmc_2008
+gamma_ratio_2017 = gamma_hmc / gamma_fthmc_2017
 gamma_ratio_2025 = gamma_hmc / gamma_fthmc_2025
 
-gamma_ratio_L32_b3_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
-gamma_ratio_L32_b3_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
+gamma_ratio_L32_b3_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
+gamma_ratio_L32_b3_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
 
 alpha_L32_b3_gamma_ratio = gv.gvar(gamma_ratio_L32_b3_mean, gamma_ratio_L32_b3_std)
 
@@ -1038,11 +1117,12 @@ deltaQ_fthmc_1331 = [ abs(fthmc_alpha_L32_b3_topo_1331[i] - fthmc_alpha_L32_b3_t
 deltaQ_fthmc_1984 = [ abs(fthmc_alpha_L32_b3_topo_1984[i] - fthmc_alpha_L32_b3_topo_1984[i-1]) for i in range(1, len(fthmc_alpha_L32_b3_topo_1984))]
 deltaQ_fthmc_1999 = [ abs(fthmc_alpha_L32_b3_topo_1999[i] - fthmc_alpha_L32_b3_topo_1999[i-1]) for i in range(1, len(fthmc_alpha_L32_b3_topo_1999))]
 deltaQ_fthmc_2008 = [ abs(fthmc_alpha_L32_b3_topo_2008[i] - fthmc_alpha_L32_b3_topo_2008[i-1]) for i in range(1, len(fthmc_alpha_L32_b3_topo_2008))]
+deltaQ_fthmc_2017 = [ abs(fthmc_alpha_L32_b3_topo_2017[i] - fthmc_alpha_L32_b3_topo_2017[i-1]) for i in range(1, len(fthmc_alpha_L32_b3_topo_2017))]
 deltaQ_fthmc_2025 = [ abs(fthmc_alpha_L32_b3_topo_2025[i] - fthmc_alpha_L32_b3_topo_2025[i-1]) for i in range(1, len(fthmc_alpha_L32_b3_topo_2025))]
 
 deltaQ_hmc_L32_b3_mean = np.mean(deltaQ_hmc)
-deltaQ_fthmc_L32_b3_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
-deltaQ_fthmc_L32_b3_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b3_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b3_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
 
 alpha_L32_b3_deltaQ_ratio = gv.gvar(deltaQ_fthmc_L32_b3_mean / deltaQ_hmc_L32_b3_mean, deltaQ_fthmc_L32_b3_std / deltaQ_hmc_L32_b3_mean)
 
@@ -1058,6 +1138,7 @@ fthmc_alpha_L32_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/alpha
 fthmc_alpha_L32_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/alpha_evaluation/dumps/topo_fthmc_L32_beta6.0_alpha_train_b3.0_L32_1984.csv')
 fthmc_alpha_L32_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/alpha_evaluation/dumps/topo_fthmc_L32_beta6.0_alpha_train_b3.0_L32_1999.csv')
 fthmc_alpha_L32_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/alpha_evaluation/dumps/topo_fthmc_L32_beta6.0_alpha_train_b3.0_L32_2008.csv')
+fthmc_alpha_L32_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/alpha_evaluation/dumps/topo_fthmc_L32_beta6.0_alpha_train_b3.0_L32_2017.csv')
 fthmc_alpha_L32_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/alpha_evaluation/dumps/topo_fthmc_L32_beta6.0_alpha_train_b3.0_L32_2025.csv')
 
 max_lag = 64
@@ -1070,6 +1151,7 @@ fthmc_alpha_L32_b6_auto_1331 = auto_from_chi(fthmc_alpha_L32_b6_topo_1331, max_l
 fthmc_alpha_L32_b6_auto_1984 = auto_from_chi(fthmc_alpha_L32_b6_topo_1984, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_alpha_L32_b6_auto_1999 = auto_from_chi(fthmc_alpha_L32_b6_topo_1999, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_alpha_L32_b6_auto_2008 = auto_from_chi(fthmc_alpha_L32_b6_topo_2008, max_lag=max_lag, beta=beta, volume=volume)
+fthmc_alpha_L32_b6_auto_2017 = auto_from_chi(fthmc_alpha_L32_b6_topo_2017, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_alpha_L32_b6_auto_2025 = auto_from_chi(fthmc_alpha_L32_b6_topo_2025, max_lag=max_lag, beta=beta, volume=volume)
 
 idx = 16
@@ -1080,16 +1162,18 @@ gamma_fthmc_1331 = 1 / (1 - fthmc_alpha_L32_b6_auto_1331[idx])
 gamma_fthmc_1984 = 1 / (1 - fthmc_alpha_L32_b6_auto_1984[idx])
 gamma_fthmc_1999 = 1 / (1 - fthmc_alpha_L32_b6_auto_1999[idx])
 gamma_fthmc_2008 = 1 / (1 - fthmc_alpha_L32_b6_auto_2008[idx])
+gamma_fthmc_2017 = 1 / (1 - fthmc_alpha_L32_b6_auto_2017[idx])
 gamma_fthmc_2025 = 1 / (1 - fthmc_alpha_L32_b6_auto_2025[idx])
 
 gamma_ratio_1331 = gamma_hmc / gamma_fthmc_1331
 gamma_ratio_1984 = gamma_hmc / gamma_fthmc_1984
 gamma_ratio_1999 = gamma_hmc / gamma_fthmc_1999
 gamma_ratio_2008 = gamma_hmc / gamma_fthmc_2008
+gamma_ratio_2017 = gamma_hmc / gamma_fthmc_2017
 gamma_ratio_2025 = gamma_hmc / gamma_fthmc_2025
 
-gamma_ratio_L32_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
-gamma_ratio_L32_b6_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
+gamma_ratio_L32_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
+gamma_ratio_L32_b6_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
 
 alpha_L32_b6_gamma_ratio = gv.gvar(gamma_ratio_L32_b6_mean, gamma_ratio_L32_b6_std)
 
@@ -1102,11 +1186,12 @@ deltaQ_fthmc_1331 = [ abs(fthmc_alpha_L32_b6_topo_1331[i] - fthmc_alpha_L32_b6_t
 deltaQ_fthmc_1984 = [ abs(fthmc_alpha_L32_b6_topo_1984[i] - fthmc_alpha_L32_b6_topo_1984[i-1]) for i in range(1, len(fthmc_alpha_L32_b6_topo_1984))]
 deltaQ_fthmc_1999 = [ abs(fthmc_alpha_L32_b6_topo_1999[i] - fthmc_alpha_L32_b6_topo_1999[i-1]) for i in range(1, len(fthmc_alpha_L32_b6_topo_1999))]
 deltaQ_fthmc_2008 = [ abs(fthmc_alpha_L32_b6_topo_2008[i] - fthmc_alpha_L32_b6_topo_2008[i-1]) for i in range(1, len(fthmc_alpha_L32_b6_topo_2008))]
+deltaQ_fthmc_2017 = [ abs(fthmc_alpha_L32_b6_topo_2017[i] - fthmc_alpha_L32_b6_topo_2017[i-1]) for i in range(1, len(fthmc_alpha_L32_b6_topo_2017))]
 deltaQ_fthmc_2025 = [ abs(fthmc_alpha_L32_b6_topo_2025[i] - fthmc_alpha_L32_b6_topo_2025[i-1]) for i in range(1, len(fthmc_alpha_L32_b6_topo_2025))]
 
 deltaQ_hmc_L32_b6_mean = np.mean(deltaQ_hmc)
-deltaQ_fthmc_L32_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
-deltaQ_fthmc_L32_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
 
 alpha_L32_b6_deltaQ_ratio = gv.gvar(deltaQ_fthmc_L32_b6_mean / deltaQ_hmc_L32_b6_mean, deltaQ_fthmc_L32_b6_std / deltaQ_hmc_L32_b6_mean)
 
@@ -1123,6 +1208,7 @@ fthmc_alpha_L64_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/alpha
 fthmc_alpha_L64_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/alpha_evaluation/dumps/topo_fthmc_L64_beta6.0_alpha_train_b3.0_L32_1984.csv')
 fthmc_alpha_L64_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/alpha_evaluation/dumps/topo_fthmc_L64_beta6.0_alpha_train_b3.0_L32_1999.csv')
 fthmc_alpha_L64_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/alpha_evaluation/dumps/topo_fthmc_L64_beta6.0_alpha_train_b3.0_L32_2008.csv')
+fthmc_alpha_L64_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/alpha_evaluation/dumps/topo_fthmc_L64_beta6.0_alpha_train_b3.0_L32_2017.csv')
 fthmc_alpha_L64_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/alpha_evaluation/dumps/topo_fthmc_L64_beta6.0_alpha_train_b3.0_L32_2025.csv')
 
 max_lag = 64
@@ -1135,6 +1221,7 @@ fthmc_alpha_L64_b6_auto_1331 = auto_from_chi(fthmc_alpha_L64_b6_topo_1331, max_l
 fthmc_alpha_L64_b6_auto_1984 = auto_from_chi(fthmc_alpha_L64_b6_topo_1984, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_alpha_L64_b6_auto_1999 = auto_from_chi(fthmc_alpha_L64_b6_topo_1999, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_alpha_L64_b6_auto_2008 = auto_from_chi(fthmc_alpha_L64_b6_topo_2008, max_lag=max_lag, beta=beta, volume=volume)
+fthmc_alpha_L64_b6_auto_2017 = auto_from_chi(fthmc_alpha_L64_b6_topo_2017, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_alpha_L64_b6_auto_2025 = auto_from_chi(fthmc_alpha_L64_b6_topo_2025, max_lag=max_lag, beta=beta, volume=volume)
 
 idx = 16
@@ -1145,16 +1232,18 @@ gamma_fthmc_1331 = 1 / (1 - fthmc_alpha_L64_b6_auto_1331[idx])
 gamma_fthmc_1984 = 1 / (1 - fthmc_alpha_L64_b6_auto_1984[idx])
 gamma_fthmc_1999 = 1 / (1 - fthmc_alpha_L64_b6_auto_1999[idx])
 gamma_fthmc_2008 = 1 / (1 - fthmc_alpha_L64_b6_auto_2008[idx])
+gamma_fthmc_2017 = 1 / (1 - fthmc_alpha_L64_b6_auto_2017[idx])
 gamma_fthmc_2025 = 1 / (1 - fthmc_alpha_L64_b6_auto_2025[idx])
 
 gamma_ratio_1331 = gamma_hmc / gamma_fthmc_1331
 gamma_ratio_1984 = gamma_hmc / gamma_fthmc_1984
 gamma_ratio_1999 = gamma_hmc / gamma_fthmc_1999
 gamma_ratio_2008 = gamma_hmc / gamma_fthmc_2008
+gamma_ratio_2017 = gamma_hmc / gamma_fthmc_2017
 gamma_ratio_2025 = gamma_hmc / gamma_fthmc_2025
 
-gamma_ratio_L64_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
-gamma_ratio_L64_b6_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
+gamma_ratio_L64_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
+gamma_ratio_L64_b6_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
 
 alpha_L64_b6_gamma_ratio = gv.gvar(gamma_ratio_L64_b6_mean, gamma_ratio_L64_b6_std)
 
@@ -1167,11 +1256,12 @@ deltaQ_fthmc_1331 = [ abs(fthmc_alpha_L64_b6_topo_1331[i] - fthmc_alpha_L64_b6_t
 deltaQ_fthmc_1984 = [ abs(fthmc_alpha_L64_b6_topo_1984[i] - fthmc_alpha_L64_b6_topo_1984[i-1]) for i in range(1, len(fthmc_alpha_L64_b6_topo_1984))]
 deltaQ_fthmc_1999 = [ abs(fthmc_alpha_L64_b6_topo_1999[i] - fthmc_alpha_L64_b6_topo_1999[i-1]) for i in range(1, len(fthmc_alpha_L64_b6_topo_1999))]
 deltaQ_fthmc_2008 = [ abs(fthmc_alpha_L64_b6_topo_2008[i] - fthmc_alpha_L64_b6_topo_2008[i-1]) for i in range(1, len(fthmc_alpha_L64_b6_topo_2008))]
+deltaQ_fthmc_2017 = [ abs(fthmc_alpha_L64_b6_topo_2017[i] - fthmc_alpha_L64_b6_topo_2017[i-1]) for i in range(1, len(fthmc_alpha_L64_b6_topo_2017))]
 deltaQ_fthmc_2025 = [ abs(fthmc_alpha_L64_b6_topo_2025[i] - fthmc_alpha_L64_b6_topo_2025[i-1]) for i in range(1, len(fthmc_alpha_L64_b6_topo_2025))]
 
 deltaQ_hmc_L64_b6_mean = np.mean(deltaQ_hmc)
-deltaQ_fthmc_L64_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
-deltaQ_fthmc_L64_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L64_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L64_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
 
 alpha_L64_b6_deltaQ_ratio = gv.gvar(deltaQ_fthmc_L64_b6_mean / deltaQ_hmc_L64_b6_mean, deltaQ_fthmc_L64_b6_std / deltaQ_hmc_L64_b6_mean)
 
@@ -1190,6 +1280,7 @@ fthmc_arctan_L32_b3_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/arct
 fthmc_arctan_L32_b3_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/arctan_evaluation/dumps/topo_fthmc_L32_beta3.0_arctan_train_b3.0_L32_1984.csv')
 fthmc_arctan_L32_b3_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/arctan_evaluation/dumps/topo_fthmc_L32_beta3.0_arctan_train_b3.0_L32_1999.csv')
 fthmc_arctan_L32_b3_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/arctan_evaluation/dumps/topo_fthmc_L32_beta3.0_arctan_train_b3.0_L32_2008.csv')
+fthmc_arctan_L32_b3_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/arctan_evaluation/dumps/topo_fthmc_L32_beta3.0_arctan_train_b3.0_L32_2017.csv')
 fthmc_arctan_L32_b3_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/arctan_evaluation/dumps/topo_fthmc_L32_beta3.0_arctan_train_b3.0_L32_2025.csv')
 
 max_lag = 64
@@ -1202,6 +1293,7 @@ fthmc_arctan_L32_b3_auto_1331 = auto_from_chi(fthmc_arctan_L32_b3_topo_1331, max
 fthmc_arctan_L32_b3_auto_1984 = auto_from_chi(fthmc_arctan_L32_b3_topo_1984, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_arctan_L32_b3_auto_1999 = auto_from_chi(fthmc_arctan_L32_b3_topo_1999, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_arctan_L32_b3_auto_2008 = auto_from_chi(fthmc_arctan_L32_b3_topo_2008, max_lag=max_lag, beta=beta, volume=volume)
+fthmc_arctan_L32_b3_auto_2017 = auto_from_chi(fthmc_arctan_L32_b3_topo_2017, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_arctan_L32_b3_auto_2025 = auto_from_chi(fthmc_arctan_L32_b3_topo_2025, max_lag=max_lag, beta=beta, volume=volume)
 
 idx = 16
@@ -1212,16 +1304,18 @@ gamma_fthmc_1331 = 1 / (1 - fthmc_arctan_L32_b3_auto_1331[idx])
 gamma_fthmc_1984 = 1 / (1 - fthmc_arctan_L32_b3_auto_1984[idx])
 gamma_fthmc_1999 = 1 / (1 - fthmc_arctan_L32_b3_auto_1999[idx])
 gamma_fthmc_2008 = 1 / (1 - fthmc_arctan_L32_b3_auto_2008[idx])
+gamma_fthmc_2017 = 1 / (1 - fthmc_arctan_L32_b3_auto_2017[idx])
 gamma_fthmc_2025 = 1 / (1 - fthmc_arctan_L32_b3_auto_2025[idx])
 
 gamma_ratio_1331 = gamma_hmc / gamma_fthmc_1331
 gamma_ratio_1984 = gamma_hmc / gamma_fthmc_1984
 gamma_ratio_1999 = gamma_hmc / gamma_fthmc_1999
 gamma_ratio_2008 = gamma_hmc / gamma_fthmc_2008
+gamma_ratio_2017 = gamma_hmc / gamma_fthmc_2017
 gamma_ratio_2025 = gamma_hmc / gamma_fthmc_2025
 
-gamma_ratio_L32_b3_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
-gamma_ratio_L32_b3_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
+gamma_ratio_L32_b3_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
+gamma_ratio_L32_b3_std = np.std([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2017, gamma_ratio_2025])
 
 arctan_L32_b3_gamma_ratio = gv.gvar(gamma_ratio_L32_b3_mean, gamma_ratio_L32_b3_std)
 
@@ -1234,11 +1328,12 @@ deltaQ_fthmc_1331 = [ abs(fthmc_arctan_L32_b3_topo_1331[i] - fthmc_arctan_L32_b3
 deltaQ_fthmc_1984 = [ abs(fthmc_arctan_L32_b3_topo_1984[i] - fthmc_arctan_L32_b3_topo_1984[i-1]) for i in range(1, len(fthmc_arctan_L32_b3_topo_1984))]
 deltaQ_fthmc_1999 = [ abs(fthmc_arctan_L32_b3_topo_1999[i] - fthmc_arctan_L32_b3_topo_1999[i-1]) for i in range(1, len(fthmc_arctan_L32_b3_topo_1999))]
 deltaQ_fthmc_2008 = [ abs(fthmc_arctan_L32_b3_topo_2008[i] - fthmc_arctan_L32_b3_topo_2008[i-1]) for i in range(1, len(fthmc_arctan_L32_b3_topo_2008))]
+deltaQ_fthmc_2017 = [ abs(fthmc_arctan_L32_b3_topo_2017[i] - fthmc_arctan_L32_b3_topo_2017[i-1]) for i in range(1, len(fthmc_arctan_L32_b3_topo_2017))]
 deltaQ_fthmc_2025 = [ abs(fthmc_arctan_L32_b3_topo_2025[i] - fthmc_arctan_L32_b3_topo_2025[i-1]) for i in range(1, len(fthmc_arctan_L32_b3_topo_2025))]
 
 deltaQ_hmc_L32_b3_mean = np.mean(deltaQ_hmc)
-deltaQ_fthmc_L32_b3_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
-deltaQ_fthmc_L32_b3_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b3_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b3_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
 
 arctan_L32_b3_deltaQ_ratio = gv.gvar(deltaQ_fthmc_L32_b3_mean / deltaQ_hmc_L32_b3_mean, deltaQ_fthmc_L32_b3_std / deltaQ_hmc_L32_b3_mean)
 
@@ -1255,6 +1350,7 @@ fthmc_arctan_L32_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/arct
 fthmc_arctan_L32_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/arctan_evaluation/dumps/topo_fthmc_L32_beta6.0_arctan_train_b3.0_L32_1984.csv')
 fthmc_arctan_L32_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/arctan_evaluation/dumps/topo_fthmc_L32_beta6.0_arctan_train_b3.0_L32_1999.csv')
 fthmc_arctan_L32_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/arctan_evaluation/dumps/topo_fthmc_L32_beta6.0_arctan_train_b3.0_L32_2008.csv')
+fthmc_arctan_L32_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/arctan_evaluation/dumps/topo_fthmc_L32_beta6.0_arctan_train_b3.0_L32_2017.csv')
 fthmc_arctan_L32_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/arctan_evaluation/dumps/topo_fthmc_L32_beta6.0_arctan_train_b3.0_L32_2025.csv')
 
 max_lag = 64
@@ -1267,6 +1363,7 @@ fthmc_arctan_L32_b6_auto_1331 = auto_from_chi(fthmc_arctan_L32_b6_topo_1331, max
 fthmc_arctan_L32_b6_auto_1984 = auto_from_chi(fthmc_arctan_L32_b6_topo_1984, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_arctan_L32_b6_auto_1999 = auto_from_chi(fthmc_arctan_L32_b6_topo_1999, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_arctan_L32_b6_auto_2008 = auto_from_chi(fthmc_arctan_L32_b6_topo_2008, max_lag=max_lag, beta=beta, volume=volume)
+fthmc_arctan_L32_b6_auto_2017 = auto_from_chi(fthmc_arctan_L32_b6_topo_2017, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_arctan_L32_b6_auto_2025 = auto_from_chi(fthmc_arctan_L32_b6_topo_2025, max_lag=max_lag, beta=beta, volume=volume)
 
 idx = 16
@@ -1277,12 +1374,14 @@ gamma_fthmc_1331 = 1 / (1 - fthmc_arctan_L32_b6_auto_1331[idx])
 gamma_fthmc_1984 = 1 / (1 - fthmc_arctan_L32_b6_auto_1984[idx])
 gamma_fthmc_1999 = 1 / (1 - fthmc_arctan_L32_b6_auto_1999[idx])
 gamma_fthmc_2008 = 1 / (1 - fthmc_arctan_L32_b6_auto_2008[idx])
+gamma_fthmc_2017 = 1 / (1 - fthmc_arctan_L32_b6_auto_2017[idx])
 gamma_fthmc_2025 = 1 / (1 - fthmc_arctan_L32_b6_auto_2025[idx])
 
 gamma_ratio_1331 = gamma_hmc / gamma_fthmc_1331
 gamma_ratio_1984 = gamma_hmc / gamma_fthmc_1984
 gamma_ratio_1999 = gamma_hmc / gamma_fthmc_1999
 gamma_ratio_2008 = gamma_hmc / gamma_fthmc_2008
+gamma_ratio_2017 = gamma_hmc / gamma_fthmc_2017
 gamma_ratio_2025 = gamma_hmc / gamma_fthmc_2025
 
 gamma_ratio_L32_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
@@ -1299,11 +1398,12 @@ deltaQ_fthmc_1331 = [ abs(fthmc_arctan_L32_b6_topo_1331[i] - fthmc_arctan_L32_b6
 deltaQ_fthmc_1984 = [ abs(fthmc_arctan_L32_b6_topo_1984[i] - fthmc_arctan_L32_b6_topo_1984[i-1]) for i in range(1, len(fthmc_arctan_L32_b6_topo_1984))]
 deltaQ_fthmc_1999 = [ abs(fthmc_arctan_L32_b6_topo_1999[i] - fthmc_arctan_L32_b6_topo_1999[i-1]) for i in range(1, len(fthmc_arctan_L32_b6_topo_1999))]
 deltaQ_fthmc_2008 = [ abs(fthmc_arctan_L32_b6_topo_2008[i] - fthmc_arctan_L32_b6_topo_2008[i-1]) for i in range(1, len(fthmc_arctan_L32_b6_topo_2008))]
+deltaQ_fthmc_2017 = [ abs(fthmc_arctan_L32_b6_topo_2017[i] - fthmc_arctan_L32_b6_topo_2017[i-1]) for i in range(1, len(fthmc_arctan_L32_b6_topo_2017))]
 deltaQ_fthmc_2025 = [ abs(fthmc_arctan_L32_b6_topo_2025[i] - fthmc_arctan_L32_b6_topo_2025[i-1]) for i in range(1, len(fthmc_arctan_L32_b6_topo_2025))]
 
 deltaQ_hmc_L32_b6_mean = np.mean(deltaQ_hmc)
-deltaQ_fthmc_L32_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
-deltaQ_fthmc_L32_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L32_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
 
 arctan_L32_b6_deltaQ_ratio = gv.gvar(deltaQ_fthmc_L32_b6_mean / deltaQ_hmc_L32_b6_mean, deltaQ_fthmc_L32_b6_std / deltaQ_hmc_L32_b6_mean)
 
@@ -1320,6 +1420,7 @@ fthmc_arctan_L64_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/arct
 fthmc_arctan_L64_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/arctan_evaluation/dumps/topo_fthmc_L64_beta6.0_arctan_train_b3.0_L32_1984.csv')
 fthmc_arctan_L64_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/arctan_evaluation/dumps/topo_fthmc_L64_beta6.0_arctan_train_b3.0_L32_1999.csv')
 fthmc_arctan_L64_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/arctan_evaluation/dumps/topo_fthmc_L64_beta6.0_arctan_train_b3.0_L32_2008.csv')
+fthmc_arctan_L64_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/arctan_evaluation/dumps/topo_fthmc_L64_beta6.0_arctan_train_b3.0_L32_2017.csv')
 fthmc_arctan_L64_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/arctan_evaluation/dumps/topo_fthmc_L64_beta6.0_arctan_train_b3.0_L32_2025.csv')
 
 max_lag = 64
@@ -1332,6 +1433,7 @@ fthmc_arctan_L64_b6_auto_1331 = auto_from_chi(fthmc_arctan_L64_b6_topo_1331, max
 fthmc_arctan_L64_b6_auto_1984 = auto_from_chi(fthmc_arctan_L64_b6_topo_1984, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_arctan_L64_b6_auto_1999 = auto_from_chi(fthmc_arctan_L64_b6_topo_1999, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_arctan_L64_b6_auto_2008 = auto_from_chi(fthmc_arctan_L64_b6_topo_2008, max_lag=max_lag, beta=beta, volume=volume)
+fthmc_arctan_L64_b6_auto_2017 = auto_from_chi(fthmc_arctan_L64_b6_topo_2017, max_lag=max_lag, beta=beta, volume=volume)
 fthmc_arctan_L64_b6_auto_2025 = auto_from_chi(fthmc_arctan_L64_b6_topo_2025, max_lag=max_lag, beta=beta, volume=volume)
 
 idx = 16
@@ -1342,12 +1444,14 @@ gamma_fthmc_1331 = 1 / (1 - fthmc_arctan_L64_b6_auto_1331[idx])
 gamma_fthmc_1984 = 1 / (1 - fthmc_arctan_L64_b6_auto_1984[idx])
 gamma_fthmc_1999 = 1 / (1 - fthmc_arctan_L64_b6_auto_1999[idx])
 gamma_fthmc_2008 = 1 / (1 - fthmc_arctan_L64_b6_auto_2008[idx])
+gamma_fthmc_2017 = 1 / (1 - fthmc_arctan_L64_b6_auto_2017[idx])
 gamma_fthmc_2025 = 1 / (1 - fthmc_arctan_L64_b6_auto_2025[idx])
 
 gamma_ratio_1331 = gamma_hmc / gamma_fthmc_1331
 gamma_ratio_1984 = gamma_hmc / gamma_fthmc_1984
 gamma_ratio_1999 = gamma_hmc / gamma_fthmc_1999
 gamma_ratio_2008 = gamma_hmc / gamma_fthmc_2008
+gamma_ratio_2017 = gamma_hmc / gamma_fthmc_2017
 gamma_ratio_2025 = gamma_hmc / gamma_fthmc_2025
 
 gamma_ratio_L64_b6_mean = np.mean([gamma_ratio_1331, gamma_ratio_1984, gamma_ratio_1999, gamma_ratio_2008, gamma_ratio_2025])
@@ -1364,11 +1468,12 @@ deltaQ_fthmc_1331 = [ abs(fthmc_arctan_L64_b6_topo_1331[i] - fthmc_arctan_L64_b6
 deltaQ_fthmc_1984 = [ abs(fthmc_arctan_L64_b6_topo_1984[i] - fthmc_arctan_L64_b6_topo_1984[i-1]) for i in range(1, len(fthmc_arctan_L64_b6_topo_1984))]
 deltaQ_fthmc_1999 = [ abs(fthmc_arctan_L64_b6_topo_1999[i] - fthmc_arctan_L64_b6_topo_1999[i-1]) for i in range(1, len(fthmc_arctan_L64_b6_topo_1999))]
 deltaQ_fthmc_2008 = [ abs(fthmc_arctan_L64_b6_topo_2008[i] - fthmc_arctan_L64_b6_topo_2008[i-1]) for i in range(1, len(fthmc_arctan_L64_b6_topo_2008))]
+deltaQ_fthmc_2017 = [ abs(fthmc_arctan_L64_b6_topo_2017[i] - fthmc_arctan_L64_b6_topo_2017[i-1]) for i in range(1, len(fthmc_arctan_L64_b6_topo_2017))]
 deltaQ_fthmc_2025 = [ abs(fthmc_arctan_L64_b6_topo_2025[i] - fthmc_arctan_L64_b6_topo_2025[i-1]) for i in range(1, len(fthmc_arctan_L64_b6_topo_2025))]
 
 deltaQ_hmc_L64_b6_mean = np.mean(deltaQ_hmc)
-deltaQ_fthmc_L64_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
-deltaQ_fthmc_L64_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L64_b6_mean = np.mean([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
+deltaQ_fthmc_L64_b6_std = np.std([np.mean(deltaQ_fthmc_1331), np.mean(deltaQ_fthmc_1984), np.mean(deltaQ_fthmc_1999), np.mean(deltaQ_fthmc_2008), np.mean(deltaQ_fthmc_2017), np.mean(deltaQ_fthmc_2025)])
 
 arctan_L64_b6_deltaQ_ratio = gv.gvar(deltaQ_fthmc_L64_b6_mean / deltaQ_hmc_L64_b6_mean, deltaQ_fthmc_L64_b6_std / deltaQ_hmc_L64_b6_mean)
 
