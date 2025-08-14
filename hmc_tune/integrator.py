@@ -62,6 +62,7 @@ class HMC_U1:
         Use 2nd-order minimum-norm (Omelyan) integrator.
         """
         lam = 0.1931833 # the best λ for 2nd-order minimum-norm (Omelyan) integrator #? NOTE: think of tuning this parameter
+        #TODO: ~ 0.21 for 4D SU(3)
         dt = self.dt
         theta_ = theta
         pi_ = pi - lam * dt * self.force(theta_)
@@ -115,6 +116,20 @@ class HMC_U1:
         
         dH = delta_H.detach().cpu().numpy().item()
         return dH
+    
+#TODO: add test with FT, FT after training
+#TODO: check the integrator
+
+
+
+# theta = initial field
+# pi = initial momentum
+# theta_new, pi_new = omelyan(theta, pi)
+# theta_reversed, pi_reversed = omelyan(theta_new, - pi_new)
+
+
+
+
 
 # %%
 import numpy as np
@@ -146,6 +161,26 @@ def compute_dH_omelyan(dt, steps, n_trials=32):
         dHs.append(dH)
     return np.mean(dHs), np.std(dHs)
 
+def test_reversed_omelyan(dt, steps, n_trials=8):
+    lattice_size = 32
+    beta = 3.0
+    n_steps = steps
+    step_size = dt
+    hmc = HMC_U1(lattice_size, beta, n_steps, step_size)
+    
+    for _ in range(n_trials):
+        theta = torch.zeros([2, lattice_size, lattice_size])
+        pi = torch.randn_like(theta, device=hmc.device)
+        theta_new, pi_new = hmc.omelyan(theta.clone(), pi.clone())
+        theta_reversed, pi_reversed = hmc.omelyan(theta_new.clone(), -pi_new.clone())
+        
+        diff_theta = theta_reversed - theta
+        diff_pi = pi_reversed + pi
+        
+        print(f"diff_theta: {diff_theta.norm()}")
+        print(f"diff_pi: {diff_pi.norm()}")
+
+
 steps_list = [5, 10, 20, 40]
 tau_leapfrog = 0.1
 tau_omelyan = 0.1
@@ -163,3 +198,12 @@ for steps in steps_list:
     dt = tau_omelyan / steps
     mean_dH, std_dH = compute_dH_omelyan(dt, steps)
     print(f"Omelyan: steps={steps:2d}, dt={dt:.5f}, ⟨ΔH⟩={mean_dH:.5e}, std={std_dH:.2e}")
+    
+print('-' * 60)
+
+for steps in steps_list:
+    dt = tau_omelyan / steps
+    test_reversed_omelyan(dt, steps)
+
+
+# %%

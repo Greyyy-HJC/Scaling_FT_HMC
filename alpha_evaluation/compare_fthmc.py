@@ -29,6 +29,7 @@ parser.add_argument('--lattice_size', type=int, default=16, help='Lattice size (
 parser.add_argument('--n_configs', type=int, default=2048, help='Number of configurations (default: 2048)')
 parser.add_argument('--beta', type=float, default=6, help='Beta parameter (default: 6)')
 parser.add_argument('--train_beta', type=float, default=6, help='Beta parameter for training (default: 6)')
+parser.add_argument('--n_steps', type=int, default=10, help='Number of steps (default: 10)')
 parser.add_argument('--ft_step_size', type=float, default=0.1, help='Step size for FT HMC (default: 0.1)')
 parser.add_argument('--max_lag', type=int, default=200, help='Max lag for autocorrelation (default: 200)')
 parser.add_argument('--rand_seed', type=int, default=1331, help='Random seed for training (default: 1331)')
@@ -45,6 +46,7 @@ print(f"Lattice size: {args.lattice_size}")
 print(f"Number of configurations: {args.n_configs}")
 print(f"Beta: {args.beta}")
 print(f"Training beta: {args.train_beta}")
+print(f"N_steps: {args.n_steps}")
 print(f"FT step size: {args.ft_step_size}")
 print(f"Max lag: {args.max_lag}")
 print(f"Random seed: {args.rand_seed}")
@@ -61,7 +63,7 @@ lattice_size = args.lattice_size
 volume = lattice_size ** 2
 beta = args.beta
 n_thermalization_steps = 2000
-n_steps = 10
+n_steps = args.n_steps
 store_interval = 1
 ft_step_size = args.ft_step_size
 n_iterations = store_interval * args.n_configs
@@ -130,14 +132,14 @@ print(f">>> Total time (Field Transformation HMC): {model_load_time + ft_therm_t
 
 # Compute autocorrelation of topological charges
 hmc_fig = hmc_summary(beta, max_lag, volume, therm_plaq_ls, plaq_ls, topological_charges, hamiltonians, therm_acceptance_rate, acceptance_rate)
-hmc_fig.savefig(f'plots/comparison_fthmc_L{lattice_size}_beta{beta:.1f}_{args.save_tag}.pdf', transparent=True)
+hmc_fig.savefig(f'plots/comparison_fthmc_L{lattice_size}_beta{beta:.1f}_nsteps{n_steps}_{args.save_tag}.pdf', transparent=True)
 
 # Print timing comparison    
 print(f">>> Total time (Field Transformation HMC): {model_load_time + ft_therm_time + ft_run_time:.2f} seconds")
 
 # Save topological_charges and acceptance rate to csv files
-np.savetxt(f'dumps/topo_fthmc_L{lattice_size}_beta{beta:.1f}_{args.save_tag}.csv', np.array(topological_charges), fmt='%.6e')
-np.savetxt(f'dumps/accept_rate_fthmc_L{lattice_size}_beta{beta:.1f}_{args.save_tag}.csv', [acceptance_rate], fmt='%.6e')
+np.savetxt(f'dumps/topo_fthmc_L{lattice_size}_beta{beta:.1f}_nsteps{n_steps}_{args.save_tag}.csv', np.array(topological_charges), fmt='%.6e')
+np.savetxt(f'dumps/accept_rate_fthmc_L{lattice_size}_beta{beta:.1f}_nsteps{n_steps}_{args.save_tag}.csv', [acceptance_rate], fmt='%.6e')
 
 
 # %%

@@ -378,7 +378,6 @@ class Local2ResNet(nn.Module):
         return plaq_coeffs, rect_coeffs 
     
     
-    
 class LocalAttnNet(nn.Module):
     """
     Simple 2-layer CNN model for local gauge field updates.
@@ -454,6 +453,89 @@ class LocalAttnNet(nn.Module):
         rect_coeffs = x[:, config.plaq_output_channels:, :, :]  # [batch_size, 8, L, L]
         
         return plaq_coeffs, rect_coeffs    
+    
+    
+class Local2ResAttnNet(nn.Module):
+    """
+    Simple 2-layer CNN model with double residual block and channel attention.
+    
+    Architecture:
+    - Input: Concatenated plaquette and rectangle features (6 channels total)
+    - Conv1: 6 → 12 channels, 3x3 kernel, circular padding, GELU activation
+    - Double residual block: 12 → 12 channels, two 3x3 kernels, circular padding, GELU activation
+    - Channel attention: 12 → 12 channels, 1x1 kernel, global average pooling, ReLU activation, 1x1 kernel, Sigmoid activation
+    - Conv2: 12 → 12 channels, 3x3 kernel, circular padding, GELU activation
+    - Output: tanh scaling to [-1/4, 1/4] range
+    
+    Locality Properties:
+    - Receptive field: 9x9 lattice sites (four 3x3 kernels)
+    
+    Total parameters: ~ 4,700
+    """
+    def __init__(self):
+        super().__init__()
+        config = NetConfig()
+        combined_input_channels = config.plaq_input_channels + config.rect_input_channels
+        hidden_channels = config.hidden_channels
+
+        # First conv layer to process combined features
+        # Parameters = input_channels x output_channels x kernel_height x kernel_width + bias_terms
+        self.conv1 = nn.Conv2d(
+            combined_input_channels,
+            hidden_channels,
+            config.kernel_size,
+            padding='same',
+            padding_mode='circular'
+        )
+        self.activation1 = nn.GELU()
+
+        # Double residual block
+        # Each has ~2,600 parameters
+        self.double_res_block = DoubleResidualBlock(hidden_channels, config.kernel_size, alpha=0.1, group_norm_groups=4) # smaller alpha, more groups
+
+        # Channel attention (on hidden channels)
+        # Parameters: ~100
+        self.channel_attention = ChannelAttention(hidden_channels)
+
+        # Output conv to generate final outputs
+        # Parameters: 12 * 12 * 3 * 3 + 12 = 1,308
+        self.conv2 = nn.Conv2d(
+            hidden_channels,
+            config.plaq_output_channels + config.rect_output_channels,  # Combined output channels
+            config.kernel_size,
+            padding='same',
+            padding_mode='circular'
+        )
+        self.activation2 = nn.GELU()
+
+    def forward(self, plaq_features, rect_features):
+        config = NetConfig()
+        # plaq_features shape: [batch_size, plaq_input_channels, L, L]
+        # rect_features shape: [batch_size, rect_input_channels, L, L]
+        
+        # Combine input features (0 parameters - tensor operation)
+        x = torch.cat([plaq_features, rect_features], dim=1)
+
+        # First conv layer (660 parameters used)
+        x = self.conv1(x)
+        x = self.activation1(x)
+
+        # Double residual block (~2,600 parameters used)
+        x = self.double_res_block(x)
+
+        # Channel attention (~100 parameters used)
+        x = self.channel_attention(x)
+
+        # Output conv to generate final outputs (1,308 parameters used)
+        x = self.conv2(x)
+        # x = self.activation2(x)  # 0 parameters 
+        x = torch.tanh(x) * 0.25  # 0 parameters - tensor operation, range [-1/4, 1/4]
+
+        # Split output into plaq and rect coefficients (0 parameters - tensor slicing)
+        plaq_coeffs = x[:, :config.plaq_output_channels, :, :]  # [batch_size, 4, L, L]
+        rect_coeffs = x[:, config.plaq_output_channels:, :, :]  # [batch_size, 8, L, L]
+        
+        return plaq_coeffs, rect_coeffs
     
 
 
@@ -532,7 +614,6 @@ class LocalCoorConvNet(nn.Module):
         
         return plaq_coeffs, rect_coeffs    
     
-
 
 class LocalUNet(nn.Module):
     """
@@ -970,7 +1051,6 @@ class LocalNetAdaptiveRF(nn.Module):
         return plaq_coeffs, rect_coeffs
 
 
-
 class LocalWindowAttention(nn.Module):
     """
     Efficient local window attention for transformer.
@@ -1083,16 +1163,19 @@ class DoubleResidualBlock(nn.Module):
     
     Parameters per block: ~ 2,600 for 12 hidden channels
     """
-    def __init__(self, channels, kernel_size=(3, 3)):
+    def __init__(self, channels, kernel_size=(3, 3), alpha=None, group_norm_groups=2):
         super().__init__()
         # Parameters: 2 * channels each
-        self.norm1 = nn.GroupNorm(2, channels)  # 2 * channels
+        self.norm1 = nn.GroupNorm(group_norm_groups, channels)  # 2 * channels
         self.conv1 = nn.Conv2d(channels, channels, kernel_size, padding='same', padding_mode='circular')  # channels² * 9 + channels
-        self.norm2 = nn.GroupNorm(2, channels)  # 2 * channels
+        self.norm2 = nn.GroupNorm(group_norm_groups, channels)  # 2 * channels
         self.conv2 = nn.Conv2d(channels, channels, kernel_size, padding='same', padding_mode='circular')  # channels² * 9 + channels
         
         self.activation = nn.SiLU()  # 0 parameters
-        self.alpha = nn.Parameter(torch.tensor(0.3))  # 1 parameter - learnable residual scaling
+        if alpha is not None:
+            self.alpha = nn.Parameter(torch.tensor(alpha))  # 1 parameter - learnable residual scaling
+        else:
+            self.alpha = nn.Parameter(torch.tensor(0.3))  # 1 parameter - learnable residual scaling
 
     def forward(self, x):
         identity = x  # 0 parameters
@@ -1150,11 +1233,13 @@ def choose_cnn_model(model_tag):
     elif model_tag == 'arctan':
         return LocalNetArcTan
     elif model_tag == 'resn':
-        return LocalResNet
+        return LocalResNet # base + 1 conv of resnet
     elif model_tag == 'res2n':
-        return Local2ResNet
+        return Local2ResNet # base + 2 conv of resnet
     elif model_tag == 'attn':
-        return LocalAttnNet
+        return LocalAttnNet # base + channel attn
+    elif model_tag == 'res2attn':
+        return Local2ResAttnNet # base + 2 conv of resnet + channel attn
     elif model_tag == 'coorconv':
         return LocalCoorConvNet
     elif model_tag == 'unet':

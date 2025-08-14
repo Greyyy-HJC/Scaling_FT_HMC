@@ -86,14 +86,14 @@ print(f">>> Total time (Standard HMC): {therm_time + run_time:.2f} seconds")
 
 # Compute autocorrelation of topological charges
 hmc_fig = hmc_summary(beta, max_lag, volume, therm_plaq_ls, plaq_ls, topological_charges, hamiltonians, therm_acceptance_rate, acceptance_rate)
-hmc_fig.savefig(f'plots/hmc_L{lattice_size}_beta{beta:.1f}.pdf', transparent=True)
+hmc_fig.savefig(f'plots/hmc_L{lattice_size}_beta{beta:.1f}_nsteps{n_steps}.pdf', transparent=True)
 
 # Print timing comparison
 print(f">>> Total time (Standard HMC): {therm_time + run_time:.2f} seconds")
 
 # Save topological_charges and acceptance rate to csv files
-np.savetxt(f'dumps/topo_hmc_L{lattice_size}_beta{beta:.1f}.csv', np.array(topological_charges), fmt='%.6e')
-np.savetxt(f'dumps/accept_rate_hmc_L{lattice_size}_beta{beta:.1f}.csv', [acceptance_rate], fmt='%.6e')
+np.savetxt(f'dumps/topo_hmc_L{lattice_size}_beta{beta:.1f}_nsteps{n_steps}.csv', np.array(topological_charges), fmt='%.6e')
+np.savetxt(f'dumps/accept_rate_hmc_L{lattice_size}_beta{beta:.1f}_nsteps{n_steps}.csv', [acceptance_rate], fmt='%.6e')
 
 
 # %%
