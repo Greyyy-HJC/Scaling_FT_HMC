@@ -1223,6 +1223,111 @@ class ChannelAttention(nn.Module):
         # Element-wise multiplication (0 parameters)
         return x * self.attention(x)  # attention module parameters used above
     
+    
+    
+class ResidualBlock_stable(nn.Module):
+    """Pre-norm + Dropout + Learnable scaling"""
+    def __init__(self, channels, kernel_size=(3, 3)):
+        super().__init__()
+        self.conv1 = nn.Conv2d(channels, channels, kernel_size, 
+                               padding='same', padding_mode='circular')
+        
+        self.conv2 = nn.Conv2d(channels, channels, kernel_size, 
+                               padding='same', padding_mode='circular')
+
+        self.activation = nn.GELU()
+
+    def forward(self, x):
+        identity = x
+
+        out = self.conv1(x)
+        out = self.activation(out)
+
+        out = self.conv2(out)
+        
+        out += identity
+        out = self.activation(out)
+
+        return out
+    
+    
+class LocalStableNet(nn.Module):
+    """Stable hybrid architecture: memory-friendly but stronger than simple"""
+    def __init__(self):
+        super().__init__()
+        config = NetConfig()
+        config.hidden_channels = 14
+        
+        combined_input_channels = config.plaq_input_channels + config.rect_input_channels
+        
+        # Simplified input projection
+        self.input_conv = nn.Conv2d(
+            combined_input_channels, 
+            config.hidden_channels, 
+            config.kernel_size,
+            padding='same', 
+            padding_mode='circular'
+        )
+        self.input_norm = nn.GroupNorm(2, config.hidden_channels)  # Reduce groups
+        
+        # Only use 2 ResNet blocks, but with more stable design
+        self.res_block1 = ResidualBlock_stable(config.hidden_channels, config.kernel_size)
+        self.res_block2 = ResidualBlock_stable(config.hidden_channels, config.kernel_size)
+        
+        # Simplified channel attention
+        self.channel_attention = nn.Sequential(
+            nn.AdaptiveAvgPool2d(1),
+            nn.Conv2d(config.hidden_channels, max(2, config.hidden_channels // 4), 1),  # Conservative dimension reduction
+            nn.ReLU(),
+            nn.Conv2d(max(2, config.hidden_channels // 4), config.hidden_channels, 1),
+            nn.Sigmoid()
+        )
+        
+        # Output layer
+        self.output_conv = nn.Conv2d(
+            config.hidden_channels,
+            config.plaq_output_channels + config.rect_output_channels,
+            1,
+            bias=True
+        )
+        
+        # Learnable output scaling
+        self.output_scale = nn.Parameter(torch.ones(1) * 0.05)
+        
+    def forward(self, plaq_features, rect_features):
+        # Merge inputs
+        x = torch.cat([plaq_features, rect_features], dim=1)
+        
+        # Input processing
+        x = self.input_conv(x)
+        x = self.input_norm(x)
+        x = F.gelu(x)
+        
+        # ResNet blocks - add scaling factor for improved stability
+        identity1 = x
+        x = self.res_block1(x) * 0.3 + identity1  # Moderate scaling
+        
+        identity2 = x
+        x = self.res_block2(x) * 0.3 + identity2
+        
+        # Channel attention
+        attention = self.channel_attention(x)
+        x = x * attention
+        
+        # Output - progressive limiting
+        x = self.output_conv(x)
+        x = torch.tanh(x) * self.output_scale
+        
+        # Separate outputs
+        plaq_coeffs = x[:, :4, :, :]
+        rect_coeffs = x[:, 4:, :, :]
+        
+        return plaq_coeffs, rect_coeffs
+    
+    
+    
+    
+    
 
 
 def choose_cnn_model(model_tag):
@@ -1250,5 +1355,7 @@ def choose_cnn_model(model_tag):
         return LocalNetMultiFreq
     elif model_tag == 'adrf':
         return LocalNetAdaptiveRF
+    elif model_tag == 'stable':
+        return LocalStableNet
     else:
         raise ValueError(f"Invalid model tag: {model_tag}")
