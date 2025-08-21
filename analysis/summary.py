@@ -1725,9 +1725,9 @@ plt.show()
 
 # %%
 
-gamma_ratio_ls = [base_L32_b6_gamma_ratio, attn_L32_b6_gamma_ratio, resn_L32_b6_gamma_ratio, res2n_L32_b6_gamma_ratio, coorconv_L32_b6_gamma_ratio, arctan_L32_b6_gamma_ratio, stable_L32_b6_gamma_ratio, gv.gvar(3.1119499568593634, 0.4234993124792864)]
+gamma_ratio_ls = [base_L32_b6_gamma_ratio, attn_L32_b6_gamma_ratio, resn_L32_b6_gamma_ratio, res2n_L32_b6_gamma_ratio, arctan_L32_b6_gamma_ratio, stable_L32_b6_gamma_ratio, gv.gvar(3.1119499568593634, 0.4234993124792864)]
 
-deltaQ_ratio_ls = [base_L32_b6_deltaQ_ratio, attn_L32_b6_deltaQ_ratio, resn_L32_b6_deltaQ_ratio, res2n_L32_b6_deltaQ_ratio, coorconv_L32_b6_deltaQ_ratio, arctan_L32_b6_deltaQ_ratio, stable_L32_b6_deltaQ_ratio, gv.gvar(2.5406976744186047, 0.1752885282753643)]
+deltaQ_ratio_ls = [base_L32_b6_deltaQ_ratio, attn_L32_b6_deltaQ_ratio, resn_L32_b6_deltaQ_ratio, res2n_L32_b6_deltaQ_ratio, arctan_L32_b6_deltaQ_ratio, stable_L32_b6_deltaQ_ratio, gv.gvar(2.5406976744186047, 0.1752885282753643)]
 
 fig, (ax1, ax2) = default_sub_plot()
 # Adjust subplot spacing
@@ -1742,9 +1742,9 @@ ax1.set_ylabel('$R_{\\gamma (\\delta =16)}$', **fs_p)
 ax1.set_ylim(1, 4.5)
 # ax2.set_xlabel('Model', **fs_p)
 ax2.set_ylabel('$R_{\\Delta Q}$', **fs_p)
-ax2.set_ylim(1, 3.4)
+ax2.set_ylim(1.4, 3.2)
 ax2.set_xticks(np.arange(len(gamma_ratio_ls)))
-ax2.set_xticklabels(['base', 'attn', 'resn', 'res2n', 'coorconv', 'arctan', 'stable64', 'stable32'], fontsize=20)
+ax2.set_xticklabels(['base', 'attn', 'resn', 'res2n', 'arctan', 'stable64', 'stable32'], fontsize=20)
 ax1.legend(ncol=2, loc='upper right', **fs_small_p)
 # plt.tight_layout()
 plt.savefig('plots/summary_L32_b6_train_b3_L32.pdf', transparent=True)

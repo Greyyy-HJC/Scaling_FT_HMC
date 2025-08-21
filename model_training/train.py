@@ -1,6 +1,8 @@
 # %%
 import os
 import torch
+torch.set_float32_matmul_precision('medium')
+
 import numpy as np
 import argparse
 import time
@@ -101,7 +103,7 @@ set_seed(args.rand_seed)
 
 # Set default type
 torch.set_default_dtype(torch.float32)
-torch.set_float32_matmul_precision('high')
+
 
 # %%
 # initialize the field transformation
