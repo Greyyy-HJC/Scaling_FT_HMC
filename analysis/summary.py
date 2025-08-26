@@ -2,25 +2,25 @@
 import numpy as np
 import sys
 import gvar as gv
-sys.path.append('/eagle/fthmc/run')
+# sys.path.append('/path/to/your/local')  # replace with the local path of your cloned GitHub repo
 from Scaling_FT_HMC.utils.func import auto_from_chi
-from lametlat.utils.plot_settings import *
-from lametlat.utils.resampling import jackknife, jk_ls_avg
+from Scaling_FT_HMC.utils.plot_settings import *
+from Scaling_FT_HMC.utils.resampling import jackknife, jk_ls_avg
 
 
 # %%
 #! base b6 L32
 
-hmc_L32_b6_topo = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_hmc_L32_beta6.0_nsteps10.csv')
+hmc_L32_b6_topo = np.loadtxt('../scaling/dumps/topo_hmc_L32_beta6.0_nsteps10.csv')
 
-fthmc_base_L32_b6_topo_1029 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_train_b3.0_L32_1029.csv')
-fthmc_base_L32_b6_topo_1107 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_train_b3.0_L32_1107.csv')
-fthmc_base_L32_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_train_b3.0_L32_1331.csv')
-fthmc_base_L32_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_train_b3.0_L32_1984.csv')
-fthmc_base_L32_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_train_b3.0_L32_1999.csv')
-fthmc_base_L32_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_train_b3.0_L32_2008.csv')
-fthmc_base_L32_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_train_b3.0_L32_2017.csv')
-fthmc_base_L32_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_train_b3.0_L32_2025.csv')
+fthmc_base_L32_b6_topo_1029 = np.loadtxt('../scaling/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_train_b3.0_L32_1029.csv')
+fthmc_base_L32_b6_topo_1107 = np.loadtxt('../scaling/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_train_b3.0_L32_1107.csv')
+fthmc_base_L32_b6_topo_1331 = np.loadtxt('../scaling/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_train_b3.0_L32_1331.csv')
+fthmc_base_L32_b6_topo_1984 = np.loadtxt('../scaling/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_train_b3.0_L32_1984.csv')
+fthmc_base_L32_b6_topo_1999 = np.loadtxt('../scaling/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_train_b3.0_L32_1999.csv')
+fthmc_base_L32_b6_topo_2008 = np.loadtxt('../scaling/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_train_b3.0_L32_2008.csv')
+fthmc_base_L32_b6_topo_2017 = np.loadtxt('../scaling/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_train_b3.0_L32_2017.csv')
+fthmc_base_L32_b6_topo_2025 = np.loadtxt('../scaling/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_train_b3.0_L32_2025.csv')
 
 max_lag = 64
 beta = 6.0
@@ -88,16 +88,16 @@ print(f"std(deltaQ) ratio for base b6 L32: {gv.sdev(base_L32_b6_deltaQ_ratio)}")
 # %%
 #! base b6 L64
 
-hmc_L64_b6_topo = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_hmc_L64_beta6.0_nsteps10.csv')
+hmc_L64_b6_topo = np.loadtxt('../scaling/dumps/topo_hmc_L64_beta6.0_nsteps10.csv')
 
-fthmc_base_L64_b6_topo_1029 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_train_b3.0_L32_1029.csv')
-fthmc_base_L64_b6_topo_1107 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_train_b3.0_L32_1107.csv')
-fthmc_base_L64_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_train_b3.0_L32_1331.csv')
-fthmc_base_L64_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_train_b3.0_L32_1984.csv')
-fthmc_base_L64_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_train_b3.0_L32_1999.csv')
-fthmc_base_L64_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_train_b3.0_L32_2008.csv')
-fthmc_base_L64_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_train_b3.0_L32_2017.csv')
-fthmc_base_L64_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_train_b3.0_L32_2025.csv')
+fthmc_base_L64_b6_topo_1029 = np.loadtxt('../scaling/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_train_b3.0_L32_1029.csv')
+fthmc_base_L64_b6_topo_1107 = np.loadtxt('../scaling/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_train_b3.0_L32_1107.csv')
+fthmc_base_L64_b6_topo_1331 = np.loadtxt('../scaling/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_train_b3.0_L32_1331.csv')
+fthmc_base_L64_b6_topo_1984 = np.loadtxt('../scaling/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_train_b3.0_L32_1984.csv')
+fthmc_base_L64_b6_topo_1999 = np.loadtxt('../scaling/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_train_b3.0_L32_1999.csv')
+fthmc_base_L64_b6_topo_2008 = np.loadtxt('../scaling/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_train_b3.0_L32_2008.csv')
+fthmc_base_L64_b6_topo_2017 = np.loadtxt('../scaling/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_train_b3.0_L32_2017.csv')
+fthmc_base_L64_b6_topo_2025 = np.loadtxt('../scaling/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_train_b3.0_L32_2025.csv')
 
 max_lag = 64
 beta = 6.0
@@ -170,16 +170,16 @@ print(f"std(deltaQ) ratio for base b6 L64: {gv.sdev(base_L64_b6_deltaQ_ratio)}")
 # %%
 #! base32 b6 L32
 
-hmc_L32_b6_topo = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_hmc_L32_beta6.0_nsteps10.csv')
+hmc_L32_b6_topo = np.loadtxt('../scaling/dumps/topo_hmc_L32_beta6.0_nsteps10.csv')
 
-fthmc_base32_L32_b6_topo_1029 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/base_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_batch32_train_b3.0_L32_1029.csv')
-fthmc_base32_L32_b6_topo_1107 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/base_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_batch32_train_b3.0_L32_1107.csv')
-fthmc_base32_L32_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/base_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_batch32_train_b3.0_L32_1331.csv')
-fthmc_base32_L32_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/base_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_batch32_train_b3.0_L32_1984.csv')
-fthmc_base32_L32_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/base_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_batch32_train_b3.0_L32_1999.csv')
-fthmc_base32_L32_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/base_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_batch32_train_b3.0_L32_2008.csv')
-fthmc_base32_L32_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/base_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_batch32_train_b3.0_L32_2017.csv')
-fthmc_base32_L32_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/base_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_batch32_train_b3.0_L32_2025.csv')
+fthmc_base32_L32_b6_topo_1029 = np.loadtxt('../base_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_batch32_train_b3.0_L32_1029.csv')
+fthmc_base32_L32_b6_topo_1107 = np.loadtxt('../base_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_batch32_train_b3.0_L32_1107.csv')
+fthmc_base32_L32_b6_topo_1331 = np.loadtxt('../base_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_batch32_train_b3.0_L32_1331.csv')
+fthmc_base32_L32_b6_topo_1984 = np.loadtxt('../base_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_batch32_train_b3.0_L32_1984.csv')
+fthmc_base32_L32_b6_topo_1999 = np.loadtxt('../base_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_batch32_train_b3.0_L32_1999.csv')
+fthmc_base32_L32_b6_topo_2008 = np.loadtxt('../base_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_batch32_train_b3.0_L32_2008.csv')
+fthmc_base32_L32_b6_topo_2017 = np.loadtxt('../base_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_batch32_train_b3.0_L32_2017.csv')
+fthmc_base32_L32_b6_topo_2025 = np.loadtxt('../base_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_base_batch32_train_b3.0_L32_2025.csv')
 
 max_lag = 64
 beta = 6.0
@@ -248,16 +248,16 @@ print(f"std(deltaQ) ratio for base b6 L32: {gv.sdev(base32_L32_b6_deltaQ_ratio)}
 # %%
 #! base32 b6 L64
 
-hmc_L64_b6_topo = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_hmc_L64_beta6.0_nsteps10.csv')
+hmc_L64_b6_topo = np.loadtxt('../scaling/dumps/topo_hmc_L64_beta6.0_nsteps10.csv')
 
-fthmc_base32_L64_b6_topo_1029 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/base_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_batch32_train_b3.0_L32_1029.csv')
-fthmc_base32_L64_b6_topo_1107 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/base_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_batch32_train_b3.0_L32_1107.csv')
-fthmc_base32_L64_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/base_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_batch32_train_b3.0_L32_1331.csv')
-fthmc_base32_L64_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/base_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_batch32_train_b3.0_L32_1984.csv')
-fthmc_base32_L64_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/base_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_batch32_train_b3.0_L32_1999.csv')
-fthmc_base32_L64_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/base_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_batch32_train_b3.0_L32_2008.csv')
-fthmc_base32_L64_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/base_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_batch32_train_b3.0_L32_2017.csv')
-fthmc_base32_L64_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/base_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_batch32_train_b3.0_L32_2025.csv')
+fthmc_base32_L64_b6_topo_1029 = np.loadtxt('../base_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_batch32_train_b3.0_L32_1029.csv')
+fthmc_base32_L64_b6_topo_1107 = np.loadtxt('../base_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_batch32_train_b3.0_L32_1107.csv')
+fthmc_base32_L64_b6_topo_1331 = np.loadtxt('../base_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_batch32_train_b3.0_L32_1331.csv')
+fthmc_base32_L64_b6_topo_1984 = np.loadtxt('../base_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_batch32_train_b3.0_L32_1984.csv')
+fthmc_base32_L64_b6_topo_1999 = np.loadtxt('../base_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_batch32_train_b3.0_L32_1999.csv')
+fthmc_base32_L64_b6_topo_2008 = np.loadtxt('../base_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_batch32_train_b3.0_L32_2008.csv')
+fthmc_base32_L64_b6_topo_2017 = np.loadtxt('../base_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_batch32_train_b3.0_L32_2017.csv')
+fthmc_base32_L64_b6_topo_2025 = np.loadtxt('../base_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_base_batch32_train_b3.0_L32_2025.csv')
 
 max_lag = 64
 beta = 6.0
@@ -329,16 +329,16 @@ print(f"std(deltaQ) ratio for base b6 L64: {gv.sdev(base32_L64_b6_deltaQ_ratio)}
 # %%
 #! attn b6 L32
 
-hmc_L32_b6_topo = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_hmc_L32_beta6.0_nsteps10.csv')
+hmc_L32_b6_topo = np.loadtxt('../scaling/dumps/topo_hmc_L32_beta6.0_nsteps10.csv')
 
-fthmc_attn_L32_b6_topo_1029 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_attn_train_b3.0_L32_1029.csv')
-fthmc_attn_L32_b6_topo_1107 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_attn_train_b3.0_L32_1107.csv')
-fthmc_attn_L32_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_attn_train_b3.0_L32_1331.csv')
-fthmc_attn_L32_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_attn_train_b3.0_L32_1984.csv')
-fthmc_attn_L32_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_attn_train_b3.0_L32_1999.csv')
-fthmc_attn_L32_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_attn_train_b3.0_L32_2008.csv')
-fthmc_attn_L32_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_attn_train_b3.0_L32_2017.csv')
-fthmc_attn_L32_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_attn_train_b3.0_L32_2025.csv')
+fthmc_attn_L32_b6_topo_1029 = np.loadtxt('../attn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_attn_train_b3.0_L32_1029.csv')
+fthmc_attn_L32_b6_topo_1107 = np.loadtxt('../attn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_attn_train_b3.0_L32_1107.csv')
+fthmc_attn_L32_b6_topo_1331 = np.loadtxt('../attn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_attn_train_b3.0_L32_1331.csv')
+fthmc_attn_L32_b6_topo_1984 = np.loadtxt('../attn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_attn_train_b3.0_L32_1984.csv')
+fthmc_attn_L32_b6_topo_1999 = np.loadtxt('../attn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_attn_train_b3.0_L32_1999.csv')
+fthmc_attn_L32_b6_topo_2008 = np.loadtxt('../attn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_attn_train_b3.0_L32_2008.csv')
+fthmc_attn_L32_b6_topo_2017 = np.loadtxt('../attn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_attn_train_b3.0_L32_2017.csv')
+fthmc_attn_L32_b6_topo_2025 = np.loadtxt('../attn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_attn_train_b3.0_L32_2025.csv')
 
 max_lag = 64
 beta = 6.0
@@ -406,17 +406,17 @@ print(f"std(deltaQ) ratio for attn b6 L32: {gv.sdev(attn_L32_b6_deltaQ_ratio)}")
 # %%
 #! attn b6 L64
 
-hmc_L64_b6_topo = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_hmc_L64_beta6.0_nsteps10.csv')
+hmc_L64_b6_topo = np.loadtxt('../scaling/dumps/topo_hmc_L64_beta6.0_nsteps10.csv')
 
 
-fthmc_attn_L64_b6_topo_1029 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_attn_train_b3.0_L32_1029.csv')
-fthmc_attn_L64_b6_topo_1107 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_attn_train_b3.0_L32_1107.csv')
-fthmc_attn_L64_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_attn_train_b3.0_L32_1331.csv')
-fthmc_attn_L64_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_attn_train_b3.0_L32_1984.csv')
-fthmc_attn_L64_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_attn_train_b3.0_L32_1999.csv')
-fthmc_attn_L64_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_attn_train_b3.0_L32_2008.csv')
-fthmc_attn_L64_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_attn_train_b3.0_L32_2017.csv')
-fthmc_attn_L64_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/attn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_attn_train_b3.0_L32_2025.csv')
+fthmc_attn_L64_b6_topo_1029 = np.loadtxt('../attn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_attn_train_b3.0_L32_1029.csv')
+fthmc_attn_L64_b6_topo_1107 = np.loadtxt('../attn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_attn_train_b3.0_L32_1107.csv')
+fthmc_attn_L64_b6_topo_1331 = np.loadtxt('../attn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_attn_train_b3.0_L32_1331.csv')
+fthmc_attn_L64_b6_topo_1984 = np.loadtxt('../attn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_attn_train_b3.0_L32_1984.csv')
+fthmc_attn_L64_b6_topo_1999 = np.loadtxt('../attn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_attn_train_b3.0_L32_1999.csv')
+fthmc_attn_L64_b6_topo_2008 = np.loadtxt('../attn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_attn_train_b3.0_L32_2008.csv')
+fthmc_attn_L64_b6_topo_2017 = np.loadtxt('../attn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_attn_train_b3.0_L32_2017.csv')
+fthmc_attn_L64_b6_topo_2025 = np.loadtxt('../attn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_attn_train_b3.0_L32_2025.csv')
 
 max_lag = 64
 beta = 6.0
@@ -486,16 +486,16 @@ print(f"std(deltaQ) ratio for attn b6 L64: {gv.sdev(attn_L64_b6_deltaQ_ratio)}")
 # %%
 #! resn b6 L32
 
-hmc_L32_b6_topo = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_hmc_L32_beta6.0_nsteps10.csv')
+hmc_L32_b6_topo = np.loadtxt('../scaling/dumps/topo_hmc_L32_beta6.0_nsteps10.csv')
 
-fthmc_resn_L32_b6_topo_1029 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_resn_train_b3.0_L32_1029.csv')
-fthmc_resn_L32_b6_topo_1107 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_resn_train_b3.0_L32_1107.csv')
-fthmc_resn_L32_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_resn_train_b3.0_L32_1331.csv')
-fthmc_resn_L32_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_resn_train_b3.0_L32_1984.csv')
-fthmc_resn_L32_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_resn_train_b3.0_L32_1999.csv')
-fthmc_resn_L32_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_resn_train_b3.0_L32_2008.csv')
-fthmc_resn_L32_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_resn_train_b3.0_L32_2017.csv')
-fthmc_resn_L32_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_resn_train_b3.0_L32_2025.csv')
+fthmc_resn_L32_b6_topo_1029 = np.loadtxt('../resn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_resn_train_b3.0_L32_1029.csv')
+fthmc_resn_L32_b6_topo_1107 = np.loadtxt('../resn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_resn_train_b3.0_L32_1107.csv')
+fthmc_resn_L32_b6_topo_1331 = np.loadtxt('../resn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_resn_train_b3.0_L32_1331.csv')
+fthmc_resn_L32_b6_topo_1984 = np.loadtxt('../resn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_resn_train_b3.0_L32_1984.csv')
+fthmc_resn_L32_b6_topo_1999 = np.loadtxt('../resn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_resn_train_b3.0_L32_1999.csv')
+fthmc_resn_L32_b6_topo_2008 = np.loadtxt('../resn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_resn_train_b3.0_L32_2008.csv')
+fthmc_resn_L32_b6_topo_2017 = np.loadtxt('../resn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_resn_train_b3.0_L32_2017.csv')
+fthmc_resn_L32_b6_topo_2025 = np.loadtxt('../resn_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_resn_train_b3.0_L32_2025.csv')
 
 beta = 6.0
 max_lag = 64
@@ -563,16 +563,16 @@ print(f"std(deltaQ) ratio for resn b6 L32: {gv.sdev(resn_L32_b6_deltaQ_ratio)}")
 # %%
 #! resn b6 L64
 
-hmc_L64_b6_topo = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_hmc_L64_beta6.0_nsteps10.csv')
+hmc_L64_b6_topo = np.loadtxt('../scaling/dumps/topo_hmc_L64_beta6.0_nsteps10.csv')
 
-fthmc_resn_L64_b6_topo_1029 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_resn_train_b3.0_L32_1029.csv')
-fthmc_resn_L64_b6_topo_1107 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_resn_train_b3.0_L32_1107.csv')
-fthmc_resn_L64_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_resn_train_b3.0_L32_1331.csv')
-fthmc_resn_L64_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_resn_train_b3.0_L32_1984.csv')
-fthmc_resn_L64_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_resn_train_b3.0_L32_1999.csv')
-fthmc_resn_L64_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_resn_train_b3.0_L32_2008.csv')
-fthmc_resn_L64_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_resn_train_b3.0_L32_2017.csv')
-fthmc_resn_L64_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/resn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_resn_train_b3.0_L32_2025.csv')
+fthmc_resn_L64_b6_topo_1029 = np.loadtxt('../resn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_resn_train_b3.0_L32_1029.csv')
+fthmc_resn_L64_b6_topo_1107 = np.loadtxt('../resn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_resn_train_b3.0_L32_1107.csv')
+fthmc_resn_L64_b6_topo_1331 = np.loadtxt('../resn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_resn_train_b3.0_L32_1331.csv')
+fthmc_resn_L64_b6_topo_1984 = np.loadtxt('../resn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_resn_train_b3.0_L32_1984.csv')
+fthmc_resn_L64_b6_topo_1999 = np.loadtxt('../resn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_resn_train_b3.0_L32_1999.csv')
+fthmc_resn_L64_b6_topo_2008 = np.loadtxt('../resn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_resn_train_b3.0_L32_2008.csv')
+fthmc_resn_L64_b6_topo_2017 = np.loadtxt('../resn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_resn_train_b3.0_L32_2017.csv')
+fthmc_resn_L64_b6_topo_2025 = np.loadtxt('../resn_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_resn_train_b3.0_L32_2025.csv')
 
 max_lag = 64
 beta = 6.0
@@ -642,16 +642,16 @@ print(f"std(deltaQ) ratio for resn b6 L64: {gv.sdev(resn_L64_b6_deltaQ_ratio)}")
 # %%
 #! tanh b6 L32
 
-hmc_L32_b6_topo = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_hmc_L32_beta6.0_nsteps10.csv')
+hmc_L32_b6_topo = np.loadtxt('../scaling/dumps/topo_hmc_L32_beta6.0_nsteps10.csv')
 
-fthmc_tanh_L32_b6_topo_1029 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/tanh_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_tanh_train_b3.0_L32_1029.csv')
-fthmc_tanh_L32_b6_topo_1107 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/tanh_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_tanh_train_b3.0_L32_1107.csv')
-fthmc_tanh_L32_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/tanh_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_tanh_train_b3.0_L32_1331.csv')
-fthmc_tanh_L32_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/tanh_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_tanh_train_b3.0_L32_1984.csv')
-fthmc_tanh_L32_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/tanh_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_tanh_train_b3.0_L32_1999.csv')
-fthmc_tanh_L32_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/tanh_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_tanh_train_b3.0_L32_2008.csv')
-fthmc_tanh_L32_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/tanh_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_tanh_train_b3.0_L32_2017.csv')
-fthmc_tanh_L32_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/tanh_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_tanh_train_b3.0_L32_2025.csv')
+fthmc_tanh_L32_b6_topo_1029 = np.loadtxt('../tanh_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_tanh_train_b3.0_L32_1029.csv')
+fthmc_tanh_L32_b6_topo_1107 = np.loadtxt('../tanh_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_tanh_train_b3.0_L32_1107.csv')
+fthmc_tanh_L32_b6_topo_1331 = np.loadtxt('../tanh_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_tanh_train_b3.0_L32_1331.csv')
+fthmc_tanh_L32_b6_topo_1984 = np.loadtxt('../tanh_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_tanh_train_b3.0_L32_1984.csv')
+fthmc_tanh_L32_b6_topo_1999 = np.loadtxt('../tanh_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_tanh_train_b3.0_L32_1999.csv')
+fthmc_tanh_L32_b6_topo_2008 = np.loadtxt('../tanh_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_tanh_train_b3.0_L32_2008.csv')
+fthmc_tanh_L32_b6_topo_2017 = np.loadtxt('../tanh_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_tanh_train_b3.0_L32_2017.csv')
+fthmc_tanh_L32_b6_topo_2025 = np.loadtxt('../tanh_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_tanh_train_b3.0_L32_2025.csv')
 
 beta = 6.0
 max_lag = 64
@@ -718,16 +718,16 @@ print(f"std(deltaQ) ratio for tanh b6 L32: {gv.sdev(tanh_L32_b6_deltaQ_ratio)}")
 # %%
 #! tanh b6 L64
 
-hmc_L64_b6_topo = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_hmc_L64_beta6.0_nsteps10.csv')
+hmc_L64_b6_topo = np.loadtxt('../scaling/dumps/topo_hmc_L64_beta6.0_nsteps10.csv')
 
-fthmc_tanh_L64_b6_topo_1029 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/tanh_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_tanh_train_b3.0_L32_1029.csv')
-fthmc_tanh_L64_b6_topo_1107 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/tanh_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_tanh_train_b3.0_L32_1107.csv')
-fthmc_tanh_L64_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/tanh_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_tanh_train_b3.0_L32_1331.csv')
-fthmc_tanh_L64_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/tanh_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_tanh_train_b3.0_L32_1984.csv')
-fthmc_tanh_L64_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/tanh_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_tanh_train_b3.0_L32_1999.csv')
-fthmc_tanh_L64_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/tanh_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_tanh_train_b3.0_L32_2008.csv')
-fthmc_tanh_L64_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/tanh_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_tanh_train_b3.0_L32_2017.csv')
-fthmc_tanh_L64_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/tanh_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_tanh_train_b3.0_L32_2025.csv')
+fthmc_tanh_L64_b6_topo_1029 = np.loadtxt('../tanh_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_tanh_train_b3.0_L32_1029.csv')
+fthmc_tanh_L64_b6_topo_1107 = np.loadtxt('../tanh_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_tanh_train_b3.0_L32_1107.csv')
+fthmc_tanh_L64_b6_topo_1331 = np.loadtxt('../tanh_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_tanh_train_b3.0_L32_1331.csv')
+fthmc_tanh_L64_b6_topo_1984 = np.loadtxt('../tanh_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_tanh_train_b3.0_L32_1984.csv')
+fthmc_tanh_L64_b6_topo_1999 = np.loadtxt('../tanh_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_tanh_train_b3.0_L32_1999.csv')
+fthmc_tanh_L64_b6_topo_2008 = np.loadtxt('../tanh_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_tanh_train_b3.0_L32_2008.csv')
+fthmc_tanh_L64_b6_topo_2017 = np.loadtxt('../tanh_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_tanh_train_b3.0_L32_2017.csv')
+fthmc_tanh_L64_b6_topo_2025 = np.loadtxt('../tanh_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_tanh_train_b3.0_L32_2025.csv')
 
 max_lag = 64
 beta = 6.0
@@ -797,16 +797,16 @@ print(f"std(deltaQ) ratio for tanh b6 L64: {gv.sdev(tanh_L64_b6_deltaQ_ratio)}")
 # %%
 #! combined b6 L32
 
-hmc_L32_b6_topo = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_hmc_L32_beta6.0_nsteps10.csv')
+hmc_L32_b6_topo = np.loadtxt('../scaling/dumps/topo_hmc_L32_beta6.0_nsteps10.csv')
 
-fthmc_combined_L32_b6_topo_1029 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined_train_b3.0_L32_1029.csv')
-fthmc_combined_L32_b6_topo_1107 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined_train_b3.0_L32_1107.csv')
-fthmc_combined_L32_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined_train_b3.0_L32_1331.csv')
-fthmc_combined_L32_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined_train_b3.0_L32_1984.csv')
-fthmc_combined_L32_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined_train_b3.0_L32_1999.csv')
-fthmc_combined_L32_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined_train_b3.0_L32_2008.csv')
-fthmc_combined_L32_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined_train_b3.0_L32_2017.csv')
-fthmc_combined_L32_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined_train_b3.0_L32_2025.csv')
+fthmc_combined_L32_b6_topo_1029 = np.loadtxt('../combined_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined_train_b3.0_L32_1029.csv')
+fthmc_combined_L32_b6_topo_1107 = np.loadtxt('../combined_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined_train_b3.0_L32_1107.csv')
+fthmc_combined_L32_b6_topo_1331 = np.loadtxt('../combined_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined_train_b3.0_L32_1331.csv')
+fthmc_combined_L32_b6_topo_1984 = np.loadtxt('../combined_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined_train_b3.0_L32_1984.csv')
+fthmc_combined_L32_b6_topo_1999 = np.loadtxt('../combined_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined_train_b3.0_L32_1999.csv')
+fthmc_combined_L32_b6_topo_2008 = np.loadtxt('../combined_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined_train_b3.0_L32_2008.csv')
+fthmc_combined_L32_b6_topo_2017 = np.loadtxt('../combined_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined_train_b3.0_L32_2017.csv')
+fthmc_combined_L32_b6_topo_2025 = np.loadtxt('../combined_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined_train_b3.0_L32_2025.csv')
 
 beta = 6.0
 max_lag = 64
@@ -874,16 +874,16 @@ print(f"std(deltaQ) ratio for combined b6 L32: {gv.sdev(combined_L32_b6_deltaQ_r
 # %%
 #! combined b6 L64
 
-hmc_L64_b6_topo = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_hmc_L64_beta6.0_nsteps10.csv')
+hmc_L64_b6_topo = np.loadtxt('../scaling/dumps/topo_hmc_L64_beta6.0_nsteps10.csv')
 
-fthmc_combined_L64_b6_topo_1029 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined_train_b3.0_L32_1029.csv')
-fthmc_combined_L64_b6_topo_1107 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined_train_b3.0_L32_1107.csv')
-fthmc_combined_L64_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined_train_b3.0_L32_1331.csv')
-fthmc_combined_L64_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined_train_b3.0_L32_1984.csv')
-fthmc_combined_L64_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined_train_b3.0_L32_1999.csv')
-fthmc_combined_L64_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined_train_b3.0_L32_2008.csv')
-fthmc_combined_L64_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined_train_b3.0_L32_2017.csv')
-fthmc_combined_L64_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined_train_b3.0_L32_2025.csv')
+fthmc_combined_L64_b6_topo_1029 = np.loadtxt('../combined_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined_train_b3.0_L32_1029.csv')
+fthmc_combined_L64_b6_topo_1107 = np.loadtxt('../combined_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined_train_b3.0_L32_1107.csv')
+fthmc_combined_L64_b6_topo_1331 = np.loadtxt('../combined_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined_train_b3.0_L32_1331.csv')
+fthmc_combined_L64_b6_topo_1984 = np.loadtxt('../combined_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined_train_b3.0_L32_1984.csv')
+fthmc_combined_L64_b6_topo_1999 = np.loadtxt('../combined_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined_train_b3.0_L32_1999.csv')
+fthmc_combined_L64_b6_topo_2008 = np.loadtxt('../combined_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined_train_b3.0_L32_2008.csv')
+fthmc_combined_L64_b6_topo_2017 = np.loadtxt('../combined_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined_train_b3.0_L32_2017.csv')
+fthmc_combined_L64_b6_topo_2025 = np.loadtxt('../combined_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined_train_b3.0_L32_2025.csv')
 
 max_lag = 64
 beta = 6.0
@@ -954,16 +954,16 @@ print(f"std(deltaQ) ratio for combined b6 L64: {gv.sdev(combined_L64_b6_deltaQ_r
 # %%
 #! combined64 b6 L32
 
-hmc_L32_b6_topo = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_hmc_L32_beta6.0_nsteps10.csv')
+hmc_L32_b6_topo = np.loadtxt('../scaling/dumps/topo_hmc_L32_beta6.0_nsteps10.csv')
 
-fthmc_combined64_L32_b6_topo_1029 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined64_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined64_train_b3.0_L32_1029.csv')
-fthmc_combined64_L32_b6_topo_1107 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined64_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined64_train_b3.0_L32_1107.csv')
-fthmc_combined64_L32_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined64_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined64_train_b3.0_L32_1331.csv')
-fthmc_combined64_L32_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined64_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined64_train_b3.0_L32_1984.csv')
-fthmc_combined64_L32_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined64_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined64_train_b3.0_L32_1999.csv')
-fthmc_combined64_L32_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined64_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined64_train_b3.0_L32_2008.csv')
-fthmc_combined64_L32_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined64_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined64_train_b3.0_L32_2017.csv')
-fthmc_combined64_L32_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined64_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined64_train_b3.0_L32_2025.csv')
+fthmc_combined64_L32_b6_topo_1029 = np.loadtxt('../combined64_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined64_train_b3.0_L32_1029.csv')
+fthmc_combined64_L32_b6_topo_1107 = np.loadtxt('../combined64_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined64_train_b3.0_L32_1107.csv')
+fthmc_combined64_L32_b6_topo_1331 = np.loadtxt('../combined64_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined64_train_b3.0_L32_1331.csv')
+fthmc_combined64_L32_b6_topo_1984 = np.loadtxt('../combined64_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined64_train_b3.0_L32_1984.csv')
+fthmc_combined64_L32_b6_topo_1999 = np.loadtxt('../combined64_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined64_train_b3.0_L32_1999.csv')
+fthmc_combined64_L32_b6_topo_2008 = np.loadtxt('../combined64_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined64_train_b3.0_L32_2008.csv')
+fthmc_combined64_L32_b6_topo_2017 = np.loadtxt('../combined64_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined64_train_b3.0_L32_2017.csv')
+fthmc_combined64_L32_b6_topo_2025 = np.loadtxt('../combined64_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps10_combined64_train_b3.0_L32_2025.csv')
 
 beta = 6.0
 max_lag = 64
@@ -1031,16 +1031,16 @@ print(f"std(deltaQ) ratio for combined64 b6 L32: {gv.sdev(combined64_L32_b6_delt
 # %%
 #! combined b6 L64
 
-hmc_L64_b6_topo = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/scaling/dumps/topo_hmc_L64_beta6.0_nsteps10.csv')
+hmc_L64_b6_topo = np.loadtxt('../scaling/dumps/topo_hmc_L64_beta6.0_nsteps10.csv')
 
-fthmc_combined64_L64_b6_topo_1029 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined64_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined64_train_b3.0_L32_1029.csv')
-fthmc_combined64_L64_b6_topo_1107 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined64_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined64_train_b3.0_L32_1107.csv')
-fthmc_combined64_L64_b6_topo_1331 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined64_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined64_train_b3.0_L32_1331.csv')
-fthmc_combined64_L64_b6_topo_1984 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined64_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined64_train_b3.0_L32_1984.csv')
-fthmc_combined64_L64_b6_topo_1999 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined64_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined64_train_b3.0_L32_1999.csv')
-fthmc_combined64_L64_b6_topo_2008 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined64_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined64_train_b3.0_L32_2008.csv')
-fthmc_combined64_L64_b6_topo_2017 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined64_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined64_train_b3.0_L32_2017.csv')
-fthmc_combined64_L64_b6_topo_2025 = np.loadtxt('/eagle/fthmc/run/Scaling_FT_HMC/combined64_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined64_train_b3.0_L32_2025.csv')
+fthmc_combined64_L64_b6_topo_1029 = np.loadtxt('../combined64_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined64_train_b3.0_L32_1029.csv')
+fthmc_combined64_L64_b6_topo_1107 = np.loadtxt('../combined64_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined64_train_b3.0_L32_1107.csv')
+fthmc_combined64_L64_b6_topo_1331 = np.loadtxt('../combined64_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined64_train_b3.0_L32_1331.csv')
+fthmc_combined64_L64_b6_topo_1984 = np.loadtxt('../combined64_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined64_train_b3.0_L32_1984.csv')
+fthmc_combined64_L64_b6_topo_1999 = np.loadtxt('../combined64_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined64_train_b3.0_L32_1999.csv')
+fthmc_combined64_L64_b6_topo_2008 = np.loadtxt('../combined64_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined64_train_b3.0_L32_2008.csv')
+fthmc_combined64_L64_b6_topo_2017 = np.loadtxt('../combined64_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined64_train_b3.0_L32_2017.csv')
+fthmc_combined64_L64_b6_topo_2025 = np.loadtxt('../combined64_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps10_combined64_train_b3.0_L32_2025.csv')
 
 max_lag = 64
 beta = 6.0
@@ -1111,23 +1111,27 @@ print(f"std(deltaQ) ratio for combined64 b6 L64: {gv.sdev(combined64_L64_b6_delt
 # %%
 #! summary
 
-# gamma_L32_b6_ratio_ls = [base_L32_b6_gamma_ratio, base32_L32_b6_gamma_ratio, attn_L32_b6_gamma_ratio, resn_L32_b6_gamma_ratio, tanh_L32_b6_gamma_ratio, combined64_L32_b6_gamma_ratio, combined_L32_b6_gamma_ratio]
+gamma_L32_b6_ratio_ls = [base_L32_b6_gamma_ratio, base32_L32_b6_gamma_ratio, attn_L32_b6_gamma_ratio, resn_L32_b6_gamma_ratio, tanh_L32_b6_gamma_ratio, combined64_L32_b6_gamma_ratio, combined_L32_b6_gamma_ratio]
 
-# deltaQ_L32_b6_ratio_ls = [base_L32_b6_deltaQ_ratio, base32_L32_b6_deltaQ_ratio, attn_L32_b6_deltaQ_ratio, resn_L32_b6_deltaQ_ratio, tanh_L32_b6_deltaQ_ratio, combined64_L32_b6_deltaQ_ratio, combined_L32_b6_deltaQ_ratio]
+deltaQ_L32_b6_ratio_ls = [base_L32_b6_deltaQ_ratio, base32_L32_b6_deltaQ_ratio, attn_L32_b6_deltaQ_ratio, resn_L32_b6_deltaQ_ratio, tanh_L32_b6_deltaQ_ratio, combined64_L32_b6_deltaQ_ratio, combined_L32_b6_deltaQ_ratio]
 
-# gamma_L64_b6_ratio_ls = [base_L64_b6_gamma_ratio, base32_L64_b6_gamma_ratio, attn_L64_b6_gamma_ratio, resn_L64_b6_gamma_ratio, tanh_L64_b6_gamma_ratio, combined64_L64_b6_gamma_ratio, combined_L64_b6_gamma_ratio]
+gamma_L64_b6_ratio_ls = [base_L64_b6_gamma_ratio, base32_L64_b6_gamma_ratio, attn_L64_b6_gamma_ratio, resn_L64_b6_gamma_ratio, tanh_L64_b6_gamma_ratio, combined64_L64_b6_gamma_ratio, combined_L64_b6_gamma_ratio]
 
-# deltaQ_L64_b6_ratio_ls = [base_L64_b6_deltaQ_ratio, base32_L64_b6_deltaQ_ratio, attn_L64_b6_deltaQ_ratio, resn_L64_b6_deltaQ_ratio, tanh_L64_b6_deltaQ_ratio, combined64_L64_b6_deltaQ_ratio, combined_L64_b6_deltaQ_ratio]
+deltaQ_L64_b6_ratio_ls = [base_L64_b6_deltaQ_ratio, base32_L64_b6_deltaQ_ratio, attn_L64_b6_deltaQ_ratio, resn_L64_b6_deltaQ_ratio, tanh_L64_b6_deltaQ_ratio, combined64_L64_b6_deltaQ_ratio, combined_L64_b6_deltaQ_ratio]
 
-gamma_L32_b6_ratio_ls = [base_L32_b6_gamma_ratio, base32_L32_b6_gamma_ratio, attn_L32_b6_gamma_ratio, resn_L32_b6_gamma_ratio, tanh_L32_b6_gamma_ratio, combined_L32_b6_gamma_ratio]
+# gamma_L32_b6_ratio_ls = [base_L32_b6_gamma_ratio, base32_L32_b6_gamma_ratio, attn_L32_b6_gamma_ratio, resn_L32_b6_gamma_ratio, tanh_L32_b6_gamma_ratio, combined_L32_b6_gamma_ratio]
 
-deltaQ_L32_b6_ratio_ls = [base_L32_b6_deltaQ_ratio, base32_L32_b6_deltaQ_ratio, attn_L32_b6_deltaQ_ratio, resn_L32_b6_deltaQ_ratio, tanh_L32_b6_deltaQ_ratio, combined_L32_b6_deltaQ_ratio]
+# deltaQ_L32_b6_ratio_ls = [base_L32_b6_deltaQ_ratio, base32_L32_b6_deltaQ_ratio, attn_L32_b6_deltaQ_ratio, resn_L32_b6_deltaQ_ratio, tanh_L32_b6_deltaQ_ratio, combined_L32_b6_deltaQ_ratio]
 
-gamma_L64_b6_ratio_ls = [base_L64_b6_gamma_ratio, base32_L64_b6_gamma_ratio, attn_L64_b6_gamma_ratio, resn_L64_b6_gamma_ratio, tanh_L64_b6_gamma_ratio, combined_L64_b6_gamma_ratio]
+# gamma_L64_b6_ratio_ls = [base_L64_b6_gamma_ratio, base32_L64_b6_gamma_ratio, attn_L64_b6_gamma_ratio, resn_L64_b6_gamma_ratio, tanh_L64_b6_gamma_ratio, combined_L64_b6_gamma_ratio]
 
-deltaQ_L64_b6_ratio_ls = [base_L64_b6_deltaQ_ratio, base32_L64_b6_deltaQ_ratio, attn_L64_b6_deltaQ_ratio, resn_L64_b6_deltaQ_ratio, tanh_L64_b6_deltaQ_ratio, combined_L64_b6_deltaQ_ratio]
+# deltaQ_L64_b6_ratio_ls = [base_L64_b6_deltaQ_ratio, base32_L64_b6_deltaQ_ratio, attn_L64_b6_deltaQ_ratio, resn_L64_b6_deltaQ_ratio, tanh_L64_b6_deltaQ_ratio, combined_L64_b6_deltaQ_ratio]
 
 fig, (ax1, ax2) = default_sub_plot()
+# Adjust figure size for better aspect ratio
+# fig.set_size_inches(10, 10 / 1.313)  # Make figure wider and taller for better visibility
+
+
 # Adjust subplot spacing
 plt.subplots_adjust(left=0.1,    # Increase left margin
                     right=0.95,    # Decrease right margin
@@ -1146,8 +1150,8 @@ ax1.set_ylim(1.7, 3.8)
 ax2.set_ylabel('$R_{\\Delta Q}$', **fs_p)
 ax2.set_ylim(1.3, 3.2)
 ax2.set_xticks(np.arange(len(gamma_L64_b6_ratio_ls)))
-# ax2.set_xticklabels(['Base', 'Base32', 'Attn', 'Resn', 'Tanh', 'Combined', 'Combined32'], fontsize=19)
-ax2.set_xticklabels(['Base', 'Base32', 'Attn', 'Resn', 'Tanh', 'Combined'], fontsize=19)
+ax2.set_xticklabels(['Base', 'Base32', 'Attn', 'Resn', 'Tanh', 'Comb', 'Comb32'], fontsize=19)
+# ax2.set_xticklabels(['Base', 'Base32', 'Attn', 'Resn', 'Tanh', 'Combined'], fontsize=19)
 ax1.legend(ncol=2, loc='upper right', **fs_small_p)
 # plt.tight_layout()
 plt.savefig('plots/summary_train_b3_L32.pdf', transparent=True)
