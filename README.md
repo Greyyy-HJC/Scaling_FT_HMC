@@ -30,7 +30,7 @@ Scaling_FT_HMC/
 
 The project implements several CNN architectures for field transformation:
 
-- **base**: Simple 2-layer CNN with GELU activation (~2K parameters)
+- **base**: Simple 2-layer CNN with GELU activation
 - **tanh**: Base model with split tanh output scaling, larger weight for plaquette term
 - **resn**: ResNet-style model with residual connections
 - **attn**: Attention-enhanced model with channel attention mechanism
@@ -49,14 +49,14 @@ python generate.py --lattice_size 32 --beta 3.0 --n_configs 2048
 ### 2. Model Training
 ```bash
 cd model_training  
-python train.py --lattice_size 32 --min_beta 3.0 --max_beta 3.0 --beta_gap 0.5 --model_tag base
+python train.py --lattice_size 32 --min_beta 3.0 --max_beta 3.0 --beta_gap 0.5 --model_tag base --save_tag base_train_b3.0_L32 --rand_seed 1029
 ```
 
 ### 3. Evaluation and Scaling Studies
 ```bash
 cd scaling
-python compare_fthmc.py --lattice_size 32 --beta 6.0 --train_beta 3.0 --model_tag base
-python compare_hmc.py --lattice_size 32 --beta 6.0  # Standard HMC baseline
+python compare_fthmc.py --lattice_size 32 --beta 6.0 --train_beta 3.0 --model_tag base --save_tag base_train_b3.0_L32 --rand_seed 1029
+python compare_hmc.py --lattice_size 32 --beta 6.0 --rand_seed 1029  # Standard HMC baseline
 ```
 
 ### 4. Analysis
@@ -65,7 +65,7 @@ cd analysis
 python summary.py  # Generate comprehensive performance analysis
 ```
 
-**Note**: When using the Jupyter notebooks in the `analysis/` directory, remember to modify the path in:
+**Note**: When running the python scripts, remember to modify the path in:
 ```python
 # sys.path.append('/path/to/your/local')  # replace with the local path of your cloned GitHub repo
 ```

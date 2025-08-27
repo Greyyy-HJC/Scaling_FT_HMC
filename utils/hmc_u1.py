@@ -2,7 +2,7 @@
 import torch
 import numpy as np
 from tqdm import tqdm
-from fthmc_2d_u1.utils.func import plaq_from_field, topo_from_field, plaq_mean_from_field, regularize
+from Scaling_FT_HMC.utils.func import plaq_from_field, topo_from_field, plaq_mean_from_field, regularize
 
 
 class HMC_U1:
@@ -49,7 +49,6 @@ class HMC_U1:
         # Set default data type and device
         torch.set_default_dtype(torch.float32)
         torch.set_default_device(self.device)
-        torch.manual_seed(1331)
 
     def initialize(self):
         return torch.zeros([2, self.lattice_size, self.lattice_size])

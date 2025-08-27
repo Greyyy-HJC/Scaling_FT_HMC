@@ -2,6 +2,9 @@
 import torch
 import numpy as np
 import argparse
+
+import sys
+# sys.path.append('/path/to/your/local')  # replace with the local path of your cloned GitHub repo
 from Scaling_FT_HMC.utils.hmc_u1 import HMC_U1
 from Scaling_FT_HMC.utils.func import hmc_summary
 

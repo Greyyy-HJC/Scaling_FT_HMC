@@ -75,9 +75,9 @@ fig_size = (fig_width, fig_width / gr)
 
 # Default plot axes for general plots
 plt_axes = [0.15, 0.15, 0.8, 0.8]  # left, bottom, width, height
-fs_p = {"fontsize": 16}  # font size of text, label, ticks
-fs_small_p = {"fontsize": 12}  # small font size of text, label, ticks
-ls_p = {"labelsize": 16}
+fs_p = {"fontsize": 20}  # font size of text, label, ticks
+fs_small_p = {"fontsize": 18}  # small font size of text, label, ticks
+ls_p = {"labelsize": 20}
 
 # Errorbar plot settings
 errorb = {
@@ -85,7 +85,14 @@ errorb = {
     "mfc": "none",
     "linestyle": "none",
     "capsize": 3,
-    "elinewidth": 1,
+    "elinewidth": 2,
+}  # none
+
+errorb_line = {
+    "markersize": 5,
+    "mfc": "none",
+    "capsize": 3,
+    "elinewidth": 2,
 }  # none
 
 errorb_circle = {
@@ -94,7 +101,7 @@ errorb_circle = {
     "mfc": "none",
     "linestyle": "none",
     "capsize": 3,
-    "elinewidth": 1.5,
+    "elinewidth": 2,
 }  # circle
 
 # Common used labels
