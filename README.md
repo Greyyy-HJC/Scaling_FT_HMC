@@ -38,6 +38,44 @@ The project implements several CNN architectures for field transformation:
 
 All models use circular padding to respect lattice periodicity and are designed with small receptive fields to maintain locality properties.
 
+## Installation
+
+### Requirements
+
+This project requires Python 3.9+ and the packages listed in `requirements.txt`. The main dependencies include:
+
+- PyTorch 2.5.1+ with CUDA support
+- Lightning for distributed training
+- NumPy, SciPy for scientific computing
+- Matplotlib, Seaborn for visualization
+- gvar for error analysis
+- tqdm for progress tracking
+
+### Setup
+
+1. **Clone the repository:**
+```bash
+git clone <repository-url>
+cd Scaling_FT_HMC
+```
+
+2. **Create and activate a conda environment:**
+```bash
+conda create -n fthmc python=3.9
+conda activate fthmc
+```
+
+3. **Install dependencies:**
+```bash
+pip install -r requirements.txt
+```
+
+4. **Update the path in Python scripts:**
+Edit the path in each Python script to point to your local repository:
+```python
+# sys.path.append('/path/to/your/local')  # replace with the local path of your cloned GitHub repo
+```
+
 ## Workflow
 
 ### 1. Gauge Configuration Generation
@@ -65,8 +103,23 @@ cd analysis
 python summary.py  # Generate comprehensive performance analysis
 ```
 
-**Note**: When running the python scripts, remember to modify the path in:
-```python
-# sys.path.append('/path/to/your/local')  # replace with the local path of your cloned GitHub repo
+## Citation
+
+If you use this code in your research, please cite our work:
+
+```bibtex
+@article{anonymous_2024,
+  title={TBD},
+  author={[Author Names Redacted for Anonymous Submission]},
+  journal={TBD},
+  year={TBD}
+}
 ```
-Update this line with your actual local repository path.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+This research code is provided as-is for reproducibility and educational purposes. For questions or collaboration opportunities, please open an issue.
