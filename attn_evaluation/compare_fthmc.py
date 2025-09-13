@@ -20,9 +20,14 @@ except AttributeError:
 import time
 import argparse
 import numpy as np
+
+import sys
+# sys.path.append('/path/to/your/local')  # replace with the local path of your cloned GitHub repo
 from Scaling_FT_HMC.utils.fthmc_u1 import HMC_U1_FT
 from Scaling_FT_HMC.utils.field_trans import FieldTransformation
 from Scaling_FT_HMC.utils.func import hmc_summary, set_seed
+
+
 
 parser = argparse.ArgumentParser(description='Parameters for Comparison')
 parser.add_argument('--lattice_size', type=int, default=16, help='Lattice size (default: 16)')

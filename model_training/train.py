@@ -7,6 +7,9 @@ import numpy as np
 import argparse
 import time
 import datetime
+
+import sys
+# sys.path.append('/path/to/your/local')  # replace with the local path of your cloned GitHub repo
 from Scaling_FT_HMC.utils.func import set_seed
 from Scaling_FT_HMC.utils.field_trans import FieldTransformation
 from lightning.fabric import Fabric

@@ -51,7 +51,6 @@ class HMC_U1_FT:
         # Set default data type and device
         torch.set_default_dtype(torch.float32)
         torch.set_default_device(self.device)
-        torch.manual_seed(1331)
         
         # Try to compile functions, but handle errors gracefully
         try:
