@@ -382,7 +382,7 @@ class FieldTransformation:
             
             del temp, cos_plaq_stack, K0
             
-            temp = K1 * 2 * cos_2plaq_stack # * 2 because of the plaq^2 term
+            temp = K1 * 2 * cos_2plaq_stack #! 2 because of the plaq^2 term
             plaq2_jac_shift = torch.stack([ 
                 temp[:, 0] + temp[:, 1],  # dir 0 
                 temp[:, 2] + temp[:, 3]   # dir 1
