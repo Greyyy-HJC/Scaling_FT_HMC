@@ -1,3 +1,4 @@
+# %%
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
@@ -261,6 +262,12 @@ def hmc_summary(beta, max_lag, volume, therm_plaq_ls, plaq_ls, topological_charg
     print(f"Thermalization acceptance rate: {therm_acceptance_rate:.4f}")
     print(f"Acceptance rate: {acceptance_rate:.4f}")
     
+    # Topological susceptibility
+    topo = np.array(topological_charges)
+    susceptibility = np.mean(topo**2) / volume
+    print(">>> Topological susceptibility <Q^2>/V:", susceptibility)
+    print(">>> Topological susceptibility theory:", chi_infinity(beta))
+    
     return hmc_fig
 
 
@@ -310,8 +317,44 @@ def plot_results(beta, therm_plaq_ls, plaq_ls, topological_charges, hamiltonians
     plt.tight_layout()
     plt.show()
 
-    print(">>> Theoretical plaquette: ", plaq_mean_theory(beta))
-    print(">>> Mean plaq: ", np.mean(plaq_ls))
-    print(">>> Std of mean plaq: ", np.std(plaq_ls) / np.sqrt(len(plaq_ls)))
+    
+    def blocking_errors(data, bin_sizes):
+        """Compute blocking errors for given bin sizes."""
+        N = len(data)
+        results = {}
+        for B in bin_sizes:
+            if N % B != 0:
+                n_block = N // B  # drop the last incomplete block
+                data_cut = data[:n_block * B]
+            else:
+                data_cut = data
+                n_block = N // B
+
+            # average of each block
+            blocks = data_cut.reshape(n_block, B).mean(axis=1)
+
+            # standard deviation of the block average (i.e., error estimate)
+            err = np.std(blocks, ddof=1) / np.sqrt(n_block)
+            results[B] = err
+        return results
+
+
+    plaq_theory = plaq_mean_theory(beta)
+    plaq_mean = np.mean(plaq_ls)
+    plaq_diff = plaq_mean - plaq_theory
+
+    print(">>> Theoretical plaquette:", plaq_theory)
+    print(">>> Mean plaq:", plaq_mean)
+    print(">>> Difference (Mean - Theory):", plaq_diff)
+
+    # try different bin sizes
+    bin_sizes = [1, 2, 4, 8, 16, 32, 64, 128]
+    errs = blocking_errors(np.array(plaq_ls), bin_sizes)
+
+    print(">>> Blocking error estimates:")
+    for B, err in errs.items():
+        print(f"    Bin size {B:3d}:  {err:.6e}")
     
     return fig
+
+# %%

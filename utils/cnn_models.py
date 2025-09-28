@@ -727,6 +727,8 @@ class LocalNet2Plaq(nn.Module):
         plaq_coeffs = torch.tanh(x[:, :config.plaq_output_channels, :, :]) / 4  # [batch_size, 4, L, L] in range [-1/4, 1/4]
         plaq2_coeffs = torch.tanh(x[:, config.plaq_output_channels:, :, :]) / 8  # [batch_size, 4, L, L] in range [-1/8, 1/8]
         
+        #TODO: give a constraint 2 * plaq_coeffs + 4 * plaq2_coeffs < 1
+        
         return plaq_coeffs, plaq2_coeffs 
 
 
