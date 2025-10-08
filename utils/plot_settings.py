@@ -81,7 +81,7 @@ ls_p = {"labelsize": 20}
 
 # Errorbar plot settings
 errorb = {
-    "markersize": 5,
+    "markersize": 8,
     "mfc": "none",
     "linestyle": "none",
     "capsize": 3,
