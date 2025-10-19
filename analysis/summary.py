@@ -10,7 +10,6 @@ from Scaling_FT_HMC.utils.resampling import jackknife, jk_ls_avg
 
 n_steps = 10
 rand_seed_ls = [1029, 1107, 1331, 1984, 1999, 2008, 2017, 2025]
-# rand_seed_ls = [1029, 1107, 1331, 1984, 1999, 2008, 2025]
 
 # %%
 #! hmc b5 L32
