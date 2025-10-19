@@ -69,6 +69,7 @@ conda activate fthmc
 ```bash
 pip install -r requirements.txt
 ```
+Note that the GPU related dependencies are not installed by default, they are not necessary for analysis. You can uncomment the lines in `requirements.txt` to install them.
 
 4. **Update the path in Python scripts:**
 Edit the path in each Python script to point to your local repository:
