@@ -55,7 +55,7 @@ This project requires Python 3.9+ and the packages listed in `requirements.txt`.
 
 1. **Clone the repository:**
 ```bash
-git clone <repository-url>
+git clone -b main --single-branch https://github.com/Greyyy-HJC/Scaling_FT_HMC.git
 cd Scaling_FT_HMC
 ```
 
