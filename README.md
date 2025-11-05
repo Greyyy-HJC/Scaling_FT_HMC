@@ -109,11 +109,14 @@ python summary.py  # Generate comprehensive performance analysis
 If you use this code in your research, please cite our work:
 
 ```bibtex
-@article{anonymous_2024,
-  title={TBD},
-  author={[Author Names Redacted for Anonymous Submission]},
-  journal={TBD},
-  year={TBD}
+@inproceedings{He:2025inl,
+    author = "He, Jinchen and Jin, Xiao-Yong and Osborn, James C. and Zhao, Yong",
+    title = "{Neural Field Transformations for Hybrid Monte Carlo: Architectural Design and Scaling}",
+    eprint = "2511.02018",
+    archivePrefix = "arXiv",
+    primaryClass = "hep-lat",
+    month = "11",
+    year = "2025"
 }
 ```
 
