@@ -21,7 +21,7 @@ import time
 import argparse
 import numpy as np
 from Scaling_FT_HMC.utils.fthmc_u1 import HMC_U1_FT
-from Scaling_FT_HMC.utils.field_trans_test import FieldTransformation
+from Scaling_FT_HMC.utils.field_trans_2plaq import FieldTransformation
 from Scaling_FT_HMC.utils.func import hmc_summary, set_seed
 
 parser = argparse.ArgumentParser(description='Parameters for Comparison')

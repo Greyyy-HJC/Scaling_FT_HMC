@@ -11,6 +11,88 @@ n_steps = 10
 rand_seed_ls = [1029, 1107, 1331, 1984, 1999, 2008, 2017, 2025]
 
 # %%
+#! hmc b6 L32
+
+hmc_L32_b6_topo = {}
+hmc_L32_b6_deltaQ = {}
+for rand_seed in rand_seed_ls:
+    hmc_L32_b6_topo[rand_seed] = np.loadtxt(f'../scaling/dumps/topo_hmc_L32_beta6.0_nsteps{n_steps}_{rand_seed}.csv')
+    hmc_L32_b6_deltaQ[rand_seed] = np.mean([ abs(hmc_L32_b6_topo[rand_seed][i] - hmc_L32_b6_topo[rand_seed][i-1]) for i in range(1, len(hmc_L32_b6_topo[rand_seed]))])
+
+beta = 6.0
+max_lag = 20
+volume = 32**2
+
+hmc_L32_b6_auto = {}
+for rand_seed in rand_seed_ls:
+    hmc_L32_b6_auto[rand_seed] = auto_from_chi(hmc_L32_b6_topo[rand_seed], max_lag=max_lag, beta=beta, volume=volume)
+
+# * auto
+hmc_L32_b6_auto_arr = np.array([hmc_L32_b6_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
+jk_auto_arr = jackknife( np.concatenate([hmc_L32_b6_auto_arr, hmc_L32_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
+hmc_L32_b6_auto_avg = jk_auto_avg[:max_lag+1]
+hmc_L32_b6_auto_avg = jk_auto_avg[max_lag+1:]
+
+# * deltaQ
+hmc_L32_b6_deltaQ_arr = np.array([hmc_L32_b6_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L32_b6_deltaQ_arr, hmc_L32_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
+hmc_L32_b6_deltaQ_avg = jk_deltaQ_avg[0]
+hmc_L32_b6_deltaQ_avg = jk_deltaQ_avg[1]
+
+
+gamma_hmc = 1 / (1 - hmc_L32_b6_auto_avg[16])
+gamma_hmc = 1 / (1 - hmc_L32_b6_auto_avg[16])
+gamma_ratio_hmc_L32_b6 = gamma_hmc / gamma_hmc
+deltaQ_ratio_hmc_L32_b6 = hmc_L32_b6_deltaQ_avg / hmc_L32_b6_deltaQ_avg
+
+print(f"gamma ratio for HMC L32 b6: {gamma_ratio_hmc_L32_b6}")
+print(f"deltaQ ratio for HMC L32 b6: {deltaQ_ratio_hmc_L32_b6}")
+
+
+# %%
+#! hmc b6 L64
+
+hmc_L64_b6_topo = {}
+hmc_L64_b6_deltaQ = {}
+for rand_seed in rand_seed_ls:
+    hmc_L64_b6_topo[rand_seed] = np.loadtxt(f'../scaling/dumps/topo_hmc_L64_beta6.0_nsteps{n_steps}_{rand_seed}.csv')
+    hmc_L64_b6_deltaQ[rand_seed] = np.mean([ abs(hmc_L64_b6_topo[rand_seed][i] - hmc_L64_b6_topo[rand_seed][i-1]) for i in range(1, len(hmc_L64_b6_topo[rand_seed]))])
+
+beta = 6.0
+max_lag = 20
+volume = 64**2
+
+hmc_L64_b6_auto = {}
+for rand_seed in rand_seed_ls:
+    hmc_L64_b6_auto[rand_seed] = auto_from_chi(hmc_L64_b6_topo[rand_seed], max_lag=max_lag, beta=beta, volume=volume)
+
+# * auto
+hmc_L64_b6_auto_arr = np.array([hmc_L64_b6_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
+jk_auto_arr = jackknife( np.concatenate([hmc_L64_b6_auto_arr, hmc_L64_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
+hmc_L64_b6_auto_avg = jk_auto_avg[:max_lag+1]
+hmc_L64_b6_auto_avg = jk_auto_avg[max_lag+1:]
+
+# * deltaQ
+hmc_L64_b6_deltaQ_arr = np.array([hmc_L64_b6_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L64_b6_deltaQ_arr, hmc_L64_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
+hmc_L64_b6_deltaQ_avg = jk_deltaQ_avg[0]
+hmc_L64_b6_deltaQ_avg = jk_deltaQ_avg[1]
+
+
+gamma_hmc = 1 / (1 - hmc_L64_b6_auto_avg[16])
+gamma_hmc = 1 / (1 - hmc_L64_b6_auto_avg[16])
+gamma_ratio_hmc_L64_b6 = gamma_hmc / gamma_hmc
+deltaQ_ratio_hmc_L64_b6 = hmc_L64_b6_deltaQ_avg / hmc_L64_b6_deltaQ_avg
+
+print(f"gamma ratio for HMC L64 b6: {gamma_ratio_hmc_L64_b6}")
+print(f"deltaQ ratio for HMC L64 b6: {deltaQ_ratio_hmc_L64_b6}")
+
+
+# %%
 #! base b6 L32
 
 fthmc_base_L32_b6_topo = {}
@@ -29,23 +111,23 @@ for rand_seed in rand_seed_ls:
 
 # * auto
 fthmc_base_L32_b6_auto_arr = np.array([fthmc_base_L32_b6_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
-jk_auto_arr = jackknife( np.concatenate([fthmc_base_L32_b6_auto_arr, fthmc_base_L32_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_arr = jackknife( np.concatenate([hmc_L32_b6_auto_arr, fthmc_base_L32_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
 jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
 base_L32_b6_auto_avg = jk_auto_avg[:max_lag+1]
 fthmc_base_L32_b6_auto_avg = jk_auto_avg[max_lag+1:]
 
 # * deltaQ
 fthmc_base_L32_b6_deltaQ_arr = np.array([fthmc_base_L32_b6_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
-jk_deltaQ_arr = jackknife( np.concatenate([fthmc_base_L32_b6_deltaQ_arr, fthmc_base_L32_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L32_b6_deltaQ_arr, fthmc_base_L32_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
 jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
-base_L32_b6_deltaQ_avg = jk_deltaQ_avg[0]
+hmc_L32_b6_deltaQ_avg = jk_deltaQ_avg[0]
 fthmc_base_L32_b6_deltaQ_avg = jk_deltaQ_avg[1]
 
 
-gamma_base = 1 / (1 - base_L32_b6_auto_avg[16])
+gamma_hmc = 1 / (1 - hmc_L32_b6_auto_avg[16])
 gamma_fthmc = 1 / (1 - fthmc_base_L32_b6_auto_avg[16])
-gamma_ratio_base_L32_b6 = gamma_base / gamma_fthmc
-deltaQ_ratio_base_L32_b6 = fthmc_base_L32_b6_deltaQ_avg / base_L32_b6_deltaQ_avg
+gamma_ratio_base_L32_b6 = gamma_hmc / gamma_fthmc
+deltaQ_ratio_base_L32_b6 = fthmc_base_L32_b6_deltaQ_avg / hmc_L32_b6_deltaQ_avg
 
 print(f"gamma ratio for base L32 b6: {gamma_ratio_base_L32_b6}")
 print(f"deltaQ ratio for base L32 b6: {deltaQ_ratio_base_L32_b6}")
@@ -69,23 +151,23 @@ for rand_seed in rand_seed_ls:
 
 # * auto
 fthmc_base_L64_b6_auto_arr = np.array([fthmc_base_L64_b6_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
-jk_auto_arr = jackknife( np.concatenate([fthmc_base_L64_b6_auto_arr, fthmc_base_L64_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_arr = jackknife( np.concatenate([hmc_L64_b6_auto_arr, fthmc_base_L64_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
 jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
-base_L64_b6_auto_avg = jk_auto_avg[:max_lag+1]
+hmc_L64_b6_auto_avg = jk_auto_avg[:max_lag+1]
 fthmc_base_L64_b6_auto_avg = jk_auto_avg[max_lag+1:]
 
 # * deltaQ
 fthmc_base_L64_b6_deltaQ_arr = np.array([fthmc_base_L64_b6_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
-jk_deltaQ_arr = jackknife( np.concatenate([fthmc_base_L64_b6_deltaQ_arr, fthmc_base_L64_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L64_b6_deltaQ_arr, fthmc_base_L64_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
 jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
-base_L64_b6_deltaQ_avg = jk_deltaQ_avg[0]
+hmc_L64_b6_deltaQ_avg = jk_deltaQ_avg[0]
 fthmc_base_L64_b6_deltaQ_avg = jk_deltaQ_avg[1]
 
 
-gamma_base = 1 / (1 - base_L64_b6_auto_avg[16])
+gamma_hmc = 1 / (1 - hmc_L64_b6_auto_avg[16])
 gamma_fthmc = 1 / (1 - fthmc_base_L64_b6_auto_avg[16])
-gamma_ratio_base_L64_b6 = gamma_base / gamma_fthmc
-deltaQ_ratio_base_L64_b6 = fthmc_base_L64_b6_deltaQ_avg / base_L64_b6_deltaQ_avg
+gamma_ratio_base_L64_b6 = gamma_hmc / gamma_fthmc
+deltaQ_ratio_base_L64_b6 = fthmc_base_L64_b6_deltaQ_avg / hmc_L64_b6_deltaQ_avg
 
 print(f"gamma ratio for base L64 b6: {gamma_ratio_base_L64_b6}")
 print(f"deltaQ ratio for base L64 b6: {deltaQ_ratio_base_L64_b6}")
@@ -110,26 +192,26 @@ for rand_seed in rand_seed_ls:
 
 # * auto
 fthmc_arctan_L32_b6_auto_arr = np.array([fthmc_arctan_L32_b6_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
-jk_auto_arr = jackknife( np.concatenate([fthmc_base_L32_b6_auto_arr, fthmc_arctan_L32_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_arr = jackknife( np.concatenate([hmc_L32_b6_auto_arr, fthmc_arctan_L32_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
 jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
-base_L32_b6_auto_avg = jk_auto_avg[:max_lag+1]
+hmc_L32_b6_auto_avg = jk_auto_avg[:max_lag+1]
 fthmc_arctan_L32_b6_auto_avg = jk_auto_avg[max_lag+1:]
 
 # * deltaQ
 fthmc_arctan_L32_b6_deltaQ_arr = np.array([fthmc_arctan_L32_b6_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
-jk_deltaQ_arr = jackknife( np.concatenate([fthmc_base_L32_b6_deltaQ_arr, fthmc_arctan_L32_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L32_b6_deltaQ_arr, fthmc_arctan_L32_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
 jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
-base_L32_b6_deltaQ_avg = jk_deltaQ_avg[0]
+hmc_L32_b6_deltaQ_avg = jk_deltaQ_avg[0]
 fthmc_arctan_L32_b6_deltaQ_avg = jk_deltaQ_avg[1]
 
 
-gamma_base = 1 / (1 - base_L32_b6_auto_avg[16])
+gamma_hmc = 1 / (1 - hmc_L32_b6_auto_avg[16])
 gamma_fthmc = 1 / (1 - fthmc_arctan_L32_b6_auto_avg[16])
-gamma_ratio_arctan_L32_b6 = gamma_base / gamma_fthmc
-deltaQ_ratio_arctan_L32_b6 = fthmc_arctan_L32_b6_deltaQ_avg / base_L32_b6_deltaQ_avg
+gamma_ratio_arctan_L32_b6 = gamma_hmc / gamma_fthmc
+deltaQ_ratio_arctan_L32_b6 = fthmc_arctan_L32_b6_deltaQ_avg / hmc_L32_b6_deltaQ_avg
 
 print(f"gamma ratio for arctan L32 b6: {gamma_ratio_arctan_L32_b6}")
-print(f"deltaQ ratio for arctan L32 b6: {deltaQ_ratio_arctan_L32_b6}")
+print(f"deltaQ ratio for arctan L32 b6:     {deltaQ_ratio_arctan_L32_b6}")
 
 
 # %%
@@ -151,23 +233,23 @@ for rand_seed in rand_seed_ls:
 
 # * auto
 fthmc_arctan_L64_b6_auto_arr = np.array([fthmc_arctan_L64_b6_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
-jk_auto_arr = jackknife( np.concatenate([fthmc_base_L64_b6_auto_arr, fthmc_arctan_L64_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_arr = jackknife( np.concatenate([hmc_L64_b6_auto_arr, fthmc_arctan_L64_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
 jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
-base_L64_b6_auto_avg = jk_auto_avg[:max_lag+1]
+hmc_L64_b6_auto_avg = jk_auto_avg[:max_lag+1]
 fthmc_arctan_L64_b6_auto_avg = jk_auto_avg[max_lag+1:]
 
 # * deltaQ
 fthmc_arctan_L64_b6_deltaQ_arr = np.array([fthmc_arctan_L64_b6_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
-jk_deltaQ_arr = jackknife( np.concatenate([fthmc_base_L64_b6_deltaQ_arr, fthmc_arctan_L64_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L64_b6_deltaQ_arr, fthmc_arctan_L64_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
 jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
-base_L64_b6_deltaQ_avg = jk_deltaQ_avg[0]
+hmc_L64_b6_deltaQ_avg = jk_deltaQ_avg[0]
 fthmc_arctan_L64_b6_deltaQ_avg = jk_deltaQ_avg[1]
 
 
-gamma_base = 1 / (1 - base_L64_b6_auto_avg[16])
+gamma_hmc = 1 / (1 - hmc_L64_b6_auto_avg[16])
 gamma_fthmc = 1 / (1 - fthmc_arctan_L64_b6_auto_avg[16])
-gamma_ratio_arctan_L64_b6 = gamma_base / gamma_fthmc
-deltaQ_ratio_arctan_L64_b6 = fthmc_arctan_L64_b6_deltaQ_avg / base_L64_b6_deltaQ_avg
+gamma_ratio_arctan_L64_b6 = gamma_hmc / gamma_fthmc
+deltaQ_ratio_arctan_L64_b6 = fthmc_arctan_L64_b6_deltaQ_avg / hmc_L64_b6_deltaQ_avg
 
 print(f"gamma ratio for arctan L64 b6: {gamma_ratio_arctan_L64_b6}")
 print(f"deltaQ ratio for arctan L64 b6: {deltaQ_ratio_arctan_L64_b6}")
@@ -192,23 +274,23 @@ for rand_seed in rand_seed_ls:
 
 # * auto
 fthmc_allp_L32_b6_auto_arr = np.array([fthmc_allp_L32_b6_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
-jk_auto_arr = jackknife( np.concatenate([fthmc_base_L32_b6_auto_arr, fthmc_allp_L32_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_arr = jackknife( np.concatenate([hmc_L32_b6_auto_arr, fthmc_allp_L32_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
 jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
-base_L32_b6_auto_avg = jk_auto_avg[:max_lag+1]
+hmc_L32_b6_auto_avg = jk_auto_avg[:max_lag+1]
 fthmc_allp_L32_b6_auto_avg = jk_auto_avg[max_lag+1:]
 
 # * deltaQ
 fthmc_allp_L32_b6_deltaQ_arr = np.array([fthmc_allp_L32_b6_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
-jk_deltaQ_arr = jackknife( np.concatenate([fthmc_base_L32_b6_deltaQ_arr, fthmc_allp_L32_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L32_b6_deltaQ_arr, fthmc_allp_L32_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
 jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
-base_L32_b6_deltaQ_avg = jk_deltaQ_avg[0]
+hmc_L32_b6_deltaQ_avg = jk_deltaQ_avg[0]
 fthmc_allp_L32_b6_deltaQ_avg = jk_deltaQ_avg[1]
 
 
-gamma_base = 1 / (1 - base_L32_b6_auto_avg[16])
+gamma_hmc = 1 / (1 - hmc_L32_b6_auto_avg[16])
 gamma_fthmc = 1 / (1 - fthmc_allp_L32_b6_auto_avg[16])
-gamma_ratio_allp_L32_b6 = gamma_base / gamma_fthmc
-deltaQ_ratio_allp_L32_b6 = fthmc_allp_L32_b6_deltaQ_avg / base_L32_b6_deltaQ_avg
+gamma_ratio_allp_L32_b6 = gamma_hmc / gamma_fthmc
+deltaQ_ratio_allp_L32_b6 = fthmc_allp_L32_b6_deltaQ_avg / hmc_L32_b6_deltaQ_avg
 
 print(f"gamma ratio for allp L32 b6: {gamma_ratio_allp_L32_b6}")
 print(f"deltaQ ratio for allp L32 b6: {deltaQ_ratio_allp_L32_b6}")
@@ -232,23 +314,23 @@ for rand_seed in rand_seed_ls:
 
 # * auto
 fthmc_allp_L64_b6_auto_arr = np.array([fthmc_allp_L64_b6_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
-jk_auto_arr = jackknife( np.concatenate([fthmc_base_L64_b6_auto_arr, fthmc_allp_L64_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_arr = jackknife( np.concatenate([hmc_L64_b6_auto_arr, fthmc_allp_L64_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
 jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
-base_L64_b6_auto_avg = jk_auto_avg[:max_lag+1]
+hmc_L64_b6_auto_avg = jk_auto_avg[:max_lag+1]
 fthmc_allp_L64_b6_auto_avg = jk_auto_avg[max_lag+1:]
 
 # * deltaQ
 fthmc_allp_L64_b6_deltaQ_arr = np.array([fthmc_allp_L64_b6_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
-jk_deltaQ_arr = jackknife( np.concatenate([fthmc_base_L64_b6_deltaQ_arr, fthmc_allp_L64_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L64_b6_deltaQ_arr, fthmc_allp_L64_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
 jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
-base_L64_b6_deltaQ_avg = jk_deltaQ_avg[0]
+hmc_L64_b6_deltaQ_avg = jk_deltaQ_avg[0]
 fthmc_allp_L64_b6_deltaQ_avg = jk_deltaQ_avg[1]
 
 
-gamma_base = 1 / (1 - base_L64_b6_auto_avg[16])
+gamma_hmc = 1 / (1 - hmc_L64_b6_auto_avg[16])
 gamma_fthmc = 1 / (1 - fthmc_allp_L64_b6_auto_avg[16])
-gamma_ratio_allp_L64_b6 = gamma_base / gamma_fthmc
-deltaQ_ratio_allp_L64_b6 = fthmc_allp_L64_b6_deltaQ_avg / base_L64_b6_deltaQ_avg
+gamma_ratio_allp_L64_b6 = gamma_hmc / gamma_fthmc
+deltaQ_ratio_allp_L64_b6 = fthmc_allp_L64_b6_deltaQ_avg / hmc_L64_b6_deltaQ_avg
 
 print(f"gamma ratio for allp L64 b6: {gamma_ratio_allp_L64_b6}")
 print(f"deltaQ ratio for allp L64 b6: {deltaQ_ratio_allp_L64_b6}")
@@ -273,23 +355,23 @@ for rand_seed in rand_seed_ls:
 
 # * auto
 fthmc_allr_L32_b6_auto_arr = np.array([fthmc_allr_L32_b6_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
-jk_auto_arr = jackknife( np.concatenate([fthmc_base_L32_b6_auto_arr, fthmc_allr_L32_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_arr = jackknife( np.concatenate([hmc_L32_b6_auto_arr, fthmc_allr_L32_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
 jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
-base_L32_b6_auto_avg = jk_auto_avg[:max_lag+1]
+hmc_L32_b6_auto_avg = jk_auto_avg[:max_lag+1]
 fthmc_allr_L32_b6_auto_avg = jk_auto_avg[max_lag+1:]
 
 # * deltaQ
 fthmc_allr_L32_b6_deltaQ_arr = np.array([fthmc_allr_L32_b6_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
-jk_deltaQ_arr = jackknife( np.concatenate([fthmc_base_L32_b6_deltaQ_arr, fthmc_allr_L32_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L32_b6_deltaQ_arr, fthmc_allr_L32_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
 jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
-base_L32_b6_deltaQ_avg = jk_deltaQ_avg[0]
+hmc_L32_b6_deltaQ_avg = jk_deltaQ_avg[0]
 fthmc_allr_L32_b6_deltaQ_avg = jk_deltaQ_avg[1]
 
 
-gamma_base = 1 / (1 - base_L32_b6_auto_avg[16])
+gamma_hmc = 1 / (1 - hmc_L32_b6_auto_avg[16])
 gamma_fthmc = 1 / (1 - fthmc_allr_L32_b6_auto_avg[16])
-gamma_ratio_allr_L32_b6 = gamma_base / gamma_fthmc
-deltaQ_ratio_allr_L32_b6 = fthmc_allr_L32_b6_deltaQ_avg / base_L32_b6_deltaQ_avg
+gamma_ratio_allr_L32_b6 = gamma_hmc / gamma_fthmc
+deltaQ_ratio_allr_L32_b6 = fthmc_allr_L32_b6_deltaQ_avg / hmc_L32_b6_deltaQ_avg
 
 print(f"gamma ratio for allr L32 b6: {gamma_ratio_allr_L32_b6}")
 print(f"deltaQ ratio for allr L32 b6: {deltaQ_ratio_allr_L32_b6}")
@@ -313,23 +395,23 @@ for rand_seed in rand_seed_ls:
 
 # * auto
 fthmc_allr_L64_b6_auto_arr = np.array([fthmc_allr_L64_b6_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
-jk_auto_arr = jackknife( np.concatenate([fthmc_base_L64_b6_auto_arr, fthmc_allr_L64_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_arr = jackknife( np.concatenate([hmc_L64_b6_auto_arr, fthmc_allr_L64_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
 jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
-base_L64_b6_auto_avg = jk_auto_avg[:max_lag+1]
+hmc_L64_b6_auto_avg = jk_auto_avg[:max_lag+1]
 fthmc_allr_L64_b6_auto_avg = jk_auto_avg[max_lag+1:]
 
 # * deltaQ
 fthmc_allr_L64_b6_deltaQ_arr = np.array([fthmc_allr_L64_b6_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
-jk_deltaQ_arr = jackknife( np.concatenate([fthmc_base_L64_b6_deltaQ_arr, fthmc_allr_L64_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L64_b6_deltaQ_arr, fthmc_allr_L64_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
 jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
-base_L64_b6_deltaQ_avg = jk_deltaQ_avg[0]
+hmc_L64_b6_deltaQ_avg = jk_deltaQ_avg[0]
 fthmc_allr_L64_b6_deltaQ_avg = jk_deltaQ_avg[1]
 
 
-gamma_base = 1 / (1 - base_L64_b6_auto_avg[16])
+gamma_hmc = 1 / (1 - hmc_L64_b6_auto_avg[16])
 gamma_fthmc = 1 / (1 - fthmc_allr_L64_b6_auto_avg[16])
-gamma_ratio_allr_L64_b6 = gamma_base / gamma_fthmc
-deltaQ_ratio_allr_L64_b6 = fthmc_allr_L64_b6_deltaQ_avg / base_L64_b6_deltaQ_avg
+gamma_ratio_allr_L64_b6 = gamma_hmc / gamma_fthmc
+deltaQ_ratio_allr_L64_b6 = fthmc_allr_L64_b6_deltaQ_avg / hmc_L64_b6_deltaQ_avg
 
 print(f"gamma ratio for allr L64 b6: {gamma_ratio_allr_L64_b6}")
 print(f"deltaQ ratio for allr L64 b6: {deltaQ_ratio_allr_L64_b6}")
@@ -356,23 +438,23 @@ for rand_seed in rand_seed_ls:
 
 # * auto
 fthmc_2plaq_L32_b6_auto_arr = np.array([fthmc_2plaq_L32_b6_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
-jk_auto_arr = jackknife( np.concatenate([fthmc_base_L32_b6_auto_arr, fthmc_2plaq_L32_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_arr = jackknife( np.concatenate([hmc_L32_b6_auto_arr, fthmc_2plaq_L32_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
 jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
-base_L32_b6_auto_avg = jk_auto_avg[:max_lag+1]
+hmc_L32_b6_auto_avg = jk_auto_avg[:max_lag+1]
 fthmc_2plaq_L32_b6_auto_avg = jk_auto_avg[max_lag+1:]
 
 # * deltaQ
 fthmc_2plaq_L32_b6_deltaQ_arr = np.array([fthmc_2plaq_L32_b6_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
-jk_deltaQ_arr = jackknife( np.concatenate([fthmc_base_L32_b6_deltaQ_arr, fthmc_2plaq_L32_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L32_b6_deltaQ_arr, fthmc_2plaq_L32_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
 jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
-base_L32_b6_deltaQ_avg = jk_deltaQ_avg[0]
+hmc_L32_b6_deltaQ_avg = jk_deltaQ_avg[0]
 fthmc_2plaq_L32_b6_deltaQ_avg = jk_deltaQ_avg[1]
 
 
-gamma_base = 1 / (1 - base_L32_b6_auto_avg[16])
+gamma_hmc = 1 / (1 - hmc_L32_b6_auto_avg[16])
 gamma_fthmc = 1 / (1 - fthmc_2plaq_L32_b6_auto_avg[16])
-gamma_ratio_2plaq_L32_b6 = gamma_base / gamma_fthmc
-deltaQ_ratio_2plaq_L32_b6 = fthmc_2plaq_L32_b6_deltaQ_avg / base_L32_b6_deltaQ_avg
+gamma_ratio_2plaq_L32_b6 = gamma_hmc / gamma_fthmc
+deltaQ_ratio_2plaq_L32_b6 = fthmc_2plaq_L32_b6_deltaQ_avg / hmc_L32_b6_deltaQ_avg
 
 print(f"gamma ratio for 2plaq L32 b6: {gamma_ratio_2plaq_L32_b6}")
 print(f"deltaQ ratio for 2plaq L32 b6: {deltaQ_ratio_2plaq_L32_b6}")
@@ -396,23 +478,23 @@ for rand_seed in rand_seed_ls:
 
 # * auto
 fthmc_2plaq_L64_b6_auto_arr = np.array([fthmc_2plaq_L64_b6_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
-jk_auto_arr = jackknife( np.concatenate([fthmc_base_L64_b6_auto_arr, fthmc_2plaq_L64_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_arr = jackknife( np.concatenate([hmc_L64_b6_auto_arr, fthmc_2plaq_L64_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
 jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
-base_L64_b6_auto_avg = jk_auto_avg[:max_lag+1]
+hmc_L64_b6_auto_avg = jk_auto_avg[:max_lag+1]
 fthmc_2plaq_L64_b6_auto_avg = jk_auto_avg[max_lag+1:]
 
 # * deltaQ
 fthmc_2plaq_L64_b6_deltaQ_arr = np.array([fthmc_2plaq_L64_b6_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
-jk_deltaQ_arr = jackknife( np.concatenate([fthmc_base_L64_b6_deltaQ_arr, fthmc_2plaq_L64_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L64_b6_deltaQ_arr, fthmc_2plaq_L64_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
 jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
-base_L64_b6_deltaQ_avg = jk_deltaQ_avg[0]
+hmc_L64_b6_deltaQ_avg = jk_deltaQ_avg[0]
 fthmc_2plaq_L64_b6_deltaQ_avg = jk_deltaQ_avg[1]
 
 
-gamma_base = 1 / (1 - base_L64_b6_auto_avg[16])
+gamma_hmc = 1 / (1 - hmc_L64_b6_auto_avg[16])
 gamma_fthmc = 1 / (1 - fthmc_2plaq_L64_b6_auto_avg[16])
-gamma_ratio_2plaq_L64_b6 = gamma_base / gamma_fthmc
-deltaQ_ratio_2plaq_L64_b6 = fthmc_2plaq_L64_b6_deltaQ_avg / base_L64_b6_deltaQ_avg
+gamma_ratio_2plaq_L64_b6 = gamma_hmc / gamma_fthmc
+deltaQ_ratio_2plaq_L64_b6 = fthmc_2plaq_L64_b6_deltaQ_avg / hmc_L64_b6_deltaQ_avg
 
 print(f"gamma ratio for 2plaq L64 b6: {gamma_ratio_2plaq_L64_b6}")
 print(f"deltaQ ratio for 2plaq L64 b6: {deltaQ_ratio_2plaq_L64_b6}")
@@ -439,23 +521,23 @@ for rand_seed in rand_seed_ls:
 
 # * auto
 fthmc_2plaq_weight_L32_b6_auto_arr = np.array([fthmc_2plaq_weight_L32_b6_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
-jk_auto_arr = jackknife( np.concatenate([fthmc_base_L32_b6_auto_arr, fthmc_2plaq_weight_L32_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_arr = jackknife( np.concatenate([hmc_L32_b6_auto_arr, fthmc_2plaq_weight_L32_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
 jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
-base_L32_b6_auto_avg = jk_auto_avg[:max_lag+1]
+hmc_L32_b6_auto_avg = jk_auto_avg[:max_lag+1]
 fthmc_2plaq_weight_L32_b6_auto_avg = jk_auto_avg[max_lag+1:]
 
 # * deltaQ
 fthmc_2plaq_weight_L32_b6_deltaQ_arr = np.array([fthmc_2plaq_weight_L32_b6_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
-jk_deltaQ_arr = jackknife( np.concatenate([fthmc_base_L32_b6_deltaQ_arr, fthmc_2plaq_weight_L32_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L32_b6_deltaQ_arr, fthmc_2plaq_weight_L32_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
 jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
-base_L32_b6_deltaQ_avg = jk_deltaQ_avg[0]
+hmc_L32_b6_deltaQ_avg = jk_deltaQ_avg[0]
 fthmc_2plaq_weight_L32_b6_deltaQ_avg = jk_deltaQ_avg[1]
 
 
-gamma_base = 1 / (1 - base_L32_b6_auto_avg[16])
+gamma_hmc = 1 / (1 - hmc_L32_b6_auto_avg[16])
 gamma_fthmc = 1 / (1 - fthmc_2plaq_weight_L32_b6_auto_avg[16])
-gamma_ratio_2plaq_weight_L32_b6 = gamma_base / gamma_fthmc
-deltaQ_ratio_2plaq_weight_L32_b6 = fthmc_2plaq_weight_L32_b6_deltaQ_avg / base_L32_b6_deltaQ_avg
+gamma_ratio_2plaq_weight_L32_b6 = gamma_hmc / gamma_fthmc
+deltaQ_ratio_2plaq_weight_L32_b6 = fthmc_2plaq_weight_L32_b6_deltaQ_avg / hmc_L32_b6_deltaQ_avg
 
 print(f"gamma ratio for 2plaq_weight L32 b6: {gamma_ratio_2plaq_weight_L32_b6}")
 print(f"deltaQ ratio for 2plaq_weight L32 b6: {deltaQ_ratio_2plaq_weight_L32_b6}")
@@ -479,27 +561,191 @@ for rand_seed in rand_seed_ls:
 
 # * auto
 fthmc_2plaq_weight_L64_b6_auto_arr = np.array([fthmc_2plaq_weight_L64_b6_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
-jk_auto_arr = jackknife( np.concatenate([fthmc_base_L64_b6_auto_arr, fthmc_2plaq_weight_L64_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_arr = jackknife( np.concatenate([hmc_L64_b6_auto_arr, fthmc_2plaq_weight_L64_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
 jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
-base_L64_b6_auto_avg = jk_auto_avg[:max_lag+1]
+hmc_L64_b6_auto_avg = jk_auto_avg[:max_lag+1]
 fthmc_2plaq_weight_L64_b6_auto_avg = jk_auto_avg[max_lag+1:]
 
 # * deltaQ
 fthmc_2plaq_weight_L64_b6_deltaQ_arr = np.array([fthmc_2plaq_weight_L64_b6_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
-jk_deltaQ_arr = jackknife( np.concatenate([fthmc_base_L64_b6_deltaQ_arr, fthmc_2plaq_weight_L64_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L64_b6_deltaQ_arr, fthmc_2plaq_weight_L64_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
 jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
-base_L64_b6_deltaQ_avg = jk_deltaQ_avg[0]
+hmc_L64_b6_deltaQ_avg = jk_deltaQ_avg[0]
 fthmc_2plaq_weight_L64_b6_deltaQ_avg = jk_deltaQ_avg[1]
 
 
-gamma_base = 1 / (1 - base_L64_b6_auto_avg[16])
+gamma_hmc = 1 / (1 - hmc_L64_b6_auto_avg[16])
 gamma_fthmc = 1 / (1 - fthmc_2plaq_weight_L64_b6_auto_avg[16])
-gamma_ratio_2plaq_weight_L64_b6 = gamma_base / gamma_fthmc
-deltaQ_ratio_2plaq_weight_L64_b6 = fthmc_2plaq_weight_L64_b6_deltaQ_avg / base_L64_b6_deltaQ_avg
+gamma_ratio_2plaq_weight_L64_b6 = gamma_hmc / gamma_fthmc
+deltaQ_ratio_2plaq_weight_L64_b6 = fthmc_2plaq_weight_L64_b6_deltaQ_avg / hmc_L64_b6_deltaQ_avg
 
 print(f"gamma ratio for 2plaq_weight L64 b6: {gamma_ratio_2plaq_weight_L64_b6}")
 print(f"deltaQ ratio for 2plaq_weight L64 b6: {deltaQ_ratio_2plaq_weight_L64_b6}")
 
+
+# %%
+#! single_plaq b6 L32
+
+fthmc_single_plaq_L32_b6_topo = {}
+fthmc_single_plaq_L32_b6_deltaQ = {}
+for rand_seed in rand_seed_ls:
+    fthmc_single_plaq_L32_b6_topo[rand_seed] = np.loadtxt(f'../single_plaq_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps{n_steps}_single_plaq_train_b3.0_L32_{rand_seed}.csv')
+    fthmc_single_plaq_L32_b6_deltaQ[rand_seed] = np.mean([ abs(fthmc_single_plaq_L32_b6_topo[rand_seed][i] - fthmc_single_plaq_L32_b6_topo[rand_seed][i-1]) for i in range(1, len(fthmc_single_plaq_L32_b6_topo[rand_seed]))])
+
+beta = 6.0
+max_lag = 20
+volume = 32**2
+
+fthmc_single_plaq_L32_b6_auto = {}
+for rand_seed in rand_seed_ls:
+    fthmc_single_plaq_L32_b6_auto[rand_seed] = auto_from_chi(fthmc_single_plaq_L32_b6_topo[rand_seed], max_lag=max_lag, beta=beta, volume=volume)
+
+# * auto
+fthmc_single_plaq_L32_b6_auto_arr = np.array([fthmc_single_plaq_L32_b6_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
+jk_auto_arr = jackknife( np.concatenate([hmc_L32_b6_auto_arr, fthmc_single_plaq_L32_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
+hmc_L32_b6_auto_avg = jk_auto_avg[:max_lag+1]
+fthmc_single_plaq_L32_b6_auto_avg = jk_auto_avg[max_lag+1:]
+
+# * deltaQ
+fthmc_single_plaq_L32_b6_deltaQ_arr = np.array([fthmc_single_plaq_L32_b6_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L32_b6_deltaQ_arr, fthmc_single_plaq_L32_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
+hmc_L32_b6_deltaQ_avg = jk_deltaQ_avg[0]
+fthmc_single_plaq_L32_b6_deltaQ_avg = jk_deltaQ_avg[1]
+
+gamma_hmc = 1 / (1 - hmc_L32_b6_auto_avg[16])
+gamma_fthmc = 1 / (1 - fthmc_single_plaq_L32_b6_auto_avg[16])
+gamma_ratio_single_plaq_L32_b6 = gamma_hmc / gamma_fthmc
+deltaQ_ratio_single_plaq_L32_b6 = fthmc_single_plaq_L32_b6_deltaQ_avg / hmc_L32_b6_deltaQ_avg
+
+
+
+print(f"gamma ratio for single_plaq L32 b6: {gamma_ratio_single_plaq_L32_b6}")
+print(f"deltaQ ratio for single_plaq L32 b6: {deltaQ_ratio_single_plaq_L32_b6}")
+
+# %%
+#! single_plaq b6 L64
+
+fthmc_single_plaq_L64_b6_topo = {}
+fthmc_single_plaq_L64_b6_deltaQ = {}
+for rand_seed in rand_seed_ls:
+    fthmc_single_plaq_L64_b6_topo[rand_seed] = np.loadtxt(f'../single_plaq_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps{n_steps}_single_plaq_train_b3.0_L32_{rand_seed}.csv')
+    fthmc_single_plaq_L64_b6_deltaQ[rand_seed] = np.mean([ abs(fthmc_single_plaq_L64_b6_topo[rand_seed][i] - fthmc_single_plaq_L64_b6_topo[rand_seed][i-1]) for i in range(1, len(fthmc_single_plaq_L64_b6_topo[rand_seed]))])
+
+beta = 6.0
+max_lag = 20
+volume = 64**2
+
+fthmc_single_plaq_L64_b6_auto = {}
+for rand_seed in rand_seed_ls:
+    fthmc_single_plaq_L64_b6_auto[rand_seed] = auto_from_chi(fthmc_single_plaq_L64_b6_topo[rand_seed], max_lag=max_lag, beta=beta, volume=volume)
+
+# * auto
+fthmc_single_plaq_L64_b6_auto_arr = np.array([fthmc_single_plaq_L64_b6_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
+jk_auto_arr = jackknife( np.concatenate([hmc_L64_b6_auto_arr, fthmc_single_plaq_L64_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
+hmc_L64_b6_auto_avg = jk_auto_avg[:max_lag+1]
+fthmc_single_plaq_L64_b6_auto_avg = jk_auto_avg[max_lag+1:]
+
+# * deltaQ
+fthmc_single_plaq_L64_b6_deltaQ_arr = np.array([fthmc_single_plaq_L64_b6_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L64_b6_deltaQ_arr, fthmc_single_plaq_L64_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
+hmc_L64_b6_deltaQ_avg = jk_deltaQ_avg[0]
+fthmc_single_plaq_L64_b6_deltaQ_avg = jk_deltaQ_avg[1]
+
+
+gamma_hmc = 1 / (1 - hmc_L64_b6_auto_avg[16])
+gamma_fthmc = 1 / (1 - fthmc_single_plaq_L64_b6_auto_avg[16])
+gamma_ratio_single_plaq_L64_b6 = gamma_hmc / gamma_fthmc
+deltaQ_ratio_single_plaq_L64_b6 = fthmc_single_plaq_L64_b6_deltaQ_avg / hmc_L64_b6_deltaQ_avg
+
+print(f"gamma ratio for single_plaq L64 b6: {gamma_ratio_single_plaq_L64_b6}")
+print(f"deltaQ ratio for single_plaq L64 b6: {deltaQ_ratio_single_plaq_L64_b6}")
+
+
+
+# %%
+#! add_cos b6 L32
+
+fthmc_add_cos_L32_b6_topo = {}
+fthmc_add_cos_L32_b6_deltaQ = {}
+for rand_seed in rand_seed_ls:
+    fthmc_add_cos_L32_b6_topo[rand_seed] = np.loadtxt(f'../add_cos_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps{n_steps}_add_cos_train_b3.0_L32_{rand_seed}.csv')
+    fthmc_add_cos_L32_b6_deltaQ[rand_seed] = np.mean([ abs(fthmc_add_cos_L32_b6_topo[rand_seed][i] - fthmc_add_cos_L32_b6_topo[rand_seed][i-1]) for i in range(1, len(fthmc_add_cos_L32_b6_topo[rand_seed]))])
+
+beta = 6.0
+max_lag = 20
+volume = 32**2
+
+fthmc_add_cos_L32_b6_auto = {}
+for rand_seed in rand_seed_ls:
+    fthmc_add_cos_L32_b6_auto[rand_seed] = auto_from_chi(fthmc_add_cos_L32_b6_topo[rand_seed], max_lag=max_lag, beta=beta, volume=volume)
+
+# * auto
+fthmc_add_cos_L32_b6_auto_arr = np.array([fthmc_add_cos_L32_b6_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
+jk_auto_arr = jackknife( np.concatenate([hmc_L32_b6_auto_arr, fthmc_add_cos_L32_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
+hmc_L32_b6_auto_avg = jk_auto_avg[:max_lag+1]
+fthmc_add_cos_L32_b6_auto_avg = jk_auto_avg[max_lag+1:]
+
+# * deltaQ
+fthmc_add_cos_L32_b6_deltaQ_arr = np.array([fthmc_add_cos_L32_b6_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L32_b6_deltaQ_arr, fthmc_add_cos_L32_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
+hmc_L32_b6_deltaQ_avg = jk_deltaQ_avg[0]
+fthmc_add_cos_L32_b6_deltaQ_avg = jk_deltaQ_avg[1]
+
+gamma_hmc = 1 / (1 - hmc_L32_b6_auto_avg[16])
+gamma_fthmc = 1 / (1 - fthmc_add_cos_L32_b6_auto_avg[16])
+gamma_ratio_add_cos_L32_b6 = gamma_hmc / gamma_fthmc
+deltaQ_ratio_add_cos_L32_b6 = fthmc_add_cos_L32_b6_deltaQ_avg / hmc_L32_b6_deltaQ_avg
+
+
+
+print(f"gamma ratio for add_cos L32 b6: {gamma_ratio_add_cos_L32_b6}")
+print(f"deltaQ ratio for add_cos L32 b6: {deltaQ_ratio_add_cos_L32_b6}")
+
+# %%
+#! add_cos b6 L64
+
+fthmc_add_cos_L64_b6_topo = {}
+fthmc_add_cos_L64_b6_deltaQ = {}
+for rand_seed in rand_seed_ls:
+    fthmc_add_cos_L64_b6_topo[rand_seed] = np.loadtxt(f'../add_cos_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps{n_steps}_add_cos_train_b3.0_L32_{rand_seed}.csv')
+    fthmc_add_cos_L64_b6_deltaQ[rand_seed] = np.mean([ abs(fthmc_add_cos_L64_b6_topo[rand_seed][i] - fthmc_add_cos_L64_b6_topo[rand_seed][i-1]) for i in range(1, len(fthmc_add_cos_L64_b6_topo[rand_seed]))])
+
+beta = 6.0
+max_lag = 20
+volume = 64**2
+
+fthmc_add_cos_L64_b6_auto = {}
+for rand_seed in rand_seed_ls:
+    fthmc_add_cos_L64_b6_auto[rand_seed] = auto_from_chi(fthmc_add_cos_L64_b6_topo[rand_seed], max_lag=max_lag, beta=beta, volume=volume)
+
+# * auto
+fthmc_add_cos_L64_b6_auto_arr = np.array([fthmc_add_cos_L64_b6_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
+jk_auto_arr = jackknife( np.concatenate([hmc_L64_b6_auto_arr, fthmc_add_cos_L64_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
+hmc_L64_b6_auto_avg = jk_auto_avg[:max_lag+1]
+fthmc_add_cos_L64_b6_auto_avg = jk_auto_avg[max_lag+1:]
+
+# * deltaQ
+fthmc_add_cos_L64_b6_deltaQ_arr = np.array([fthmc_add_cos_L64_b6_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L64_b6_deltaQ_arr, fthmc_add_cos_L64_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
+hmc_L64_b6_deltaQ_avg = jk_deltaQ_avg[0]
+fthmc_add_cos_L64_b6_deltaQ_avg = jk_deltaQ_avg[1]
+
+
+gamma_hmc = 1 / (1 - hmc_L64_b6_auto_avg[16])
+gamma_fthmc = 1 / (1 - fthmc_add_cos_L64_b6_auto_avg[16])
+gamma_ratio_add_cos_L64_b6 = gamma_hmc / gamma_fthmc
+deltaQ_ratio_add_cos_L64_b6 = fthmc_add_cos_L64_b6_deltaQ_avg / hmc_L64_b6_deltaQ_avg
+
+print(f"gamma ratio for add_cos L64 b6: {gamma_ratio_add_cos_L64_b6}")
+print(f"deltaQ ratio for add_cos L64 b6: {deltaQ_ratio_add_cos_L64_b6}")
 
 
 
@@ -522,23 +768,32 @@ for rand_seed in rand_seed_ls:
 
 # * auto
 fthmc_tanh_L32_b6_auto_arr = np.array([fthmc_tanh_L32_b6_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
-jk_auto_arr = jackknife( np.concatenate([fthmc_base_L32_b6_auto_arr, fthmc_tanh_L32_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_arr = jackknife( np.concatenate([hmc_L32_b6_auto_arr, fthmc_tanh_L32_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
 jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
-base_L32_b6_auto_avg = jk_auto_avg[:max_lag+1]
+hmc_L32_b6_auto_avg = jk_auto_avg[:max_lag+1]
 fthmc_tanh_L32_b6_auto_avg = jk_auto_avg[max_lag+1:]
 
 # * deltaQ
 fthmc_tanh_L32_b6_deltaQ_arr = np.array([fthmc_tanh_L32_b6_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
-jk_deltaQ_arr = jackknife( np.concatenate([fthmc_base_L32_b6_deltaQ_arr, fthmc_tanh_L32_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L32_b6_deltaQ_arr, fthmc_tanh_L32_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
 jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
-base_L32_b6_deltaQ_avg = jk_deltaQ_avg[0]
+hmc_L32_b6_deltaQ_avg = jk_deltaQ_avg[0]
 fthmc_tanh_L32_b6_deltaQ_avg = jk_deltaQ_avg[1]
 
 
-gamma_base = 1 / (1 - base_L32_b6_auto_avg[16])
+gamma_hmc = 1 / (1 - hmc_L32_b6_auto_avg[16])
 gamma_fthmc = 1 / (1 - fthmc_tanh_L32_b6_auto_avg[16])
-gamma_ratio_tanh_L32_b6 = gamma_base / gamma_fthmc
-deltaQ_ratio_tanh_L32_b6 = fthmc_tanh_L32_b6_deltaQ_avg / base_L32_b6_deltaQ_avg
+gamma_ratio_tanh_L32_b6 = gamma_hmc / gamma_fthmc
+deltaQ_ratio_tanh_L32_b6 = fthmc_tanh_L32_b6_deltaQ_avg / hmc_L32_b6_deltaQ_avg
+
+print("gamma hmc L32 b6:", gamma_hmc)
+print("deltaQ hmc L32 b6:", hmc_L32_b6_deltaQ_avg)
+
+print("gamma tanh L32 b6:", gamma_fthmc)
+print("deltaQ tanh L32 b6:", fthmc_tanh_L32_b6_deltaQ_avg)
+
+print(gamma_hmc / gamma_fthmc)
+print(gv.evalcov([gamma_hmc, gamma_fthmc]))
 
 print(f"gamma ratio for tanh L32 b6: {gamma_ratio_tanh_L32_b6}")
 print(f"deltaQ ratio for tanh L32 b6: {deltaQ_ratio_tanh_L32_b6}")
@@ -562,39 +817,120 @@ for rand_seed in rand_seed_ls:
 
 # * auto
 fthmc_tanh_L64_b6_auto_arr = np.array([fthmc_tanh_L64_b6_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
-jk_auto_arr = jackknife( np.concatenate([fthmc_base_L64_b6_auto_arr, fthmc_tanh_L64_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_arr = jackknife( np.concatenate([hmc_L64_b6_auto_arr, fthmc_tanh_L64_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
 jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
-base_L64_b6_auto_avg = jk_auto_avg[:max_lag+1]
+hmc_L64_b6_auto_avg = jk_auto_avg[:max_lag+1]
 fthmc_tanh_L64_b6_auto_avg = jk_auto_avg[max_lag+1:]
 
 # * deltaQ
 fthmc_tanh_L64_b6_deltaQ_arr = np.array([fthmc_tanh_L64_b6_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
-jk_deltaQ_arr = jackknife( np.concatenate([fthmc_base_L64_b6_deltaQ_arr, fthmc_tanh_L64_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L64_b6_deltaQ_arr, fthmc_tanh_L64_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
 jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
-base_L64_b6_deltaQ_avg = jk_deltaQ_avg[0]
+hmc_L64_b6_deltaQ_avg = jk_deltaQ_avg[0]
 fthmc_tanh_L64_b6_deltaQ_avg = jk_deltaQ_avg[1]
 
 
-gamma_base = 1 / (1 - base_L64_b6_auto_avg[16])
+gamma_hmc = 1 / (1 - hmc_L64_b6_auto_avg[16])
 gamma_fthmc = 1 / (1 - fthmc_tanh_L64_b6_auto_avg[16])
-gamma_ratio_tanh_L64_b6 = gamma_base / gamma_fthmc
-deltaQ_ratio_tanh_L64_b6 = fthmc_tanh_L64_b6_deltaQ_avg / base_L64_b6_deltaQ_avg
+gamma_ratio_tanh_L64_b6 = gamma_hmc / gamma_fthmc
+deltaQ_ratio_tanh_L64_b6 = fthmc_tanh_L64_b6_deltaQ_avg / hmc_L64_b6_deltaQ_avg
 
 print(f"gamma ratio for tanh L64 b6: {gamma_ratio_tanh_L64_b6}")
 print(f"deltaQ ratio for tanh L64 b6: {deltaQ_ratio_tanh_L64_b6}")
+
+
+# %%
+#! combined32_add_cos b6 L32
+
+fthmc_combined_add_cos_L32_b6_topo = {}
+fthmc_combined_add_cos_L32_b6_deltaQ = {}
+for rand_seed in rand_seed_ls:
+    fthmc_combined_add_cos_L32_b6_topo[rand_seed] = np.loadtxt(f'../combined_add_cos_evaluation/dumps/topo_fthmc_L32_beta6.0_nsteps{n_steps}_combined32_add_cos_train_b3.0_L32_{rand_seed}.csv')
+    fthmc_combined_add_cos_L32_b6_deltaQ[rand_seed] = np.mean([ abs(fthmc_combined_add_cos_L32_b6_topo[rand_seed][i] - fthmc_combined_add_cos_L32_b6_topo[rand_seed][i-1]) for i in range(1, len(fthmc_combined_add_cos_L32_b6_topo[rand_seed]))])
+
+beta = 6.0
+max_lag = 20
+volume = 32**2
+
+fthmc_combined_add_cos_L32_b6_auto = {}
+for rand_seed in rand_seed_ls:
+    fthmc_combined_add_cos_L32_b6_auto[rand_seed] = auto_from_chi(fthmc_combined_add_cos_L32_b6_topo[rand_seed], max_lag=max_lag, beta=beta, volume=volume)
+
+# * auto
+fthmc_combined_add_cos_L32_b6_auto_arr = np.array([fthmc_combined_add_cos_L32_b6_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
+jk_auto_arr = jackknife( np.concatenate([hmc_L32_b6_auto_arr, fthmc_combined_add_cos_L32_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
+hmc_L32_b6_auto_avg = jk_auto_avg[:max_lag+1]
+fthmc_combined_add_cos_L32_b6_auto_avg = jk_auto_avg[max_lag+1:]
+
+# * deltaQ
+fthmc_combined_add_cos_L32_b6_deltaQ_arr = np.array([fthmc_combined_add_cos_L32_b6_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L32_b6_deltaQ_arr, fthmc_combined_add_cos_L32_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
+hmc_L32_b6_deltaQ_avg = jk_deltaQ_avg[0]
+fthmc_combined_add_cos_L32_b6_deltaQ_avg = jk_deltaQ_avg[1]
+
+
+gamma_hmc = 1 / (1 - hmc_L32_b6_auto_avg[16])
+gamma_fthmc = 1 / (1 - fthmc_combined_add_cos_L32_b6_auto_avg[16])
+gamma_ratio_combined_add_cos_L32_b6 = gamma_hmc / gamma_fthmc
+deltaQ_ratio_combined_add_cos_L32_b6 = fthmc_combined_add_cos_L32_b6_deltaQ_avg / hmc_L32_b6_deltaQ_avg
+
+print(f"gamma ratio for combined_add_cos L32 b6: {gamma_ratio_combined_add_cos_L32_b6}")
+print(f"deltaQ ratio for combined_add_cos L32 b6: {deltaQ_ratio_combined_add_cos_L32_b6}")
+
+# %%
+#! combined32_add_cos b6 L64
+
+fthmc_combined_add_cos_L64_b6_topo = {}
+fthmc_combined_add_cos_L64_b6_deltaQ = {}
+for rand_seed in rand_seed_ls:
+    fthmc_combined_add_cos_L64_b6_topo[rand_seed] = np.loadtxt(f'../combined_add_cos_evaluation/dumps/topo_fthmc_L64_beta6.0_nsteps{n_steps}_combined32_add_cos_train_b3.0_L32_{rand_seed}.csv')
+    fthmc_combined_add_cos_L64_b6_deltaQ[rand_seed] = np.mean([ abs(fthmc_combined_add_cos_L64_b6_topo[rand_seed][i] - fthmc_combined_add_cos_L64_b6_topo[rand_seed][i-1]) for i in range(1, len(fthmc_combined_add_cos_L64_b6_topo[rand_seed]))])
+
+beta = 6.0
+max_lag = 20
+volume = 64**2
+
+fthmc_combined_add_cos_L64_b6_auto = {}
+for rand_seed in rand_seed_ls:
+    fthmc_combined_add_cos_L64_b6_auto[rand_seed] = auto_from_chi(fthmc_combined_add_cos_L64_b6_topo[rand_seed], max_lag=max_lag, beta=beta, volume=volume)
+
+# * auto
+fthmc_combined_add_cos_L64_b6_auto_arr = np.array([fthmc_combined_add_cos_L64_b6_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
+jk_auto_arr = jackknife( np.concatenate([hmc_L64_b6_auto_arr, fthmc_combined_add_cos_L64_b6_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
+hmc_L64_b6_auto_avg = jk_auto_avg[:max_lag+1]
+fthmc_combined_add_cos_L64_b6_auto_avg = jk_auto_avg[max_lag+1:]
+
+# * deltaQ
+fthmc_combined_add_cos_L64_b6_deltaQ_arr = np.array([fthmc_combined_add_cos_L64_b6_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L64_b6_deltaQ_arr, fthmc_combined_add_cos_L64_b6_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
+hmc_L64_b6_deltaQ_avg = jk_deltaQ_avg[0]
+fthmc_combined_add_cos_L64_b6_deltaQ_avg = jk_deltaQ_avg[1]
+
+
+gamma_hmc = 1 / (1 - hmc_L64_b6_auto_avg[16])
+gamma_fthmc = 1 / (1 - fthmc_combined_add_cos_L64_b6_auto_avg[16])
+gamma_ratio_combined_add_cos_L64_b6 = gamma_hmc / gamma_fthmc
+deltaQ_ratio_combined_add_cos_L64_b6 = fthmc_combined_add_cos_L64_b6_deltaQ_avg / hmc_L64_b6_deltaQ_avg
+
+print(f"gamma ratio for combined_add_cos L64 b6: {gamma_ratio_combined_add_cos_L64_b6}")
+print(f"deltaQ ratio for combined_add_cos L64 b6: {deltaQ_ratio_combined_add_cos_L64_b6}")
 
 
 
 # %%
 #! summary
 
-gamma_L32_b6_ratio_ls = [gamma_ratio_tanh_L32_b6, gamma_ratio_arctan_L32_b6, gamma_ratio_allp_L32_b6, gamma_ratio_allr_L32_b6, gamma_ratio_2plaq_L32_b6, gamma_ratio_2plaq_weight_L32_b6]
+gamma_L32_b6_ratio_ls = [gamma_ratio_tanh_L32_b6, gamma_ratio_arctan_L32_b6, gamma_ratio_allp_L32_b6, gamma_ratio_allr_L32_b6, gamma_ratio_2plaq_L32_b6, gamma_ratio_2plaq_weight_L32_b6, gamma_ratio_single_plaq_L32_b6, gamma_ratio_add_cos_L32_b6]
 
-deltaQ_L32_b6_ratio_ls = [deltaQ_ratio_tanh_L32_b6, deltaQ_ratio_arctan_L32_b6, deltaQ_ratio_allp_L32_b6, deltaQ_ratio_allr_L32_b6, deltaQ_ratio_2plaq_L32_b6, deltaQ_ratio_2plaq_weight_L32_b6]
+deltaQ_L32_b6_ratio_ls = [deltaQ_ratio_tanh_L32_b6, deltaQ_ratio_arctan_L32_b6, deltaQ_ratio_allp_L32_b6, deltaQ_ratio_allr_L32_b6, deltaQ_ratio_2plaq_L32_b6, deltaQ_ratio_2plaq_weight_L32_b6, deltaQ_ratio_single_plaq_L32_b6, deltaQ_ratio_add_cos_L32_b6]
 
-gamma_L64_b6_ratio_ls = [gamma_ratio_tanh_L64_b6, gamma_ratio_arctan_L64_b6, gamma_ratio_allp_L64_b6, gamma_ratio_allr_L64_b6, gamma_ratio_2plaq_L64_b6, gamma_ratio_2plaq_weight_L64_b6]
+gamma_L64_b6_ratio_ls = [gamma_ratio_tanh_L64_b6, gamma_ratio_arctan_L64_b6, gamma_ratio_allp_L64_b6, gamma_ratio_allr_L64_b6, gamma_ratio_2plaq_L64_b6, gamma_ratio_2plaq_weight_L64_b6, gamma_ratio_single_plaq_L64_b6, gamma_ratio_add_cos_L64_b6]
 
-deltaQ_L64_b6_ratio_ls = [deltaQ_ratio_tanh_L64_b6, deltaQ_ratio_arctan_L64_b6, deltaQ_ratio_allp_L64_b6, deltaQ_ratio_allr_L64_b6, deltaQ_ratio_2plaq_L64_b6, deltaQ_ratio_2plaq_weight_L64_b6]
+deltaQ_L64_b6_ratio_ls = [deltaQ_ratio_tanh_L64_b6, deltaQ_ratio_arctan_L64_b6, deltaQ_ratio_allp_L64_b6, deltaQ_ratio_allr_L64_b6, deltaQ_ratio_2plaq_L64_b6, deltaQ_ratio_2plaq_weight_L64_b6, deltaQ_ratio_single_plaq_L64_b6, deltaQ_ratio_add_cos_L64_b6]
 
 
 fig, ax = default_plot()
@@ -604,9 +940,9 @@ ax.errorbar(np.arange(len(gamma_L32_b6_ratio_ls))-0.05, [gv.mean(gamma_ratio) fo
 ax.errorbar(np.arange(len(gamma_L64_b6_ratio_ls))+0.05, [gv.mean(gamma_ratio) for gamma_ratio in gamma_L64_b6_ratio_ls], [gv.sdev(gamma_ratio) for gamma_ratio in gamma_L64_b6_ratio_ls], label="$\\beta=6$, $V=64^2$", marker="x", **errorb)
 
 ax.set_ylabel('$\\gamma (16)_{\\mathrm{Base}} ~/~ \\gamma (16)$', **fs_p)
-ax.set_ylim(0.5, 1.6)
-ax.set_xticks(np.arange(len(gamma_L64_b6_ratio_ls)))
-ax.set_xticklabels(['Tanh', 'arctan', 'allp', 'allr', 'plaq2', 'plaq2_wt'], **fs_p)
+ax.set_ylim(1.5, 4.5)
+ax.set_xticks(np.arange(len(gamma_L32_b6_ratio_ls)))
+ax.set_xticklabels(['Tanh', 'arctan', 'allp', 'allr', 'plaq2', 'plaq2_wt', 's_plaq', 'add_cos'], fontsize=12)
 ax.legend(ncol=2, loc='upper right', **fs_small_p)
 plt.tight_layout()
 plt.savefig('plots/test_summary_train_b3_L32_gamma.pdf', transparent=True)
@@ -620,9 +956,9 @@ ax.errorbar(np.arange(len(deltaQ_L32_b6_ratio_ls))-0.05, [gv.mean(deltaQ_ratio) 
 ax.errorbar(np.arange(len(deltaQ_L64_b6_ratio_ls))+0.05, [gv.mean(deltaQ_ratio) for deltaQ_ratio in deltaQ_L64_b6_ratio_ls], [gv.sdev(deltaQ_ratio) for deltaQ_ratio in deltaQ_L64_b6_ratio_ls], label="$\\beta=6$, $V=64^2$", **errorb_circle)
 
 ax.set_ylabel('$\\Delta Q ~/~ \\Delta Q_{\\mathrm{Base}}$', **fs_p)
-ax.set_ylim(0.5, 1.6)
-ax.set_xticks(np.arange(len(deltaQ_L64_b6_ratio_ls)))
-ax.set_xticklabels(['Tanh', 'arctan', 'allp', 'allr', 'plaq2', 'plaq2_wt'], **fs_p)
+ax.set_ylim(1.5, 4.2)
+ax.set_xticks(np.arange(len(deltaQ_L32_b6_ratio_ls)))
+ax.set_xticklabels(['Tanh', 'arctan', 'allp', 'allr', 'plaq2', 'plaq2_wt', 's_plaq', 'add_cos'], fontsize=12)
 ax.legend(ncol=2, loc='upper right', **fs_small_p)
 plt.tight_layout()
 plt.savefig('plots/test_summary_train_b3_L32_deltaQ.pdf', transparent=True)

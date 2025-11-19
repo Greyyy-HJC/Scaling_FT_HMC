@@ -8,7 +8,7 @@ import argparse
 import time
 import datetime
 from Scaling_FT_HMC.utils.func import set_seed
-from Scaling_FT_HMC.utils.field_trans_test import FieldTransformation
+from Scaling_FT_HMC.utils.field_trans_2plaq import FieldTransformation
 from lightning.fabric import Fabric
 
 # Record program start time
