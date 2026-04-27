@@ -20,7 +20,7 @@ torch_logger.setLevel(logging.ERROR)  # Only show error level logs
 torch_logger.propagate = False
 
 from Scaling_FT_HMC.utils.func import plaq_from_field_batch, rect_from_field_batch, get_field_mask, get_plaq_mask, get_rect_mask
-from Scaling_FT_HMC.utils.cnn_models import choose_cnn_model
+from Scaling_FT_HMC.utils.cnn_models_add_cos import choose_cnn_model #todo
 
 class FieldTransformation:
     """Neural network based field transformation"""
@@ -137,7 +137,7 @@ class FieldTransformation:
         plaq_masked = plaq * plaq_mask
         plaq_sin_feature = torch.sin(plaq_masked)
         plaq_cos_feature = torch.cos(plaq_masked)
-        plaq_features = torch.stack([plaq_sin_feature, plaq_cos_feature], dim=1)
+        plaq_features = torch.stack([plaq_sin_feature, plaq_cos_feature], dim=1) # [batch_size, 2, L, L]
         
         # Calculate rect features using cached rect
         rect_mask = get_rect_mask(index, batch_size, self.L).to(self.device)

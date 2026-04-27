@@ -20,7 +20,7 @@ torch_logger.setLevel(logging.ERROR)  # Only show error level logs
 torch_logger.propagate = False
 
 from Scaling_FT_HMC.utils.func import plaq_from_field_batch, rect_from_field_batch, get_field_mask, get_plaq_mask, get_rect_mask
-from Scaling_FT_HMC.utils.cnn_models import choose_cnn_model
+from Scaling_FT_HMC.utils.cnn_models_add_cos import choose_cnn_model #todo
 
 class FieldTransformation:
     """Neural network based field transformation"""

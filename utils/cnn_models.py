@@ -663,7 +663,6 @@ class LocalNetAllRect(nn.Module):
         return plaq_coeffs, rect_coeffs 
     
 
-
 class LocalNet2Plaq(nn.Module):
     """
     Simple 2-layer CNN model with learnable alpha scaling for local gauge field updates.
@@ -726,8 +725,6 @@ class LocalNet2Plaq(nn.Module):
         # Output scaling
         plaq_coeffs = torch.tanh(x[:, :config.plaq_output_channels, :, :]) / 4  # [batch_size, 4, L, L] in range [-1/4, 1/4]
         plaq2_coeffs = torch.tanh(x[:, config.plaq_output_channels:, :, :]) / 8  # [batch_size, 4, L, L] in range [-1/8, 1/8]
-        
-        #TODO: give a constraint 2 * plaq_coeffs + 4 * plaq2_coeffs < 1
         
         return plaq_coeffs, plaq2_coeffs 
 
@@ -931,6 +928,211 @@ class LocalNetAddCos(nn.Module):
         
         return plaq_coeffs, rect_coeffs 
     
+
+
+class LocalNetAddCosNorm(nn.Module):
+    """
+    Simple 2-layer CNN model with learnable alpha scaling for local gauge field updates.
+    
+    Architecture:
+    - Input: Concatenated plaquette and rectangle features (6 channels total)
+    - Conv1: 6 → 12 channels, 3x3 kernel, circular padding, GELU activation
+    - Conv2: 12 → 12 channels, 3x3 kernel, circular padding
+    - Output: tanh scaling with larger coefficient on plaq
+    
+    Locality Properties:
+    - Receptive field: 5x5 lattice sites (two 3x3 convolutions)
+    
+    Total parameters: ~ 2,000
+    """
+    def __init__(self):
+        super().__init__()
+        config = NetConfig()
+            
+        # Combined input channels for plaq and rect features
+        combined_input_channels = config.plaq_input_channels + config.rect_input_channels
+        self.combined_output_channels = 2 * (config.plaq_output_channels + config.rect_output_channels)
+
+        # First conv layer to process combined features
+        # Parameters = input_channels x output_channels x kernel_height x kernel_width + bias_terms
+        # Parameters: 6 * 12 * 3 * 3 + 12 = 660
+        self.conv_input = nn.Conv2d(
+            combined_input_channels,
+            config.hidden_channels,  # Double the channels
+            config.kernel_size,
+            padding='same',
+            padding_mode='circular'
+        )
+        self.activation = nn.GELU()  # 0 parameters
+        
+        # Second conv layer to generate final outputs
+        # Parameters: 12 * 12 * 3 * 3 + 12 = 1,308
+        self.conv_output = nn.Conv2d(
+            config.hidden_channels,
+            self.combined_output_channels,
+            config.kernel_size,
+            padding='same',
+            padding_mode='circular'
+        )
+        
+        offset = 2 * config.plaq_output_channels
+        self.idx_dir0 = [0, 1, 4, 5] + [offset + i for i in [0, 1, 2, 3, 8, 9, 10, 11]] # dir0: plaq and rect
+        self.idx_dir1 = [2, 3, 6, 7] + [offset + i for i in [4, 5, 6, 7, 12, 13, 14, 15]] # dir1: plaq and rect
+
+
+    def forward(self, plaq_features, rect_features):
+        config = NetConfig()
+        # plaq_features shape: [batch_size, plaq_input_channels, L, L]
+        # rect_features shape: [batch_size, rect_input_channels, L, L]
+        
+        # Combine input features (0 parameters - tensor operation)
+        x = torch.cat([plaq_features, rect_features], dim=1)
+        
+        # First conv layer (660 parameters used)
+        x = self.conv_input(x)
+        x = self.activation(x)  # 0 parameters
+        
+        # Second conv layer (1,308 parameters used)
+        x = self.conv_output(x)
+        
+        #TODO: add activation function
+        x = torch.tanh(x) 
+        # x = self.activation(x)
+        
+        # create mask (on current device)
+        mask_dir0 = torch.zeros(1, self.combined_output_channels, 1, 1, device=x.device, dtype=x.dtype)
+        mask_dir1 = torch.zeros(1, self.combined_output_channels, 1, 1, device=x.device, dtype=x.dtype)
+        mask_dir0[:, self.idx_dir0, :, :] = 1.0
+        mask_dir1[:, self.idx_dir1, :, :] = 1.0
+        
+        
+        
+        # calculate L1 Norm
+        norm_dir0 = torch.sum(torch.abs(x) * mask_dir0, dim=1, keepdim=True)
+        norm_dir1 = torch.sum(torch.abs(x) * mask_dir1, dim=1, keepdim=True)
+        
+        # calculate scale coefficient (Soft Projection)
+        # if sum < 1, scale = 1; if sum > 1, scale = sum
+        scale_dir0 = torch.clamp(norm_dir0, min=1.0)
+        scale_dir1 = torch.clamp(norm_dir1, min=1.0)
+        
+        # apply scaling
+        # build a total denominator (denominator tensor)
+        # because mask_dir0 and mask_dir1 are mutually exclusive and complementary, they can be added directly
+        total_scale = scale_dir0 * mask_dir0 + scale_dir1 * mask_dir1
+        
+        # for Group 0 channels, the value of total_scale is scale_dir0
+        # for Group 1 channels, the value of total_scale is scale_dir1
+        x_norm = x / total_scale
+        
+        
+        
+        # Output scaling
+        plaq_coeffs = x_norm[:, :2 * config.plaq_output_channels, :, :]  # [batch_size, 8, L, L]
+        rect_coeffs = x_norm[:, 2 * config.plaq_output_channels:, :, :]  # [batch_size, 16, L, L]
+        
+        return plaq_coeffs, rect_coeffs 
+      
+    
+    
+    
+class LocalNetAddCosOpt(nn.Module):
+    """
+    Lightweight CNN model with one ResNet block and learnable output scales.
+    
+    Architecture:
+    - Input: Concatenated plaquette and rectangle features (6 channels total)
+    - Conv1: 6 → 16 channels, 3x3 kernel, circular padding, GELU
+    - ResBlock: 16 → 16 channels (single block to reduce overfitting)
+    - Conv_output: 16 → 24 channels, 3x3 kernel
+    - Output: tanh with learnable scale parameters
+    
+    Locality Properties:
+    - Receptive field: 7x7 lattice sites (input conv + 1 res block)
+    
+    Key features:
+    - Single ResNet block (reduced from 2 to prevent overfitting)
+    - Learnable scale parameters for plaq/rect output ranges
+    - Dropout for regularization
+    
+    Total parameters: ~ 5,000
+    """
+    def __init__(self):
+        super().__init__()
+        config = NetConfig()
+        
+        # Moderate hidden channels
+        hidden_channels = 16
+        
+        # Combined input/output channels
+        combined_input_channels = config.plaq_input_channels + config.rect_input_channels
+        self.combined_output_channels = 2 * (config.plaq_output_channels + config.rect_output_channels)
+        self.plaq_out_channels = 2 * config.plaq_output_channels
+
+        # Input projection
+        self.conv_input = nn.Conv2d(
+            combined_input_channels,
+            hidden_channels,
+            config.kernel_size,
+            padding='same',
+            padding_mode='circular'
+        )
+        self.activation = nn.GELU()
+        
+        # Single residual block (reduced from 2)
+        self.res_conv1 = nn.Conv2d(hidden_channels, hidden_channels, config.kernel_size, 
+                                    padding='same', padding_mode='circular')
+        self.res_conv2 = nn.Conv2d(hidden_channels, hidden_channels, config.kernel_size, 
+                                    padding='same', padding_mode='circular')
+        
+        # Dropout for regularization
+        self.dropout = nn.Dropout(p=0.1)
+        
+        # Output projection
+        self.conv_output = nn.Conv2d(
+            hidden_channels,
+            self.combined_output_channels,
+            config.kernel_size,
+            padding='same',
+            padding_mode='circular'
+        )
+        
+        # Learnable scale parameters (initialized to match AddCos ranges)
+        self.plaq_scale = nn.Parameter(torch.tensor(0.2))   # 1/5
+        self.rect_scale = nn.Parameter(torch.tensor(0.025)) # 1/40
+
+    def forward(self, plaq_features, rect_features):
+        # Combine input features
+        x = torch.cat([plaq_features, rect_features], dim=1)
+        
+        # Input projection
+        x = self.conv_input(x)
+        x = self.activation(x)
+        
+        # Single residual block
+        identity = x
+        x = self.res_conv1(x)
+        x = self.activation(x)
+        x = self.dropout(x)  # Dropout for regularization
+        x = self.res_conv2(x)
+        x = self.activation(x + identity)  # Residual connection
+        
+        # Output projection
+        x = self.conv_output(x)
+        
+        # Apply tanh for bounded output
+        x = torch.tanh(x)
+        
+        # Split into plaq and rect
+        plaq_raw = x[:, :self.plaq_out_channels, :, :]
+        rect_raw = x[:, self.plaq_out_channels:, :, :]
+        
+        # Apply learnable scales
+        plaq_coeffs = plaq_raw * self.plaq_scale
+        rect_coeffs = rect_raw * self.rect_scale
+        
+        return plaq_coeffs, rect_coeffs 
+    
     
     
 class LocalCombinedNetAddCos(nn.Module):
@@ -1049,6 +1251,10 @@ def choose_cnn_model(model_tag):
         return LocalNetSinglePlaq
     elif model_tag == 'add_cos': # * only for field_trans_add_cos.py
         return LocalNetAddCos
+    elif model_tag == 'add_cos_norm': # * only for field_trans_add_cos.py
+        return LocalNetAddCosNorm 
+    elif model_tag == 'add_cos_opt': # * only for field_trans_add_cos_opt.py
+        return LocalNetAddCosOpt
     elif model_tag == 'combined_add_cos': # * only for field_trans_add_cos.py
         return LocalCombinedNetAddCos
     else:

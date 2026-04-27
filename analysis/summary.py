@@ -10,7 +10,7 @@ from Scaling_FT_HMC.utils.resampling import jackknife, jk_ls_avg
 
 n_steps = 10
 rand_seed_ls = [1029, 1107, 1331, 1984, 1999, 2008, 2017, 2025]
-# rand_seed_ls = [1984, 1999, 2008, 2025]
+# rand_seed_ls = [1029, 1107, 1331, 1984, 2008, 2017, 2025]
 
 # %%
 #! hmc b5 L32
@@ -1864,6 +1864,46 @@ print(f"gamma ratio for combined32_add_cos L128 b6: {gamma_ratio_combined32_add_
 print(f"deltaQ ratio for combined32_add_cos L128 b6: {deltaQ_ratio_combined32_add_cos_L128_b6}")
 
 
+# %%
+#! combined32_add_cos b7 L128
+
+fthmc_combined32_add_cos_L128_b7_topo = {}
+fthmc_combined32_add_cos_L128_b7_deltaQ = {}
+for rand_seed in rand_seed_ls:
+    fthmc_combined32_add_cos_L128_b7_topo[rand_seed] = np.loadtxt(f'../combined_add_cos_evaluation/dumps/topo_fthmc_L128_beta7.0_nsteps{n_steps}_combined32_add_cos_train_b3.0_L32_{rand_seed}.csv')
+    fthmc_combined32_add_cos_L128_b7_deltaQ[rand_seed] = np.mean([ abs(fthmc_combined32_add_cos_L128_b7_topo[rand_seed][i] - fthmc_combined32_add_cos_L128_b7_topo[rand_seed][i-1]) for i in range(1, len(fthmc_combined32_add_cos_L128_b7_topo[rand_seed]))])
+
+beta = 7.0
+max_lag = 20
+volume = 128**2
+
+fthmc_combined32_add_cos_L128_b7_auto = {}
+for rand_seed in rand_seed_ls:
+    fthmc_combined32_add_cos_L128_b7_auto[rand_seed] = auto_from_chi(fthmc_combined32_add_cos_L128_b7_topo[rand_seed], max_lag=max_lag, beta=beta, volume=volume)
+
+# * auto
+fthmc_combined32_add_cos_L128_b7_auto_arr = np.array([fthmc_combined32_add_cos_L128_b7_auto[seed] for seed in rand_seed_ls])  # Shape: (8, max_lag + 1)
+jk_auto_arr = jackknife( np.concatenate([hmc_L128_b7_auto_arr, fthmc_combined32_add_cos_L128_b7_auto_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2 * max_lag + 2)
+jk_auto_avg = jk_ls_avg(jk_auto_arr) # shape: (2 * max_lag + 2,)
+hmc_L128_b7_auto_avg = jk_auto_avg[:max_lag+1]
+fthmc_combined32_add_cos_L128_b7_auto_avg = jk_auto_avg[max_lag+1:]
+
+# * deltaQ
+fthmc_combined32_add_cos_L128_b7_deltaQ_arr = np.array([fthmc_combined32_add_cos_L128_b7_deltaQ[seed] for seed in rand_seed_ls]).reshape(-1, 1) # Shape: (8, 1)
+jk_deltaQ_arr = jackknife( np.concatenate([hmc_L128_b7_deltaQ_arr, fthmc_combined32_add_cos_L128_b7_deltaQ_arr], axis=1) ) # concatenate for jk_ls_avg, shape: (8, 2)
+jk_deltaQ_avg = jk_ls_avg(jk_deltaQ_arr) # shape: (2,)
+hmc_L128_b7_deltaQ_avg = jk_deltaQ_avg[0]
+fthmc_combined32_add_cos_L128_b7_deltaQ_avg = jk_deltaQ_avg[1]
+
+
+gamma_hmc = 1 / (1 - hmc_L128_b7_auto_avg[16])
+gamma_fthmc = 1 / (1 - fthmc_combined32_add_cos_L128_b7_auto_avg[16])
+gamma_ratio_combined32_add_cos_L128_b7 = gamma_hmc / gamma_fthmc
+deltaQ_ratio_combined32_add_cos_L128_b7 = fthmc_combined32_add_cos_L128_b7_deltaQ_avg / hmc_L128_b7_deltaQ_avg
+
+print(f"gamma ratio for combined32_add_cos L128 b7: {gamma_ratio_combined32_add_cos_L128_b7}")
+print(f"deltaQ ratio for combined32_add_cos L128 b7: {deltaQ_ratio_combined32_add_cos_L128_b7}")
+
 
 # %%
 #! summary
@@ -1880,9 +1920,9 @@ gamma_L128_b6_ratio_ls = [gamma_ratio_base_L128_b6, gamma_ratio_base32_L128_b6, 
 
 deltaQ_L128_b6_ratio_ls = [deltaQ_ratio_base_L128_b6, deltaQ_ratio_base32_L128_b6, deltaQ_ratio_attn_L128_b6, deltaQ_ratio_resn_L128_b6, deltaQ_ratio_tanh_L128_b6, deltaQ_ratio_combined64_L128_b6, deltaQ_ratio_combined_L128_b6]
 
-gamma_L128_b7_ratio_ls = [gamma_ratio_base_L128_b7, gamma_ratio_base32_L128_b7, gamma_ratio_attn_L128_b7, gamma_ratio_resn_L128_b7, gamma_ratio_tanh_L128_b7, gamma_ratio_combined64_L128_b7, gamma_ratio_combined_L128_b7]
+gamma_L128_b7_ratio_ls = [gamma_ratio_base_L128_b7, gamma_ratio_base32_L128_b7, gamma_ratio_attn_L128_b7, gamma_ratio_resn_L128_b7, gamma_ratio_tanh_L128_b7, gamma_ratio_combined64_L128_b7, gamma_ratio_combined_L128_b7, gamma_ratio_combined32_add_cos_L128_b7]
 
-deltaQ_L128_b7_ratio_ls = [deltaQ_ratio_base_L128_b7, deltaQ_ratio_base32_L128_b7, deltaQ_ratio_attn_L128_b7, deltaQ_ratio_resn_L128_b7, deltaQ_ratio_tanh_L128_b7, deltaQ_ratio_combined64_L128_b7, deltaQ_ratio_combined_L128_b7]
+deltaQ_L128_b7_ratio_ls = [deltaQ_ratio_base_L128_b7, deltaQ_ratio_base32_L128_b7, deltaQ_ratio_attn_L128_b7, deltaQ_ratio_resn_L128_b7, deltaQ_ratio_tanh_L128_b7, deltaQ_ratio_combined64_L128_b7, deltaQ_ratio_combined_L128_b7, deltaQ_ratio_combined32_add_cos_L128_b7]
 
 gamma_L32_b5_ratio_ls = [gamma_ratio_base_L32_b5, gamma_ratio_base32_L32_b5, gamma_ratio_attn_L32_b5, gamma_ratio_resn_L32_b5, gamma_ratio_tanh_L32_b5, gamma_ratio_combined64_L32_b5, gamma_ratio_combined_L32_b5]
 
